@@ -412,6 +412,37 @@ const fetchRedditSubmissions = async (
 
   return data;
 };
+
+type SubmissionScore = Tables<'projects_subreddits_reddit_submissions'>;
+
+const insertSubmissionScores = async (submissionScores: SubmissionScore[]) => {
+  const { error } = await supabaseAdmin
+    .from('projects_subreddits_reddit_submissions')
+    .insert(submissionScores);
+
+  if (error) {
+    console.log('Error inserting reddit submissions', error);
+  }
+};
+
+const updateProjectRedditScanAt = async (
+  projectId: string,
+  subredditId: string,
+  dateTime: Date,
+) => {
+  const { error } = await supabaseAdmin
+    .from('subreddits')
+    .update({
+      scanned_at: dateTime.toISOString(),
+    })
+    .eq('project_id', projectId)
+    .eq('subreddit_id', subredditId);
+
+  if (error) {
+    console.log('Error saving latest scanned submission', error);
+  }
+};
+
 /******************* openai end **********************/
 
 export {
@@ -432,5 +463,7 @@ export {
   /******************* openai start **********************/
   getSubredditsForScoreScanner,
   fetchRedditSubmissions,
+  insertSubmissionScores,
+  updateProjectRedditScanAt,
   /******************* openai end **********************/
 };

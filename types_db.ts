@@ -166,6 +166,52 @@ export type Database = {
           },
         ]
       }
+      projects_subreddits_reddit_submissions: {
+        Row: {
+          created_at: string
+          project_id: string
+          reddit_submission_id: string
+          score: number | null
+          subreddit_id: string
+        }
+        Insert: {
+          created_at?: string
+          project_id: string
+          reddit_submission_id: string
+          score?: number | null
+          subreddit_id: string
+        }
+        Update: {
+          created_at?: string
+          project_id?: string
+          reddit_submission_id?: string
+          score?: number | null
+          subreddit_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projects_subreddits_reddit_submission_reddit_submission_id_fkey"
+            columns: ["reddit_submission_id"]
+            isOneToOne: false
+            referencedRelation: "reddit_submissions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projects_subreddits_reddit_submissions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projects_subreddits_reddit_submissions_subreddit_id_fkey"
+            columns: ["subreddit_id"]
+            isOneToOne: false
+            referencedRelation: "subreddits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reddit_submissions: {
         Row: {
           created_at: string | null
