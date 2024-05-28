@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { PropsWithChildren } from 'react';
 import { getURL } from '@/utils/helpers';
 import 'styles/main.css';
+import { cn } from "@/utils/cn";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -49,7 +50,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={cn('bg-background text-foreground', inter.className)}>{children}</body>
     </html>
   );
 }
