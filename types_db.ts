@@ -407,7 +407,23 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      getusersubmissions: {
+        Args: {
+          userid: string
+          num: number
+        }
+        Returns: {
+          created_at: string | null
+          id: string
+          name: string | null
+          permalink: string | null
+          reddit_id: string | null
+          subreddit_id: string | null
+          text: string | null
+          title: string | null
+          url: string | null
+        }[]
+      }
     }
     Enums: {
       pricing_plan_interval: "day" | "week" | "month" | "year"

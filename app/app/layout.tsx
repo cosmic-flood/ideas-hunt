@@ -1,22 +1,13 @@
-import { PropsWithChildren, Suspense } from "react";
-import Navbar from "@/components/ui/Navbar";
-import Footer from "@/components/ui/Footer";
-import { Toaster } from "@/components/ui/Toasts/toaster";
+import { PropsWithChildren } from 'react';
+import Header from '@/components/header';
 
 export default async function RootLayout({ children }: PropsWithChildren) {
   return (
     <>
-      <Navbar />
-      <main
-        id="skip"
-        className="min-h-[calc(100dvh-4rem)] md:min-h[calc(100dvh-5rem)]"
-      >
+      <Header />
+      <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
         {children}
       </main>
-      <Footer />
-      <Suspense>
-        <Toaster />
-      </Suspense>
     </>
   );
 }
