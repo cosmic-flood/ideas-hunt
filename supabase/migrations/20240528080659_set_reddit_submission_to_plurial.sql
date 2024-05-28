@@ -1,0 +1,1 @@
+ALTER TABLE reddit_submission RENAME TO reddit_submissions;
