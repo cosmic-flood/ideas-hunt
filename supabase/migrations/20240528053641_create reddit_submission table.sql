@@ -3,7 +3,6 @@
 * Note: This table contains user data. Users should only be able to view and update their own data.
 */
 create table reddit_submission (
-  -- UUID from auth.users
   id uuid default uuid_generate_v4() primary key,
   reddit_id text,
   title text,
