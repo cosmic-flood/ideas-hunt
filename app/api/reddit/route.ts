@@ -6,7 +6,10 @@ import {
   saveSubredditLatestScan,
 } from '@/utils/supabase/admin';
 import { Tables } from '@/types_db';
-import { RedditClient } from '@/utils/score/reddit';
+import {
+  RedditClient,
+  RedditSubmissionContentType,
+} from '@/utils/score/reddit';
 
 type RedditSubmission = Tables<'reddit_submissions'>;
 
@@ -80,8 +83,12 @@ export async function GET(req: Request) {
         text: p.selftext,
         url: p.url,
         permalink: p.permalink,
-        created_at: new Date(p.created_utc * 1000),
         subreddit_id: subreddit.id,
+        content_type:
+          p.selftext !== ''
+            ? RedditSubmissionContentType.Text
+            : RedditSubmissionContentType.Link,
+        posted_at: new Date(p.created_utc * 1000),
       };
     }) as unknown as RedditSubmission[];
 

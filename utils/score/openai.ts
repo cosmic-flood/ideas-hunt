@@ -46,7 +46,7 @@ export async function rateSubmissions(
 
   prompt += `
   
-  Respond with a score from 1 to 10 for each post.
+  Respond only a score for each post.
   `;
 
   try {

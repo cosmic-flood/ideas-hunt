@@ -168,10 +168,11 @@ export type Database = {
       }
       reddit_submissions: {
         Row: {
-          created_at: string | null
+          content_type: string | null
           id: string
           name: string | null
           permalink: string | null
+          posted_at: string | null
           reddit_id: string | null
           subreddit_id: string | null
           text: string | null
@@ -179,10 +180,11 @@ export type Database = {
           url: string | null
         }
         Insert: {
-          created_at?: string | null
+          content_type?: string | null
           id?: string
           name?: string | null
           permalink?: string | null
+          posted_at?: string | null
           reddit_id?: string | null
           subreddit_id?: string | null
           text?: string | null
@@ -190,10 +192,11 @@ export type Database = {
           url?: string | null
         }
         Update: {
-          created_at?: string | null
+          content_type?: string | null
           id?: string
           name?: string | null
           permalink?: string | null
+          posted_at?: string | null
           reddit_id?: string | null
           subreddit_id?: string | null
           text?: string | null
@@ -421,10 +424,11 @@ export type Database = {
           subredditid: string
         }
         Returns: {
-          created_at: string | null
+          content_type: string | null
           id: string
           name: string | null
           permalink: string | null
+          posted_at: string | null
           reddit_id: string | null
           subreddit_id: string | null
           text: string | null

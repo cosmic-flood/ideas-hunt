@@ -1,5 +1,10 @@
 const authUrl = 'https://www.reddit.com/api/v1/access_token';
 
+export enum RedditSubmissionContentType {
+  Text = 'text',
+  Link = 'link',
+}
+
 export class RedditClient {
   private accessToken: string = '';
 
