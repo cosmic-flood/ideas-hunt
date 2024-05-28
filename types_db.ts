@@ -217,6 +217,7 @@ export type Database = {
           created_at: string | null
           id: string
           name: string | null
+          permalink: string | null
           reddit_id: string | null
           subreddit_id: string | null
           text: string | null
@@ -227,6 +228,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           name?: string | null
+          permalink?: string | null
           reddit_id?: string | null
           subreddit_id?: string | null
           text?: string | null
@@ -237,6 +239,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           name?: string | null
+          permalink?: string | null
           reddit_id?: string | null
           subreddit_id?: string | null
           text?: string | null

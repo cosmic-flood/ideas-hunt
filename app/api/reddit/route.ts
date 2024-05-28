@@ -1,12 +1,12 @@
-import snoowrap from 'snoowrap';
 import {
   getScheduleJob,
   getSubredditsForRedditScanner,
   insertRedditSubmissions,
   saveScheduleJobStartTime,
-  saveSubredditLatestScan
-} from "@/utils/supabase/admin";
-import { Tables } from "@/types_db";
+  saveSubredditLatestScan,
+} from '@/utils/supabase/admin';
+import { Tables } from '@/types_db';
+import { RedditClient } from '@/utils/score/reddit';
 
 type RedditSubmission = Tables<'reddit_submissions'>;
 
@@ -35,22 +35,23 @@ export async function GET(req: Request) {
     return new Response('Missing params', { status: 500 });
   }
 
+  const redditClient = new RedditClient(
+    clientId,
+    clientSecret,
+    userAgent,
+    username,
+    password,
+  );
+
   // fetch reddit scan job
   const job = await getScheduleJob(jobName);
   if (job === null) {
     return new Response('OK');
   }
 
-  const reddit = new snoowrap({
-    userAgent,
-    clientId,
-    clientSecret,
-    username,
-    password
-  });
-
   // fetch subreddits
-  const jobStartTime = job.start_time !== null? new Date(job.start_time) : new Date();
+  const jobStartTime =
+    job.start_time !== null ? new Date(job.start_time) : new Date();
   const subreddits = await getSubredditsForRedditScanner(jobStartTime);
 
   if (subreddits.length === 0) {
@@ -58,28 +59,30 @@ export async function GET(req: Request) {
     return new Response('OK');
   }
 
-  for(let subreddit of subreddits) {
-    const { name,  latest_scanned_submission_name } = subreddit;
-    const query: any = { limit: 100 };
-    if (latest_scanned_submission_name !== null) {
-      query.after = latest_scanned_submission_name;
-    }
+  for (let subreddit of subreddits) {
+    const { name, latest_scanned_submission_name } = subreddit;
 
-    let posts = await reddit.getSubreddit(name!).getNew(query);
+    let posts: any[] = await redditClient.getNew(
+      name!,
+      latest_scanned_submission_name,
+      100,
+    );
+
     if (posts.length === 0) {
       continue;
     }
 
-    const submissions = posts.map(p => {
+    const submissions = posts.map((p) => {
       return {
         reddit_id: p.id,
         name: p.name,
         title: p.title,
         text: p.selftext,
         url: p.url,
+        permalink: p.permalink,
         created_at: new Date(p.created_utc * 1000),
         subreddit_id: subreddit.id,
-      }
+      };
     }) as unknown as RedditSubmission[];
 
     await insertRedditSubmissions(submissions);
