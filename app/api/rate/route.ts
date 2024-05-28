@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 
 import {
-  fetchRedditSubmissions,
+  fetchNotRatedRedditSubmissions,
   getScheduleJob,
   getSubredditsForScoreScanner,
   insertSubmissionScores,
@@ -9,9 +9,9 @@ import {
   updateProjectRedditScanAt,
 } from '@/utils/supabase/admin';
 import { Tables } from '@/types_db';
-import { scoreSubmissions } from '@/utils/score/openai';
+import { rateSubmissions } from '@/utils/score/openai';
 
-type SubmissionScore = Tables<'projects_subreddits_reddit_submissions_scores'>;
+type SubmissionScore = Tables<'reddit_submissions_scores'>;
 
 const jobName = 'score';
 
@@ -44,12 +44,16 @@ export async function GET(req: Request) {
   }
 
   for (let subreddit of subreddits) {
-    const submissions = await fetchRedditSubmissions(subreddit.subreddit_id);
+    const submissions = await fetchNotRatedRedditSubmissions(
+      subreddit.project_id,
+      subreddit.subreddit_id,
+    );
+
     if (submissions.length === 0) {
       continue;
     }
 
-    const scores = await scoreSubmissions(
+    const scores = await rateSubmissions(
       openai,
       subreddit.projects?.description!,
       submissions.map((s) => `${s.title} ${s.text}`),
@@ -63,7 +67,7 @@ export async function GET(req: Request) {
         project_id: subreddit.projects!.id,
         subreddit_id: subreddit.subreddit_id,
         reddit_submission_id: submissions[idx].id,
-        score: parseFloat(score),
+        score: score,
       };
     }) as SubmissionScore[];
 

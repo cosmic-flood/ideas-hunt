@@ -166,7 +166,51 @@ export type Database = {
           },
         ]
       }
-      projects_subreddits_reddit_submissions_scores: {
+      reddit_submissions: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string | null
+          permalink: string | null
+          reddit_id: string | null
+          subreddit_id: string | null
+          text: string | null
+          title: string | null
+          url: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name?: string | null
+          permalink?: string | null
+          reddit_id?: string | null
+          subreddit_id?: string | null
+          text?: string | null
+          title?: string | null
+          url?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string | null
+          permalink?: string | null
+          reddit_id?: string | null
+          subreddit_id?: string | null
+          text?: string | null
+          title?: string | null
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reddit_submissions_subreddit_id_fkey"
+            columns: ["subreddit_id"]
+            isOneToOne: false
+            referencedRelation: "subreddits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reddit_submissions_scores: {
         Row: {
           created_at: string
           project_id: string
@@ -205,50 +249,6 @@ export type Database = {
           },
           {
             foreignKeyName: "projects_subreddits_reddit_submissions_subreddit_id_fkey"
-            columns: ["subreddit_id"]
-            isOneToOne: false
-            referencedRelation: "subreddits"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      reddit_submissions: {
-        Row: {
-          created_at: string | null
-          id: string
-          name: string | null
-          permalink: string | null
-          reddit_id: string | null
-          subreddit_id: string | null
-          text: string | null
-          title: string | null
-          url: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: string
-          name?: string | null
-          permalink?: string | null
-          reddit_id?: string | null
-          subreddit_id?: string | null
-          text?: string | null
-          title?: string | null
-          url?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: string
-          name?: string | null
-          permalink?: string | null
-          reddit_id?: string | null
-          subreddit_id?: string | null
-          text?: string | null
-          title?: string | null
-          url?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "reddit_submissions_subreddit_id_fkey"
             columns: ["subreddit_id"]
             isOneToOne: false
             referencedRelation: "subreddits"
@@ -407,10 +407,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      getusersubmissions: {
+      get_user_submission_score: {
         Args: {
-          userid: string
-          num: number
+          p_user_id: string
+          page_offset?: number
+          page_size?: number
+        }
+        Returns: Database["public"]["CompositeTypes"]["user_submission_score"][]
+      }
+      getnotratedsubmissions: {
+        Args: {
+          projectid: string
+          subredditid: string
         }
         Returns: {
           created_at: string | null
@@ -439,7 +447,14 @@ export type Database = {
         | "paused"
     }
     CompositeTypes: {
-      [_ in never]: never
+      user_submission_score: {
+        subreddit: string | null
+        title: string | null
+        created_at: string | null
+        text: string | null
+        url: string | null
+        score: number | null
+      }
     }
   }
 }

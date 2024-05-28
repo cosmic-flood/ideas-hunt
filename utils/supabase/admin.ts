@@ -398,13 +398,14 @@ const getSubredditsForScoreScanner = async (
   return data;
 };
 
-const fetchRedditSubmissions = async (
+const fetchNotRatedRedditSubmissions = async (
+  projectId: string,
   subredditId: string,
 ): Promise<RedditSubmission[]> => {
-  const { data, error } = await supabaseAdmin
-    .from('reddit_submissions')
-    .select('*')
-    .eq(`subreddit_id`, subredditId);
+  const { data, error } = await supabaseAdmin.rpc('getnotratedsubmissions', {
+    projectid: projectId,
+    subredditid: subredditId,
+  });
 
   if (error) {
     return [];
@@ -413,11 +414,11 @@ const fetchRedditSubmissions = async (
   return data;
 };
 
-type SubmissionScore = Tables<'projects_subreddits_reddit_submissions_scores'>;
+type SubmissionScore = Tables<'reddit_submissions_scores'>;
 
 const insertSubmissionScores = async (submissionScores: SubmissionScore[]) => {
   const { error } = await supabaseAdmin
-    .from('projects_subreddits_reddit_submissions_scores')
+    .from('reddit_submissions_scores')
     .insert(submissionScores);
 
   if (error) {
@@ -462,7 +463,7 @@ export {
   /******************* reddit end **********************/
   /******************* openai start **********************/
   getSubredditsForScoreScanner,
-  fetchRedditSubmissions,
+  fetchNotRatedRedditSubmissions,
   insertSubmissionScores,
   updateProjectRedditScanAt,
   /******************* openai end **********************/

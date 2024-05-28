@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 
-export async function scoreSubmissions(
+export async function rateSubmissions(
   openai: OpenAI,
   projectDescription: string,
   submissions: string[],
@@ -33,7 +33,7 @@ export async function scoreSubmissions(
   ];
 
   let prompt = `
-  Evaluate the relativity between the following Reddit posts and the given Business/Product description.
+  According to the above example, for the following Business/Product description and Reddit posts:
 
   Description: "${projectDescription}"
   
@@ -56,9 +56,10 @@ export async function scoreSubmissions(
     });
 
     const messageContent = chatCompletion.choices[0].message.content;
-    return messageContent
-      ?.split('\n')
-      .map((line: string) => parseInt(line.split(':')[1]));
+    return messageContent?.split('\n').map((line: string) => {
+      const parts = line.split(':');
+      return parseInt(parts[parts.length - 1]);
+    });
   } catch (error) {
     console.error('Error evaluating relativity:', error);
     return [];
