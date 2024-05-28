@@ -1,11 +1,14 @@
 import { Metadata } from 'next';
-import { Inter } from "next/font/google";
 import { PropsWithChildren } from 'react';
 import { getURL } from '@/utils/helpers';
 import 'styles/main.css';
-import { cn } from "@/utils/cn";
+import { cn } from '@/utils/cn';
+import { Inter as FontSans } from 'next/font/google';
 
-const inter = Inter({ subsets: ["latin"] });
+const fontSans = FontSans({
+  subsets: ['latin'],
+  variable: '--font-sans',
+});
 
 const meta = {
   title: 'Next.js Subscription Starter',
@@ -13,7 +16,7 @@ const meta = {
   cardImage: '/og.png',
   robots: 'follow, index',
   favicon: '/favicon.ico',
-  url: getURL()
+  url: getURL(),
 };
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -34,7 +37,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: meta.description,
       images: [meta.cardImage],
       type: 'website',
-      siteName: meta.title
+      siteName: meta.title,
     },
     twitter: {
       card: 'summary_large_image',
@@ -42,15 +45,22 @@ export async function generateMetadata(): Promise<Metadata> {
       creator: '@Vercel',
       title: meta.title,
       description: meta.description,
-      images: [meta.cardImage]
-    }
+      images: [meta.cardImage],
+    },
   };
 }
 
 export default async function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
-      <body className={cn('bg-background text-foreground', inter.className)}>{children}</body>
+      <body
+        className={cn(
+          'min-h-screen bg-background font-sans antialiased',
+          fontSans.variable,
+        )}
+      >
+        {children}
+      </body>
     </html>
   );
 }
