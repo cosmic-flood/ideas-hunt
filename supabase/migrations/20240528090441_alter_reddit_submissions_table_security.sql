@@ -1,0 +1,1 @@
+alter table reddit_submissions enable row level security;

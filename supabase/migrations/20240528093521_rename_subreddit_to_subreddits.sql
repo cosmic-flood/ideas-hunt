@@ -1,0 +1,1 @@
+ALTER TABLE subreddit RENAME TO subreddits;

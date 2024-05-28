@@ -109,10 +109,35 @@ export type Database = {
         }
         Relationships: []
       }
+      projects: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       reddit_submissions: {
         Row: {
           created_at: string | null
           id: string
+          name: string | null
           reddit_id: string | null
           subreddit: string | null
           text: string | null
@@ -122,6 +147,7 @@ export type Database = {
         Insert: {
           created_at?: string | null
           id?: string
+          name?: string | null
           reddit_id?: string | null
           subreddit?: string | null
           text?: string | null
@@ -131,11 +157,57 @@ export type Database = {
         Update: {
           created_at?: string | null
           id?: string
+          name?: string | null
           reddit_id?: string | null
           subreddit?: string | null
           text?: string | null
           title?: string | null
           url?: string | null
+        }
+        Relationships: []
+      }
+      schedule_jobs: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string | null
+          start_time: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name?: string | null
+          start_time?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string | null
+          start_time?: string | null
+        }
+        Relationships: []
+      }
+      subreddits: {
+        Row: {
+          created_at: string | null
+          id: string
+          latest_scanned_submission_name: string | null
+          name: string | null
+          scanned_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          latest_scanned_submission_name?: string | null
+          name?: string | null
+          scanned_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          latest_scanned_submission_name?: string | null
+          name?: string | null
+          scanned_at?: string | null
         }
         Relationships: []
       }

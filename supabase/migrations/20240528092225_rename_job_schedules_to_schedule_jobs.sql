@@ -1,0 +1,1 @@
+ALTER TABLE job_schedules RENAME TO schedule_jobs;

@@ -1,0 +1,2 @@
+ALTER TABLE reddit_submissions
+ADD latest_scanned_submission_name text;
