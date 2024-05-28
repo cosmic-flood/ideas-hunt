@@ -1,7 +1,7 @@
 import snoowrap from 'snoowrap';
 import {
   getScheduleJob,
-  getSubreddits,
+  getSubredditsForRedditScanner,
   insertRedditSubmissions,
   saveScheduleJobStartTime,
   saveSubredditLatestScan
@@ -51,7 +51,7 @@ export async function GET(req: Request) {
 
   // fetch subreddits
   const jobStartTime = job.start_time !== null? new Date(job.start_time) : new Date();
-  const subreddits = await getSubreddits(jobStartTime);
+  const subreddits = await getSubredditsForRedditScanner(jobStartTime);
 
   if (subreddits.length === 0) {
     await saveScheduleJobStartTime(jobName, new Date());
@@ -78,7 +78,7 @@ export async function GET(req: Request) {
         text: p.selftext,
         url: p.url,
         created_at: new Date(p.created_utc * 1000),
-        subreddit: p.subreddit.display_name,
+        subreddit_id: subreddit.id,
       }
     }) as unknown as RedditSubmission[];
 

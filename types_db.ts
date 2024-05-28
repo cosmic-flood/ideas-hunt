@@ -133,13 +133,46 @@ export type Database = {
         }
         Relationships: []
       }
+      projects_subreddits: {
+        Row: {
+          project_id: string
+          scanned_at: string | null
+          subreddit_id: string
+        }
+        Insert: {
+          project_id: string
+          scanned_at?: string | null
+          subreddit_id: string
+        }
+        Update: {
+          project_id?: string
+          scanned_at?: string | null
+          subreddit_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projects_subreddits_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projects_subreddits_subreddit_id_fkey"
+            columns: ["subreddit_id"]
+            isOneToOne: false
+            referencedRelation: "subreddits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reddit_submissions: {
         Row: {
           created_at: string | null
           id: string
           name: string | null
           reddit_id: string | null
-          subreddit: string | null
+          subreddit_id: string | null
           text: string | null
           title: string | null
           url: string | null
@@ -149,7 +182,7 @@ export type Database = {
           id?: string
           name?: string | null
           reddit_id?: string | null
-          subreddit?: string | null
+          subreddit_id?: string | null
           text?: string | null
           title?: string | null
           url?: string | null
@@ -159,12 +192,20 @@ export type Database = {
           id?: string
           name?: string | null
           reddit_id?: string | null
-          subreddit?: string | null
+          subreddit_id?: string | null
           text?: string | null
           title?: string | null
           url?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "reddit_submissions_subreddit_id_fkey"
+            columns: ["subreddit_id"]
+            isOneToOne: false
+            referencedRelation: "subreddits"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       schedule_jobs: {
         Row: {

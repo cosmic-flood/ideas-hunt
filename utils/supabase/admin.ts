@@ -14,7 +14,7 @@ const TRIAL_PERIOD_DAYS = 0;
 // as it has admin privileges and overwrites RLS policies!
 const supabaseAdmin = createClient<Database>(
   process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+  process.env.SUPABASE_SERVICE_ROLE_KEY || '',
 );
 
 const upsertProductRecord = async (product: Stripe.Product) => {
@@ -24,7 +24,7 @@ const upsertProductRecord = async (product: Stripe.Product) => {
     name: product.name,
     description: product.description ?? null,
     image: product.images?.[0] ?? null,
-    metadata: product.metadata
+    metadata: product.metadata,
   };
 
   const { error: upsertError } = await supabaseAdmin
@@ -38,7 +38,7 @@ const upsertProductRecord = async (product: Stripe.Product) => {
 const upsertPriceRecord = async (
   price: Stripe.Price,
   retryCount = 0,
-  maxRetries = 3
+  maxRetries = 3,
 ) => {
   const priceData: Price = {
     id: price.id,
@@ -49,7 +49,7 @@ const upsertPriceRecord = async (
     unit_amount: price.unit_amount ?? null,
     interval: price.recurring?.interval ?? null,
     interval_count: price.recurring?.interval_count ?? null,
-    trial_period_days: price.recurring?.trial_period_days ?? TRIAL_PERIOD_DAYS
+    trial_period_days: price.recurring?.trial_period_days ?? TRIAL_PERIOD_DAYS,
   };
 
   const { error: upsertError } = await supabaseAdmin
@@ -63,7 +63,7 @@ const upsertPriceRecord = async (
       await upsertPriceRecord(price, retryCount + 1, maxRetries);
     } else {
       throw new Error(
-        `Price insert/update failed after ${maxRetries} retries: ${upsertError.message}`
+        `Price insert/update failed after ${maxRetries} retries: ${upsertError.message}`,
       );
     }
   } else if (upsertError) {
@@ -88,7 +88,8 @@ const deletePriceRecord = async (price: Stripe.Price) => {
     .from('prices')
     .delete()
     .eq('id', price.id);
-  if (deletionError) throw new Error(`Price deletion failed: ${deletionError.message}`);
+  if (deletionError)
+    throw new Error(`Price deletion failed: ${deletionError.message}`);
   console.log(`Price deleted: ${price.id}`);
 };
 
@@ -98,7 +99,9 @@ const upsertCustomerToSupabase = async (uuid: string, customerId: string) => {
     .upsert([{ id: uuid, stripe_customer_id: customerId }]);
 
   if (upsertError)
-    throw new Error(`Supabase customer record creation failed: ${upsertError.message}`);
+    throw new Error(
+      `Supabase customer record creation failed: ${upsertError.message}`,
+    );
 
   return customerId;
 };
@@ -113,7 +116,7 @@ const createCustomerInStripe = async (uuid: string, email: string) => {
 
 const createOrRetrieveCustomer = async ({
   email,
-  uuid
+  uuid,
 }: {
   email: string;
   uuid: string;
@@ -134,7 +137,7 @@ const createOrRetrieveCustomer = async ({
   let stripeCustomerId: string | undefined;
   if (existingSupabaseCustomer?.stripe_customer_id) {
     const existingStripeCustomer = await stripe.customers.retrieve(
-      existingSupabaseCustomer.stripe_customer_id
+      existingSupabaseCustomer.stripe_customer_id,
     );
     stripeCustomerId = existingStripeCustomer.id;
   } else {
@@ -160,23 +163,23 @@ const createOrRetrieveCustomer = async ({
 
       if (updateError)
         throw new Error(
-          `Supabase customer record update failed: ${updateError.message}`
+          `Supabase customer record update failed: ${updateError.message}`,
         );
       console.warn(
-        `Supabase customer record mismatched Stripe ID. Supabase record updated.`
+        `Supabase customer record mismatched Stripe ID. Supabase record updated.`,
       );
     }
     // If Supabase has a record and matches Stripe, return Stripe customer ID
     return stripeCustomerId;
   } else {
     console.warn(
-      `Supabase customer record was missing. A new record was created.`
+      `Supabase customer record was missing. A new record was created.`,
     );
 
     // If Supabase has no record, create a new record and return Stripe customer ID
     const upsertedStripeCustomer = await upsertCustomerToSupabase(
       uuid,
-      stripeIdToInsert
+      stripeIdToInsert,
     );
     if (!upsertedStripeCustomer)
       throw new Error('Supabase customer record creation failed.');
@@ -190,7 +193,7 @@ const createOrRetrieveCustomer = async ({
  */
 const copyBillingDetailsToCustomer = async (
   uuid: string,
-  payment_method: Stripe.PaymentMethod
+  payment_method: Stripe.PaymentMethod,
 ) => {
   //Todo: check this assertion
   const customer = payment_method.customer as string;
@@ -202,16 +205,17 @@ const copyBillingDetailsToCustomer = async (
     .from('users')
     .update({
       billing_address: { ...address },
-      payment_method: { ...payment_method[payment_method.type] }
+      payment_method: { ...payment_method[payment_method.type] },
     })
     .eq('id', uuid);
-  if (updateError) throw new Error(`Customer update failed: ${updateError.message}`);
+  if (updateError)
+    throw new Error(`Customer update failed: ${updateError.message}`);
 };
 
 const manageSubscriptionStatusChange = async (
   subscriptionId: string,
   customerId: string,
-  createAction = false
+  createAction = false,
 ) => {
   // Get customer's UUID from mapping table.
   const { data: customerData, error: noCustomerError } = await supabaseAdmin
@@ -226,7 +230,7 @@ const manageSubscriptionStatusChange = async (
   const { id: uuid } = customerData!;
 
   const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
-    expand: ['default_payment_method']
+    expand: ['default_payment_method'],
   });
   // Upsert the latest status of the subscription object.
   const subscriptionData: TablesInsert<'subscriptions'> = {
@@ -246,10 +250,10 @@ const manageSubscriptionStatusChange = async (
       ? toDateTime(subscription.canceled_at).toISOString()
       : null,
     current_period_start: toDateTime(
-      subscription.current_period_start
+      subscription.current_period_start,
     ).toISOString(),
     current_period_end: toDateTime(
-      subscription.current_period_end
+      subscription.current_period_end,
     ).toISOString(),
     created: toDateTime(subscription.created).toISOString(),
     ended_at: subscription.ended_at
@@ -260,16 +264,18 @@ const manageSubscriptionStatusChange = async (
       : null,
     trial_end: subscription.trial_end
       ? toDateTime(subscription.trial_end).toISOString()
-      : null
+      : null,
   };
 
   const { error: upsertError } = await supabaseAdmin
     .from('subscriptions')
     .upsert([subscriptionData]);
   if (upsertError)
-    throw new Error(`Subscription insert/update failed: ${upsertError.message}`);
+    throw new Error(
+      `Subscription insert/update failed: ${upsertError.message}`,
+    );
   console.log(
-    `Inserted/updated subscription [${subscription.id}] for user [${uuid}]`
+    `Inserted/updated subscription [${subscription.id}] for user [${uuid}]`,
   );
 
   // For a new subscription copy the billing details to the customer object.
@@ -278,7 +284,7 @@ const manageSubscriptionStatusChange = async (
     //@ts-ignore
     await copyBillingDetailsToCustomer(
       uuid,
-      subscription.default_payment_method as Stripe.PaymentMethod
+      subscription.default_payment_method as Stripe.PaymentMethod,
     );
 };
 
@@ -299,59 +305,115 @@ const getScheduleJob = async (jobName: string): Promise<ScheduleJob | null> => {
   }
 
   return data;
-}
+};
 
 const saveScheduleJobStartTime = async (jobName: string, dateTime: Date) => {
   const { error } = await supabaseAdmin
     .from('schedule_jobs')
     .update({
-      start_time: dateTime.toISOString()
+      start_time: dateTime.toISOString(),
     })
-    .eq('name', jobName)
+    .eq('name', jobName);
 
   if (error) {
-    console.log('Error saving ScheduleJob start_time', error)
+    console.log('Error saving ScheduleJob start_time', error);
   }
-}
+};
 
-const getSubreddits = async (time: Date, limit: number = 20): Promise<Subreddit[]> => {
+const getSubredditsForRedditScanner = async (
+  time: Date,
+  limit: number = 20,
+): Promise<Subreddit[]> => {
   const { data, error } = await supabaseAdmin
     .from('subreddits')
     .select('*')
-    .or(`scanned_at.lt.${time.toISOString()},scanned_at.is.null`);
+    .or(`scanned_at.lt.${time.toISOString()},scanned_at.is.null`)
+    .limit(limit);
 
   if (error) {
     return [];
   }
 
   return data;
-}
+};
 
 const saveSubredditLatestScan = async (subreddit: Subreddit) => {
   const { error } = await supabaseAdmin
     .from('subreddits')
     .update({
       latest_scanned_submission_name: subreddit.latest_scanned_submission_name,
-      scanned_at: subreddit.scanned_at
+      scanned_at: subreddit.scanned_at,
     })
-    .eq('id', subreddit.id)
+    .eq('id', subreddit.id);
 
   if (error) {
-    console.log('Error saving latest scanned submission', error)
+    console.log('Error saving latest scanned submission', error);
   }
-}
+};
 
-const insertRedditSubmissions = async (redditSubmission: RedditSubmission[]) => {
+const insertRedditSubmissions = async (
+  redditSubmission: RedditSubmission[],
+) => {
   const { error } = await supabaseAdmin
     .from('reddit_submissions')
     .insert(redditSubmission);
 
   if (error) {
-    console.log('Error inserting reddit submissions', error)
+    console.log('Error inserting reddit submissions', error);
   }
-}
+};
 
 /******************* reddit end **********************/
+
+/******************* openai start **********************/
+
+interface SubredditForScore {
+  project_id: string;
+  projects: { id: string; description: string | null } | null;
+  subreddit_id: string;
+  subreddits: { id: string } | null;
+}
+
+const getSubredditsForScoreScanner = async (
+  time: Date,
+  limit: number = 20,
+): Promise<SubredditForScore[]> => {
+  const { data, error } = await supabaseAdmin
+    .from('projects_subreddits')
+    .select(
+      `
+      project_id,
+      projects (id, description),
+      subreddit_id,
+      subreddits (id)
+    `,
+    )
+    .or(`scanned_at.lt.${time.toISOString()},scanned_at.is.null`)
+    .limit(limit);
+
+  if (error) {
+    return [];
+  }
+
+  return data;
+};
+
+const fetchRedditSubmissions = async (
+  subredditId: string,
+): Promise<RedditSubmission[]> => {
+  const { data, error } = await supabaseAdmin
+    .from('reddit_submissions')
+    .select('*')
+    .eq(`subreddit_id`, subredditId);
+
+  if (error) {
+    return [];
+  }
+
+  return data;
+};
+/******************* openai end **********************/
+
 export {
   upsertProductRecord,
   upsertPriceRecord,
@@ -363,8 +425,12 @@ export {
   /******************* reddit start **********************/
   getScheduleJob,
   saveScheduleJobStartTime,
-  getSubreddits,
+  getSubredditsForRedditScanner,
   saveSubredditLatestScan,
-  insertRedditSubmissions
+  insertRedditSubmissions,
   /******************* reddit end **********************/
+  /******************* openai start **********************/
+  getSubredditsForScoreScanner,
+  fetchRedditSubmissions,
+  /******************* openai end **********************/
 };
