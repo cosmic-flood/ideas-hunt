@@ -11,8 +11,7 @@ import {
 import { Tables } from '@/types_db';
 import { scoreSubmissions } from '@/utils/score/openai';
 
-type RedditSubmission = Tables<'reddit_submissions'>;
-type SubmissionScore = Tables<'projects_subreddits_reddit_submissions'>;
+type SubmissionScore = Tables<'projects_subreddits_reddit_submissions_scores'>;
 
 const jobName = 'score';
 

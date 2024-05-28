@@ -52,13 +52,13 @@ export async function scoreSubmissions(
   try {
     const chatCompletion = await openai.chat.completions.create({
       messages: [...messages, { role: 'user', content: prompt }],
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4-turbo-preview',
     });
 
     const messageContent = chatCompletion.choices[0].message.content;
     return messageContent
       ?.split('\n')
-      .map((line: string) => line.split(':')[1]);
+      .map((line: string) => parseInt(line.split(':')[1]));
   } catch (error) {
     console.error('Error evaluating relativity:', error);
     return [];

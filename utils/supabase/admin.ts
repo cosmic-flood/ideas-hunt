@@ -431,7 +431,7 @@ const updateProjectRedditScanAt = async (
   dateTime: Date,
 ) => {
   const { error } = await supabaseAdmin
-    .from('subreddits')
+    .from('projects_subreddits')
     .update({
       scanned_at: dateTime.toISOString(),
     })
