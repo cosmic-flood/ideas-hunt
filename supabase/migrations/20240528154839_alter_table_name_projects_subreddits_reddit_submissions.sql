@@ -1,0 +1,1 @@
+ALTER TABLE projects_subreddits_reddit_submissions RENAME TO projects_subreddits_reddit_submissions_scores;

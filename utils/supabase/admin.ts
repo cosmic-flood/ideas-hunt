@@ -413,11 +413,11 @@ const fetchRedditSubmissions = async (
   return data;
 };
 
-type SubmissionScore = Tables<'projects_subreddits_reddit_submissions'>;
+type SubmissionScore = Tables<'projects_subreddits_reddit_submissions_scores'>;
 
 const insertSubmissionScores = async (submissionScores: SubmissionScore[]) => {
   const { error } = await supabaseAdmin
-    .from('projects_subreddits_reddit_submissions')
+    .from('projects_subreddits_reddit_submissions_scores')
     .insert(submissionScores);
 
   if (error) {

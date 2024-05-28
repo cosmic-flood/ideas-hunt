@@ -166,7 +166,7 @@ export type Database = {
           },
         ]
       }
-      projects_subreddits_reddit_submissions: {
+      projects_subreddits_reddit_submissions_scores: {
         Row: {
           created_at: string
           project_id: string
