@@ -49,7 +49,7 @@ export class RedditClient {
     const url = new URL(baseUrl);
     url.searchParams.append('limit', `${limit}`);
     if (submissionName) {
-      url.searchParams.append('after', submissionName);
+      url.searchParams.append('before', submissionName);
     }
 
     const response = await fetch(baseUrl, {
