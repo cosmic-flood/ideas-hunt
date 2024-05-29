@@ -6,7 +6,6 @@ import { cn } from '@/utils/cn';
 
 export default function NavLinks() {
   const currentPath = usePathname();
-  console.log(currentPath);
 
   return (
     <nav className="flex items-center gap-4 text-sm lg:gap-6">
