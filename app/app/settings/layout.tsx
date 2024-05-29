@@ -27,7 +27,7 @@ const sidebarNavItems = [
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
-    <div className="hidden space-y-6 p-6 pb-16 md:block">
+    <>
       <div className="space-y-0.5">
         <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
         <p className="text-muted-foreground">
@@ -41,6 +41,6 @@ export default function Layout({ children }: PropsWithChildren) {
         </aside>
         <div className="flex-1 lg:max-w-2xl">{children}</div>
       </div>
-    </div>
+    </>
   );
 }

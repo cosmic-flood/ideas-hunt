@@ -13,16 +13,14 @@ import {
 
 export default function Header() {
   return (
-    <div className="border-b">
-      <header className="container flex items-center justify-between py-2">
+    <div className="w-full border-b p-4 sm:px-6 sm:py-0 md:gap-8">
+      <header className="flex items-center justify-between py-2">
         <h2 className="text-lg font-semibold">Reddit Sales</h2>
         <User />
       </header>
     </div>
   );
 }
-
-function NavLinks() {}
 
 function User() {
   return (
