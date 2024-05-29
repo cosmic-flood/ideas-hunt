@@ -14,7 +14,7 @@ import Link from 'next/link';
 
 export default function StarterDialog() {
   const [isOpen, setIsOpen] = React.useState(false);
-  console.log('in starter dialog');
+
   useEffect(() => {
     const accountInitialized = localStorage.getItem('initialized');
     if (!accountInitialized) {
