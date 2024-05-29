@@ -1,8 +1,16 @@
 const authUrl = 'https://www.reddit.com/api/v1/access_token';
 
-export enum RedditSubmissionContentType {
-  Text = 'text',
+export enum RedditType {
+  Comment = 'comment',
+  Account = 'account',
   Link = 'link',
+  Message = 'message',
+  Subreddit = 'subreddit',
+  Award = 'award',
+}
+
+export function getRedditType(post: any): RedditType {
+  return post.selftext === '' ? RedditType.Message : RedditType.Link;
 }
 
 export class RedditClient {
@@ -12,8 +20,6 @@ export class RedditClient {
     private readonly clientId: string,
     private readonly clientSecret: string,
     private readonly userAgent: string,
-    private readonly username: string,
-    private readonly password: string,
   ) {}
 
   async init() {
@@ -22,6 +28,7 @@ export class RedditClient {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         Authorization: `Basic ${Buffer.from(`${this.clientId}:${this.clientSecret}`).toString('base64')}`,
+        'User-Agent': this.userAgent,
       },
       body: 'grant_type=client_credentials',
     });

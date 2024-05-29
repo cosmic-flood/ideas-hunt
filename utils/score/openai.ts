@@ -53,6 +53,7 @@ export async function rateSubmissions(
     const chatCompletion = await openai.chat.completions.create({
       messages: [...messages, { role: 'user', content: prompt }],
       model: 'gpt-4-turbo-preview',
+      temperature: 0.5,
     });
 
     const messageContent = chatCompletion.choices[0].message.content;
