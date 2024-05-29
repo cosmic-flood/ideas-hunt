@@ -1,6 +1,7 @@
 import SubmissionTable from '@/components/ui/(overview)/submission-table';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
+import StarterDialog from '@/components/ui/(overview)/starter-dialog';
 
 export default async function Page() {
   const supabase = createClient();
@@ -14,6 +15,7 @@ export default async function Page() {
 
   return (
     <>
+      <StarterDialog />
       <div className="mb-4">
         <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
         <p className="text-muted-foreground">
