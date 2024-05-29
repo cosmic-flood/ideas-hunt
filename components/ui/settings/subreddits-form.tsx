@@ -18,7 +18,7 @@ import { cn } from '@/utils/cn';
 import { Cross1Icon, PlusIcon } from '@radix-ui/react-icons';
 import { Button } from '@/components/ui/shadcn-button';
 import { Input } from '@/components/ui/input';
-import { addSubreddit } from '@/utils/supabase/write';
+import { updateUserSubreddits } from '@/utils/supabase/write';
 
 type Subreddit = Tables<'subreddits'>;
 
@@ -55,8 +55,16 @@ export function SubredditForm({ subreddits }: { subreddits: Subreddit[] }) {
   });
 
   async function onSubmit(data: SubredditFormValues) {
-    const cleaned = data.subreddits.filter((x) => x.name.trim() !== '');
-    await addSubreddit(cleaned.map((x) => x.name));
+    const existed = subreddits.map((x) => x.name?.trim()!);
+
+    const current = data.subreddits
+      .filter((x) => x.name.trim() !== '')
+      .map((x) => x.name);
+
+    const deletes = existed.filter((x) => !current.includes(x));
+    const adds = current.filter((x) => !existed.includes(x));
+
+    await updateUserSubreddits(deletes, adds);
   }
 
   return (
