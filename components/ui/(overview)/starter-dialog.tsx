@@ -40,7 +40,7 @@ export default function StarterDialog() {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction>
+          <AlertDialogAction asChild>
             <Link href="/settings">Start Configuration</Link>
           </AlertDialogAction>
         </AlertDialogFooter>
