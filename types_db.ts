@@ -413,10 +413,21 @@ export type Database = {
       get_user_submission_score: {
         Args: {
           p_user_id: string
-          page_offset?: number
-          page_size?: number
+          query: string
         }
         Returns: Database["public"]["CompositeTypes"]["user_submission_score"][]
+      }
+      get_user_subreddits: {
+        Args: {
+          p_user_id: string
+        }
+        Returns: {
+          created_at: string | null
+          id: string
+          latest_scanned_submission_name: string | null
+          name: string | null
+          scanned_at: string | null
+        }[]
       }
       getnotratedsubmissions: {
         Args: {
@@ -454,9 +465,10 @@ export type Database = {
       user_submission_score: {
         subreddit: string | null
         title: string | null
-        created_at: string | null
+        posted_at: string | null
         text: string | null
         url: string | null
+        content_type: string | null
         score: number | null
       }
     }
