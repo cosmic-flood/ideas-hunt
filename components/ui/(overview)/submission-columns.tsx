@@ -5,6 +5,7 @@ import { UserSubmissionScore } from '@/utils/supabase/reddit-submissions';
 import { Badge } from '@/components/ui/badge';
 import { DataTableColumnHeader } from '@/components/ui/(overview)/data-table-column-header';
 import { format } from 'date-fns';
+import Link from 'next/link';
 
 const types = [
   {
@@ -30,11 +31,16 @@ export const columns: ColumnDef<UserSubmissionScore>[] = [
     header: 'Post',
     cell: ({ row }) => {
       return (
-        <div title={row.getValue('title')} className="max-w-[500px] truncate">
-          <span className="font-medium">{row.getValue('title')}</span>
-          <br />
-          <span className="text-slate-500">{row.original.subreddit}</span>
-        </div>
+        <Link
+          href={`https://www.reddit.com${row.original.permalink}`}
+          target="_blank"
+        >
+          <div title={row.getValue('title')} className="max-w-[500px] truncate">
+            <span className="font-medium">{row.getValue('title')}</span>
+            <br />
+            <span className="text-slate-500">{row.original.subreddit}</span>
+          </div>
+        </Link>
       );
     },
   },
