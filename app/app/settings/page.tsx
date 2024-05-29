@@ -10,6 +10,7 @@ import { ProductForm } from '@/components/ui/settings/product-form';
 import { SubredditForm } from '@/components/ui/settings/subreddits-form';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
+import { EmailForm } from '@/components/ui/settings/email-form';
 
 export default async function Page() {
   const supabase = createClient();
@@ -44,6 +45,17 @@ export default async function Page() {
         </CardHeader>
         <CardContent>
           <SubredditForm subreddits={subreddits} />
+        </CardContent>
+      </Card>
+      <Card className="flex-1 shadow-none">
+        <CardHeader>
+          <CardTitle>Email</CardTitle>
+          <CardDescription>
+            Control how to receive email notification here.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <EmailForm email={user.email!} />
         </CardContent>
       </Card>
     </div>
