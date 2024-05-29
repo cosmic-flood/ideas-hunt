@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/components/ui/Button';
+import Button from '@/components/ui/ButtonRemove';
 import Link from 'next/link';
 import { requestPasswordUpdate } from '@/utils/auth-helpers/server';
 import { handleRequest } from '@/utils/auth-helpers/client';
@@ -17,7 +17,7 @@ interface ForgotPasswordProps {
 export default function ForgotPassword({
   allowEmail,
   redirectMethod,
-  disableButton
+  disableButton,
 }: ForgotPasswordProps) {
   const router = redirectMethod === 'client' ? useRouter() : null;
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -46,7 +46,7 @@ export default function ForgotPassword({
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              className="w-full p-3 rounded-md bg-zinc-800"
+              className="w-full rounded-md bg-zinc-800 p-3"
             />
           </div>
           <Button
@@ -61,19 +61,19 @@ export default function ForgotPassword({
         </div>
       </form>
       <p>
-        <Link href="/signin/password_signin" className="font-light text-sm">
+        <Link href="/signin/password_signin" className="text-sm font-light">
           Sign in with email and password
         </Link>
       </p>
       {allowEmail && (
         <p>
-          <Link href="/signin/email_signin" className="font-light text-sm">
+          <Link href="/signin/email_signin" className="text-sm font-light">
             Sign in via magic link
           </Link>
         </p>
       )}
       <p>
-        <Link href="/signin/signup" className="font-light text-sm">
+        <Link href="/signin/signup" className="text-sm font-light">
           Don't have an account? Sign up
         </Link>
       </p>

@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/components/ui/Button';
+import Button from '@/components/ui/ButtonRemove';
 import Card from '@/components/ui/Card';
 import { updateEmail } from '@/utils/auth-helpers/server';
 import { handleRequest } from '@/utils/auth-helpers/client';
@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function EmailForm({
-  userEmail
+  userEmail,
 }: {
   userEmail: string | undefined;
 }) {
@@ -47,12 +47,12 @@ export default function EmailForm({
         </div>
       }
     >
-      <div className="mt-8 mb-4 text-xl font-semibold">
+      <div className="mb-4 mt-8 text-xl font-semibold">
         <form id="emailForm" onSubmit={(e) => handleSubmit(e)}>
           <input
             type="text"
             name="newEmail"
-            className="w-1/2 p-3 rounded-md bg-zinc-800"
+            className="w-1/2 rounded-md bg-zinc-800 p-3"
             defaultValue={userEmail ?? ''}
             placeholder="Your email"
             maxLength={64}

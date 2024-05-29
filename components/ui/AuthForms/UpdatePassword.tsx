@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/components/ui/Button';
+import Button from '@/components/ui/ButtonRemove';
 import { updatePassword } from '@/utils/auth-helpers/server';
 import { handleRequest } from '@/utils/auth-helpers/client';
 import { useRouter } from 'next/navigation';
@@ -11,7 +11,7 @@ interface UpdatePasswordProps {
 }
 
 export default function UpdatePassword({
-  redirectMethod
+  redirectMethod,
 }: UpdatePasswordProps) {
   const router = redirectMethod === 'client' ? useRouter() : null;
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -38,7 +38,7 @@ export default function UpdatePassword({
               type="password"
               name="password"
               autoComplete="current-password"
-              className="w-full p-3 rounded-md bg-zinc-800"
+              className="w-full rounded-md bg-zinc-800 p-3"
             />
             <label htmlFor="passwordConfirm">Confirm New Password</label>
             <input
@@ -47,7 +47,7 @@ export default function UpdatePassword({
               type="password"
               name="passwordConfirm"
               autoComplete="current-password"
-              className="w-full p-3 rounded-md bg-zinc-800"
+              className="w-full rounded-md bg-zinc-800 p-3"
             />
           </div>
           <Button

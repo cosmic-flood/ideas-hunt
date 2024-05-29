@@ -1,12 +1,11 @@
 'use client';
 
-import Button from '@/components/ui/Button';
-import React from 'react';
+import Button from '@/components/ui/ButtonRemove';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { signUp } from '@/utils/auth-helpers/server';
 import { handleRequest } from '@/utils/auth-helpers/client';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 
 // Define prop type with allowEmail boolean
 interface SignUpProps {
@@ -42,7 +41,7 @@ export default function SignUp({ allowEmail, redirectMethod }: SignUpProps) {
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              className="w-full p-3 rounded-md bg-zinc-800"
+              className="w-full rounded-md bg-zinc-800 p-3"
             />
             <label htmlFor="password">Password</label>
             <input
@@ -51,7 +50,7 @@ export default function SignUp({ allowEmail, redirectMethod }: SignUpProps) {
               type="password"
               name="password"
               autoComplete="current-password"
-              className="w-full p-3 rounded-md bg-zinc-800"
+              className="w-full rounded-md bg-zinc-800 p-3"
             />
           </div>
           <Button
@@ -66,13 +65,13 @@ export default function SignUp({ allowEmail, redirectMethod }: SignUpProps) {
       </form>
       <p>Already have an account?</p>
       <p>
-        <Link href="/signin/password_signin" className="font-light text-sm">
+        <Link href="/signin/password_signin" className="text-sm font-light">
           Sign in with email and password
         </Link>
       </p>
       {allowEmail && (
         <p>
-          <Link href="/signin/email_signin" className="font-light text-sm">
+          <Link href="/signin/email_signin" className="text-sm font-light">
             Sign in via magic link
           </Link>
         </p>

@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/components/ui/Button';
+import Button from '@/components/ui/ButtonRemove';
 import Card from '@/components/ui/Card';
 import { updateName } from '@/utils/auth-helpers/server';
 import { handleRequest } from '@/utils/auth-helpers/client';
@@ -41,12 +41,12 @@ export default function NameForm({ userName }: { userName: string }) {
         </div>
       }
     >
-      <div className="mt-8 mb-4 text-xl font-semibold">
+      <div className="mb-4 mt-8 text-xl font-semibold">
         <form id="nameForm" onSubmit={(e) => handleSubmit(e)}>
           <input
             type="text"
             name="fullName"
-            className="w-1/2 p-3 rounded-md bg-zinc-800"
+            className="w-1/2 rounded-md bg-zinc-800 p-3"
             defaultValue={userName}
             placeholder="Your name"
             maxLength={64}
