@@ -1,5 +1,9 @@
 import OpenAI from 'openai';
 
+function removeLinks(text: string) {
+  return text.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
+}
+
 export async function rateSubmissions(
   openai: OpenAI,
   projectDescription: string,
@@ -41,7 +45,7 @@ export async function rateSubmissions(
   `;
 
   submissions.forEach((post, index) => {
-    prompt += `\n${index + 1}:${post}`;
+    prompt += `\n${index + 1}:${removeLinks(post)}`;
   });
 
   prompt += `

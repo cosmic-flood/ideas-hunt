@@ -10,14 +10,15 @@ import {
 } from '@/utils/supabase/admin';
 import { Tables } from '@/types_db';
 import { rateSubmissions } from '@/utils/score/openai';
+import { headers } from 'next/headers';
 
 type SubmissionScore = Tables<'reddit_submissions_scores'>;
 
 const jobName = 'score';
 
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const apiKey = searchParams.get('api_key');
+  const headersList = headers();
+  const apiKey = headersList.get('api-key');
   if (apiKey !== process.env.API_KEY) {
     return new Response('OK');
   }
