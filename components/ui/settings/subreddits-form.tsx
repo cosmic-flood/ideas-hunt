@@ -79,10 +79,13 @@ export function SubredditForm({ subreddits }: { subreddits: Subreddit[] }) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className={cn(index !== 0 && 'sr-only')}>
-                    Subreddits
+                    Current Subreddits
                   </FormLabel>
                   <FormDescription className={cn(index !== 0 && 'sr-only')}>
-                    Add subreddits where you want to promote your product.
+                    Add subreddits (r/subreddit_name) to monitor for new posts.
+                    RedditSale will track these subreddits and analyze new posts
+                    against your description to help you identify potential
+                    leads.
                   </FormDescription>
                   <FormControl>
                     <div className="flex items-center gap-3">
@@ -100,7 +103,11 @@ export function SubredditForm({ subreddits }: { subreddits: Subreddit[] }) {
                           }
                         }}
                       />
-                      <Input {...field} />
+                      <Input
+                        readOnly={true}
+                        className="cursor-default shadow-none"
+                        {...field}
+                      />
                     </div>
                   </FormControl>
                   <FormMessage />
