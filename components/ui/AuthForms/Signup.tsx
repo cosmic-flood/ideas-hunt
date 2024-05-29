@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/components/ui/ButtonRemove';
+import Button from 'components/ui/Button';
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { signUp } from '@/utils/auth-helpers/server';

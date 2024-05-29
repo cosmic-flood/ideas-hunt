@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/components/ui/ButtonRemove';
+import Button from 'components/ui/Button';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { createStripePortal } from '@/utils/stripe/server';
