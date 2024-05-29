@@ -12,13 +12,7 @@ type Product = Tables<'projects'>;
 export async function fetchCurrentUser(): Promise<User | null> {
   const {
     data: { user },
-    error,
   } = await supabase.auth.getUser();
-
-  if (error) {
-    console.log('Auth Error: Failed to fetch current user.', error);
-    return null;
-  }
 
   return user;
 }
@@ -29,7 +23,7 @@ export async function fetchSubreddits(userId: string): Promise<Subreddit[]> {
   });
 
   if (error) {
-    console.log('Database Error: Failed to fetch subreddits.', error);
+    console.error('Database Error: Failed to fetch subreddits.', error);
     return [];
   }
 
@@ -44,7 +38,7 @@ export async function fetchProduct(userId: string): Promise<Product> {
     .single();
 
   if (error) {
-    console.log('Database Error: Failed to fetch products.', error);
+    console.error('Database Error: Failed to fetch products.', error);
     return {} as Product;
   }
 

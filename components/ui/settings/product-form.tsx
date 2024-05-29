@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/shadcn-button';
+import { updateProduct } from '@/utils/supabase/write';
 
 type Product = Tables<'projects'>;
 
@@ -39,8 +40,8 @@ export function ProductForm({ product }: { product: Product }) {
     mode: 'onChange',
   });
 
-  function onSubmit(data: ProductFormValues) {
-    console.log('...onSubmit', JSON.stringify(data, null, 2));
+  async function onSubmit(data: ProductFormValues) {
+    await updateProduct(data.description);
   }
 
   return (

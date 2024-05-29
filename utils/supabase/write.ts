@@ -14,9 +14,25 @@ const supabaseAdmin = createClient<Database>(
 
 type Subreddit = Tables<'subreddits'>;
 
+export async function updateProduct(description: string) {
+  const user = await fetchCurrentUser();
+  if (!user) {
+    console.warn('Failed to fetch current user in server action.');
+    return;
+  }
+
+  await supabaseAdmin
+    .from('projects')
+    .update({ description })
+    .eq('user_id', user.id);
+
+  revalidatePath('/settings');
+}
+
 export async function updateUserSubreddits(deletes: string[], adds: string[]) {
   const user = await fetchCurrentUser();
   if (!user) {
+    console.warn('Failed to fetch current user in server action.');
     return;
   }
 
@@ -27,7 +43,7 @@ export async function updateUserSubreddits(deletes: string[], adds: string[]) {
     .single();
 
   if (getProjectError) {
-    console.log(
+    console.error(
       'Database Error: Failed to fetch project id while update subreddits.',
       getProjectError,
     );
@@ -53,7 +69,7 @@ async function addUserSubreddits(projectId: string, adds: string[]) {
     .select('*')
     .in('name', adds);
   if (getExistedError) {
-    console.log(
+    console.error(
       'Database Error: Failed to fetch new subreddits.',
       getExistedError,
     );
@@ -71,7 +87,7 @@ async function addUserSubreddits(projectId: string, adds: string[]) {
       .insert(newSubreddits.map((name) => ({ name })))
       .select();
     if (writeError) {
-      console.log(
+      console.error(
         `Database Error: Failed to insert new subreddits: ${newSubreddits.join(',')}`,
         writeError,
       );
@@ -108,7 +124,7 @@ async function deleteUserSubreddits(projectId: string, deletes: string[]) {
     .select('id')
     .in('name', deletes);
   if (getSubredditError) {
-    console.log(
+    console.error(
       `Database Error: Failed to fetch subreddits: ${deletes.join(',')}`,
       getSubredditError,
     );
