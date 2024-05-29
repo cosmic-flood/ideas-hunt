@@ -11,8 +11,8 @@ const types = [
     label: 'Link',
   },
   {
-    value: 'text',
-    label: 'Text',
+    value: 'message',
+    label: 'Message',
   },
 ];
 
