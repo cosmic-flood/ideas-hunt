@@ -1,3 +1,4 @@
+import { headers } from 'next/headers';
 import {
   getScheduleJob,
   getSubredditsForRedditScanner,
@@ -13,8 +14,8 @@ type RedditSubmission = Tables<'reddit_submissions'>;
 const jobName = 'reddit_scanner';
 
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const apiKey = searchParams.get('api_key');
+  const headersList = headers();
+  const apiKey = headersList.get('api-key');
   if (apiKey !== process.env.API_KEY) {
     return new Response('OK');
   }
@@ -22,26 +23,16 @@ export async function GET(req: Request) {
   const clientId = process.env.REDDIT_CLIENT_ID;
   const clientSecret = process.env.REDDIT_CLIENT_SECRET;
   const userAgent = process.env.REDDIT_USER_AGENT;
-  const username = process.env.REDDIT_USERNAME;
-  const password = process.env.REDDIT_PASSWORD;
 
   if (
     clientId === undefined ||
     clientSecret === undefined ||
-    userAgent === undefined ||
-    username === undefined ||
-    password === undefined
+    userAgent === undefined
   ) {
     return new Response('Missing params', { status: 500 });
   }
 
-  const redditClient = new RedditClient(
-    clientId,
-    clientSecret,
-    userAgent,
-    username,
-    password,
-  );
+  const redditClient = new RedditClient(clientId, clientSecret, userAgent);
 
   // fetch reddit scan job
   const job = await getScheduleJob(jobName);
