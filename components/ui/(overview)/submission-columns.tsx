@@ -4,6 +4,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { UserSubmissionScore } from '@/utils/supabase/reddit-submissions';
 import { Badge } from '@/components/ui/badge';
 import { DataTableColumnHeader } from '@/components/ui/(overview)/data-table-column-header';
+import { format } from 'date-fns';
 
 const types = [
   {
@@ -57,5 +58,10 @@ export const columns: ColumnDef<UserSubmissionScore>[] = [
   {
     accessorKey: 'posted_at',
     header: 'Posted At',
+    cell: ({ row }) => {
+      const type = types.find((t) => t.value === row.original.content_type);
+
+      return <span>{format(row.original.posted_at!, 'MM-dd-yyyy HH:mm')}</span>;
+    },
   },
 ];
