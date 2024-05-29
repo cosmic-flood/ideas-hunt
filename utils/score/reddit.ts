@@ -79,7 +79,7 @@ export class RedditClient {
       url.searchParams.append('before', submissionName);
     }
 
-    const response = await fetch(baseUrl, {
+    const response = await fetch(url, {
       headers: {
         Authorization: `Bearer ${this.accessToken}`,
       },

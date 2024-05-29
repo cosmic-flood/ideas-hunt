@@ -59,9 +59,14 @@ export async function GET(req: Request) {
       subreddit.projects?.description!,
       submissions.map((s) => `${s.title} ${s.text}`),
     );
+
     if (!scores || scores.length === 0) {
       continue;
     }
+
+    console.log(
+      `Scored ${scores.length} submissions for project ${subreddit.projects!.name}(${subreddit.projects!.id}) and subreddit ${subreddit.subreddit_id}(${subreddit.subreddits!.name})`,
+    );
 
     const submissionScores: SubmissionScore[] = scores.map((score, idx) => {
       return {

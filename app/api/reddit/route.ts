@@ -63,6 +63,10 @@ export async function GET(req: Request) {
       continue;
     }
 
+    console.log(
+      `Crawled ${posts.length} submissions for subreddit ${subreddit.name}(${subreddit.id})`,
+    );
+
     const submissions = posts.map((p) => {
       return {
         reddit_id: p.id,

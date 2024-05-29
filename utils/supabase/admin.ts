@@ -371,9 +371,13 @@ const insertRedditSubmissions = async (
 
 interface SubredditForScore {
   project_id: string;
-  projects: { id: string; description: string | null } | null;
+  projects: {
+    id: string;
+    description: string | null;
+    name: string | null;
+  } | null;
   subreddit_id: string;
-  subreddits: { id: string } | null;
+  subreddits: { id: string; name: string | null } | null;
 }
 
 const getSubredditsForScoreScanner = async (
@@ -385,9 +389,9 @@ const getSubredditsForScoreScanner = async (
     .select(
       `
       project_id,
-      projects (id, description),
+      projects (id, name, description),
       subreddit_id,
-      subreddits (id)
+      subreddits (id, name)
     `,
     )
     .or(`scanned_at.lt.${time.toISOString()},scanned_at.is.null`)
