@@ -13,7 +13,6 @@ export default async function Header() {
     return <GuestUserHeader />;
   }
 
-  console.log('user', user);
   return <AuthenticatedUserHeader user={user} />;
 }
 
