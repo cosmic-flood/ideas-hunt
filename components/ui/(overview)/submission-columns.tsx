@@ -61,7 +61,7 @@ export const columns: ColumnDef<UserSubmissionScore>[] = [
     cell: ({ row }) => {
       const type = types.find((t) => t.value === row.original.content_type);
 
-      return <span>{format(row.original.posted_at!, 'MM-dd-yyyy HH:mm')}</span>;
+      return <span>{format(row.original.posted_at!, 'yyyy-MM-dd HH:mm')}</span>;
     },
   },
 ];
