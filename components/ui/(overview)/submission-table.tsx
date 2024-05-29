@@ -1,7 +1,7 @@
 import { fetchUserSubmissionScore } from '@/utils/supabase/reddit-submissions';
 import { DataTable } from '@/components/ui/(overview)/data-table';
 import { columns } from '@/components/ui/(overview)/submission-columns';
-import { fetchSubreddits } from '@/utils/supabase/subreddit';
+import { fetchSubreddits } from '@/utils/supabase/query';
 
 export default async function SubmissionTable() {
   const submissions = await fetchUserSubmissionScore(

@@ -1,17 +1,51 @@
-import { Separator } from '@/components/ui/separator';
-import { Product } from '@/components/ui/settings/product';
+import { fetchProduct, fetchSubreddits } from '@/utils/supabase/query';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/shadcn-card';
+import { ProductForm } from '@/components/ui/settings/product-form';
+import { SubredditForm } from '@/components/ui/settings/subreddits-form';
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation';
 
-export default function Page() {
+export default async function Page() {
+  const supabase = createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return redirect('/signin');
+  }
+
+  const userId = '4a9184bd-357d-42b1-80ab-3d471e54a16c';
+
+  const product = await fetchProduct(userId);
+  const subreddits = await fetchSubreddits(userId);
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-medium">Profile</h3>
-        <p className="text-sm text-muted-foreground">
-          This is how others will see you on the site.
-        </p>
-      </div>
-      <Separator />
-      <Product />
+    <div className="flex w-full flex-col gap-8">
+      <Card className="flex-1 shadow-none">
+        <CardHeader>
+          <CardTitle>Product</CardTitle>
+          <CardDescription>Describe your product here.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ProductForm product={product} />
+        </CardContent>
+      </Card>
+      <Card className="flex-1 shadow-none">
+        <CardHeader>
+          <CardTitle>Subreddits</CardTitle>
+          <CardDescription>Manage your subreddits here.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <SubredditForm subreddits={subreddits} />
+        </CardContent>
+      </Card>
     </div>
   );
 }
