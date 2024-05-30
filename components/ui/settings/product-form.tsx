@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/shadcn-button';
-import { updateProduct } from '@/utils/supabase/write';
+import { updateProduct } from '@/utils/supabase/server-write';
 
 type Product = Tables<'projects'>;
 

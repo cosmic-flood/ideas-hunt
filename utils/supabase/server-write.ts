@@ -1,20 +1,16 @@
 'use server';
 
-import { createClient } from '@supabase/supabase-js';
 import { revalidatePath } from 'next/cache';
-import type { Database, Tables } from 'types_db';
-import { fetchCurrentUser } from '@/utils/supabase/query';
-
-// Note: supabaseAdmin uses the SERVICE_ROLE_KEY which you must only use in a secure server-side context
-// as it has admin privileges and overwrites RLS policies!
-const supabaseAdmin = createClient<Database>(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || '',
-);
+import type { Tables } from 'types_db';
+import { fetchCurrentUser } from '@/utils/supabase/server-query';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { createAdminClient } from '@/utils/supabase/admin-client';
 
 type Subreddit = Tables<'subreddits'>;
 
 export async function updateProduct(description: string) {
+  const supabaseAdmin = createAdminClient();
+
   const user = await fetchCurrentUser();
   if (!user) {
     console.warn('Failed to fetch current user in server action.');
@@ -30,6 +26,8 @@ export async function updateProduct(description: string) {
 }
 
 export async function updateUserSubreddits(deletes: string[], adds: string[]) {
+  const supabaseAdmin = createAdminClient();
+
   const user = await fetchCurrentUser();
   if (!user) {
     console.warn('Failed to fetch current user in server action.');
@@ -51,20 +49,24 @@ export async function updateUserSubreddits(deletes: string[], adds: string[]) {
   }
 
   if (deletes.length > 0) {
-    await deleteUserSubreddits(project!.id, deletes);
+    await deleteUserSubreddits(supabaseAdmin, project!.id, deletes);
   }
 
   if (adds.length > 0) {
-    await addUserSubreddits(project!.id, adds);
+    await addUserSubreddits(supabaseAdmin, project!.id, adds);
   }
 
   revalidatePath('/settings');
 }
 
-async function addUserSubreddits(projectId: string, adds: string[]) {
+async function addUserSubreddits(
+  supabase: SupabaseClient,
+  projectId: string,
+  adds: string[],
+) {
   let allSubreddits: Subreddit[] = [];
 
-  const { data: existed, error: getExistedError } = await supabaseAdmin
+  const { data: existed, error: getExistedError } = await supabase
     .from('subreddits')
     .select('*')
     .in('name', adds);
@@ -82,7 +84,7 @@ async function addUserSubreddits(projectId: string, adds: string[]) {
     (add) => !existed.some((x) => x.name === add),
   );
   if (newSubreddits.length > 0) {
-    const { data: inserted, error: writeError } = await supabaseAdmin
+    const { data: inserted, error: writeError } = await supabase
       .from('subreddits')
       .insert(newSubreddits.map((name) => ({ name })))
       .select();
@@ -107,7 +109,7 @@ async function addUserSubreddits(projectId: string, adds: string[]) {
     .filter((x) => adds.includes(x.name!))
     .map((x) => x.id);
 
-  await supabaseAdmin.from('projects_subreddits').insert(
+  await supabase.from('projects_subreddits').insert(
     redditIds.map((id) => ({
       project_id: projectId,
       subreddit_id: id,
@@ -117,9 +119,13 @@ async function addUserSubreddits(projectId: string, adds: string[]) {
   console.log('Successfully added new subreddits for user:', redditIds);
 }
 
-async function deleteUserSubreddits(projectId: string, deletes: string[]) {
+async function deleteUserSubreddits(
+  supabase: SupabaseClient,
+  projectId: string,
+  deletes: string[],
+) {
   // get subreddit ids to delete from projects_subreddits
-  const { data: subreddits, error: getSubredditError } = await supabaseAdmin
+  const { data: subreddits, error: getSubredditError } = await supabase
     .from('subreddits')
     .select('id')
     .in('name', deletes);
@@ -132,7 +138,7 @@ async function deleteUserSubreddits(projectId: string, deletes: string[]) {
   }
 
   const redditIds = subreddits?.map((x) => x.id);
-  await supabaseAdmin
+  await supabase
     .from('projects_subreddits')
     .delete()
     .eq('project_id', projectId)

@@ -18,7 +18,7 @@ import { cn } from '@/utils/cn';
 import { Cross1Icon, PlusIcon } from '@radix-ui/react-icons';
 import { Button } from '@/components/ui/shadcn-button';
 import { Input } from '@/components/ui/input';
-import { updateUserSubreddits } from '@/utils/supabase/write';
+import { updateUserSubreddits } from '@/utils/supabase/server-write';
 
 type Subreddit = Tables<'subreddits'>;
 

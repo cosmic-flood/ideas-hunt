@@ -1,16 +1,16 @@
 'use server';
 
-import { createClient } from '@/utils/supabase/server';
 import { Tables } from '@/types_db';
 import { User } from '@supabase/supabase-js';
 import { UserSubmissionScore } from '@/utils/supabase/custom-types';
-
-const supabase = createClient();
+import { createClient } from '@/utils/supabase/server';
 
 type Subreddit = Tables<'subreddits'>;
 type Product = Tables<'projects'>;
 
 export async function fetchCurrentUser(): Promise<User | null> {
+  const supabase = createClient();
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -19,6 +19,8 @@ export async function fetchCurrentUser(): Promise<User | null> {
 }
 
 export async function fetchSubreddits(userId: string): Promise<Subreddit[]> {
+  const supabase = createClient();
+
   const { data, error } = await supabase.rpc('get_user_subreddits', {
     p_user_id: userId,
   });
@@ -32,6 +34,8 @@ export async function fetchSubreddits(userId: string): Promise<Subreddit[]> {
 }
 
 export async function fetchProduct(userId: string): Promise<Product> {
+  const supabase = createClient();
+
   const { data, error } = await supabase
     .from('projects')
     .select('*')
@@ -50,6 +54,8 @@ export async function fetchUserSubmissionScore(
   query: string,
   userId: string,
 ): Promise<UserSubmissionScore[]> {
+  const supabase = createClient();
+
   const { data, error } = await supabase
     .rpc('get_user_submission_score', { p_user_id: userId, query: query })
     .returns<UserSubmissionScore[]>();

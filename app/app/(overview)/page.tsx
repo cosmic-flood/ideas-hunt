@@ -22,7 +22,7 @@ export default async function Page() {
           Here&apos;s a list of your tasks for this month!
         </p>
       </div>
-      <SubmissionTable />
+      <SubmissionTable user={user} />
     </>
   );
 }

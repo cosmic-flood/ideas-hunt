@@ -1,17 +1,14 @@
-import { fetchUserSubmissionScore } from '@/utils/supabase/reddit-submissions';
 import { DataTable } from '@/components/ui/(overview)/data-table';
 import { columns } from '@/components/ui/(overview)/submission-columns';
-import { fetchSubreddits } from '@/utils/supabase/query';
+import {
+  fetchSubreddits,
+  fetchUserSubmissionScore,
+} from '@/utils/supabase/server-query';
+import { User } from '@supabase/supabase-js';
 
-export default async function SubmissionTable() {
-  const submissions = await fetchUserSubmissionScore(
-    '',
-    '4a9184bd-357d-42b1-80ab-3d471e54a16c',
-  );
-
-  const subreddits = await fetchSubreddits(
-    '4a9184bd-357d-42b1-80ab-3d471e54a16c',
-  );
+export default async function SubmissionTable({ user }: { user: User }) {
+  const submissions = await fetchUserSubmissionScore('', user.id);
+  const subreddits = await fetchSubreddits(user.id);
 
   return (
     <DataTable
