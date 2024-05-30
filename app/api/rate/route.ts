@@ -6,12 +6,14 @@ import {
   getSubredditsForScoreScanner,
   insertSubmissionScores,
   saveScheduleJobStartTime,
+  SubredditForScore,
   updateProjectRedditScanAt,
 } from '@/utils/supabase/admin';
 import { Tables } from '@/types_db';
 import { rateSubmissions } from '@/utils/score/openai';
 import { headers } from 'next/headers';
 
+export const runtime = 'edge';
 export const maxDuration = 60;
 
 type SubmissionScore = Tables<'reddit_submissions_scores'>;
@@ -46,6 +48,52 @@ export async function GET(req: Request) {
     return new Response('OK');
   }
 
+  rateSubreddits(openai, subreddits);
+  // for (let subreddit of subreddits) {
+  //   const submissions = await fetchNotRatedRedditSubmissions(
+  //     subreddit.project_id,
+  //     subreddit.subreddit_id,
+  //   );
+  //
+  //   if (submissions.length === 0) {
+  //     continue;
+  //   }
+  //
+  //   const scores = await rateSubmissions(
+  //     openai,
+  //     subreddit.projects?.description!,
+  //     submissions.map((s) => `${s.title} ${s.text}`),
+  //   );
+  //
+  //   if (!scores || scores.length === 0) {
+  //     continue;
+  //   }
+  //
+  //   console.log(
+  //     `Scored ${scores.length} submissions for project ${subreddit.projects!.name}(${subreddit.projects!.id}) and subreddit ${subreddit.subreddit_id}(${subreddit.subreddits!.name})`,
+  //   );
+  //
+  //   const submissionScores: SubmissionScore[] = scores.map((score, idx) => {
+  //     return {
+  //       project_id: subreddit.projects!.id,
+  //       subreddit_id: subreddit.subreddit_id,
+  //       reddit_submission_id: submissions[idx].id,
+  //       score: score,
+  //     };
+  //   }) as SubmissionScore[];
+  //
+  //   await insertSubmissionScores(submissionScores);
+  //   await updateProjectRedditScanAt(
+  //     subreddit.projects!.id,
+  //     subreddit.subreddit_id,
+  //     new Date(),
+  //   );
+  // }
+
+  return new Response('OK');
+}
+
+async function rateSubreddits(openai: OpenAI, subreddits: SubredditForScore[]) {
   for (let subreddit of subreddits) {
     const submissions = await fetchNotRatedRedditSubmissions(
       subreddit.project_id,
@@ -86,6 +134,4 @@ export async function GET(req: Request) {
       new Date(),
     );
   }
-
-  return new Response('OK');
 }

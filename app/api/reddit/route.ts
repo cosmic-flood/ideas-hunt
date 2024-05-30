@@ -9,6 +9,7 @@ import {
 import { Tables } from '@/types_db';
 import { getRedditType, RedditClient } from '@/utils/score/reddit';
 
+export const runtime = 'edge';
 export const maxDuration = 60;
 
 type RedditSubmission = Tables<'reddit_submissions'>;

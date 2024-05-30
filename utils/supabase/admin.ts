@@ -471,3 +471,5 @@ export {
   updateProjectRedditScanAt,
   /******************* openai end **********************/
 };
+
+export type { SubredditForScore };
