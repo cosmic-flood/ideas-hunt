@@ -11,12 +11,15 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/shadcn-button';
+import { useRouter } from 'next/navigation';
 
 export default function StarterDialog() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = React.useState(false);
 
   const handleClick = () => {
     localStorage.setItem('initialized', 'true');
+    router.push('/settings');
   };
 
   useEffect(() => {
