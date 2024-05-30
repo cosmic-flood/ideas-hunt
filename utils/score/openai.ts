@@ -55,14 +55,17 @@ export async function rateSubmissions(
   Respond with a score from 1 to 10 for each post, separate the index and score with :.
   `;
 
-  console.log('Prompt:', prompt);
+  console.log('Evaluating prompt');
 
   try {
+    const startTime = new Date().getTime();
     const chatCompletion = await openai.chat.completions.create({
       messages: [...messages, { role: 'user', content: prompt }],
       model: 'gpt-4-turbo-preview',
       temperature: 0.5,
     });
+
+    console.log('Time taken:', new Date().getTime() - startTime);
 
     const messageContent = chatCompletion.choices[0].message.content;
     console.log('OpenAI usage', JSON.stringify(chatCompletion.usage));

@@ -100,6 +100,7 @@ async function rate() {
       `Inserted ${submissionScores.length} scores for project ${subreddit.projects!.name}(${subreddit.projects!.id}) and subreddit ${subreddit.subreddit_id}(${subreddit.subreddits!.name})`,
     );
 
+    console.log('Sleeping for 10 seconds');
     await waitFor(10000);
   }
 }
