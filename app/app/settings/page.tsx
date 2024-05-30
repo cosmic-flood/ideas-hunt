@@ -39,7 +39,10 @@ export default async function Page() {
       <Card className="flex-1 shadow-none">
         <CardHeader>
           <CardTitle>Subreddits</CardTitle>
-          <CardDescription>Manage your subreddits here.</CardDescription>
+          <CardDescription>
+            RedditSale will track these subreddits and analyze new posts against
+            your description to help you identify potential leads.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <SubredditForm subreddits={subreddits} />
@@ -47,7 +50,7 @@ export default async function Page() {
       </Card>
       <Card className="flex-1 shadow-none">
         <CardHeader>
-          <CardTitle>Email</CardTitle>
+          <CardTitle>Notification</CardTitle>
           <CardDescription>
             Control how to receive email notification here.
           </CardDescription>

@@ -8,17 +8,16 @@ import { useToast } from '@/components/ui/use-toast';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { cn } from '@/utils/cn';
 import { Cross1Icon, PlusIcon } from '@radix-ui/react-icons';
 import { Button } from '@/components/ui/shadcn-button';
 import { Input } from '@/components/ui/input';
 import { updateUserSubreddits } from '@/utils/supabase/server-write';
+import { cn } from '@/utils/cn';
 
 type Subreddit = Tables<'subreddits'>;
 
@@ -81,12 +80,6 @@ export function SubredditForm({ subreddits }: { subreddits: Subreddit[] }) {
                   <FormLabel className={cn(index !== 0 && 'sr-only')}>
                     Current Subreddits
                   </FormLabel>
-                  <FormDescription className={cn(index !== 0 && 'sr-only')}>
-                    Add subreddits (r/subreddit_name) to monitor for new posts.
-                    RedditSale will track these subreddits and analyze new posts
-                    against your description to help you identify potential
-                    leads.
-                  </FormDescription>
                   <FormControl>
                     <div className="flex items-center gap-3">
                       <Cross1Icon
@@ -121,6 +114,9 @@ export function SubredditForm({ subreddits }: { subreddits: Subreddit[] }) {
             <PlusIcon className="mr-1.5" />
             Add Subreddit
           </Button>
+          <p className="my-2 text-[0.8rem] text-muted-foreground">
+            Add subreddits (r/subreddit_name) to monitor for new posts.
+          </p>
         </div>
         <div className="text-end">
           <Button type="submit">Save</Button>
