@@ -63,6 +63,8 @@ export function EmailForm({ email }: { email: string }) {
       }, 1000);
     });
 
+    console.log(data);
+
     await promise;
   }
 
