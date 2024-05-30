@@ -37,7 +37,7 @@ export async function rateSubmissions(
   ];
 
   let prompt = `
-  According to the above example, for the following Business/Product description and Reddit posts:
+  According to the above example, evaluate the relativity between the following Business/Product description and Reddit posts:
 
   Description: "${projectDescription}"
   
@@ -45,12 +45,14 @@ export async function rateSubmissions(
   `;
 
   submissions.forEach((post, index) => {
-    prompt += `\n${index + 1}:${removeLinks(post)}`;
+    prompt += `
+      ${index + 1}:${removeLinks(post)}
+    `;
   });
 
   prompt += `
   
-  Respond only a score for each post.
+  Respond with a score from 1 to 10 for each post, separate the index and score with :.
   `;
 
   try {
