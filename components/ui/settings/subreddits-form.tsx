@@ -103,11 +103,7 @@ export function SubredditForm({ subreddits }: { subreddits: Subreddit[] }) {
                           }
                         }}
                       />
-                      <Input
-                        readOnly={true}
-                        className="cursor-default shadow-none"
-                        {...field}
-                      />
+                      <Input {...field} />
                     </div>
                   </FormControl>
                   <FormMessage />

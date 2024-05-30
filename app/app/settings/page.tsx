@@ -22,10 +22,8 @@ export default async function Page() {
     return redirect('/signin');
   }
 
-  const userId = '4a9184bd-357d-42b1-80ab-3d471e54a16c';
-
-  const product = await fetchProduct(userId);
-  const subreddits = await fetchSubreddits(userId);
+  const product = await fetchProduct(user.id);
+  const subreddits = await fetchSubreddits(user.id);
 
   return (
     <div className="flex w-full flex-col gap-8">
