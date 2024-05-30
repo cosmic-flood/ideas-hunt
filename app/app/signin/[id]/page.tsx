@@ -60,8 +60,8 @@ export default async function SignIn({
             Welcome to Reddit Sale
           </h1>
           <p className="text-sm text-muted-foreground">
-            Enter your email below to receive a magic link. Once you click the
-            link in your email, you will be signed in.
+            Enter your email below to receive a magic link. Click the link in
+            your email to be signed in instantly.
           </p>
         </div>
 
