@@ -1,4 +1,5 @@
 import { headers } from 'next/headers';
+import { waitUntil } from '@vercel/functions';
 import {
   getScheduleJob,
   getSubredditsForRedditScanner,
@@ -10,7 +11,6 @@ import { Tables } from '@/types_db';
 import { getRedditType, RedditClient } from '@/utils/score/reddit';
 
 export const runtime = 'edge';
-export const maxDuration = 60;
 
 type RedditSubmission = Tables<'reddit_submissions'>;
 
@@ -23,6 +23,11 @@ export async function GET(req: Request) {
     return new Response('OK');
   }
 
+  waitUntil(crawlReddit());
+  return new Response('OK');
+}
+
+async function crawlReddit() {
   const clientId = process.env.REDDIT_CLIENT_ID;
   const clientSecret = process.env.REDDIT_CLIENT_SECRET;
   const userAgent = process.env.REDDIT_USER_AGENT;
@@ -90,6 +95,4 @@ export async function GET(req: Request) {
     subreddit.scanned_at = new Date().toISOString();
     await saveSubredditLatestScan(subreddit);
   }
-
-  return new Response('OK');
 }
