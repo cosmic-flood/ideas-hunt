@@ -25,7 +25,7 @@ export default function NavLinks() {
           'text-foreground/60 transition-colors hover:text-foreground/80',
         )}
       >
-        Settings
+        Leads Settings
       </Link>
     </nav>
   );
