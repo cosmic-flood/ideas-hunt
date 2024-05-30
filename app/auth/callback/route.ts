@@ -1,6 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
-import { NextResponse } from 'next/server';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getErrorRedirect, getStatusRedirect } from '@/utils/helpers';
 
 export async function GET(request: NextRequest) {
@@ -19,8 +18,8 @@ export async function GET(request: NextRequest) {
         getErrorRedirect(
           `${requestUrl.origin}/signin`,
           error.name,
-          "Sorry, we weren't able to log you in. Please try again."
-        )
+          "Sorry, we weren't able to log you in. Please try again.",
+        ),
       );
     }
   }
@@ -28,9 +27,9 @@ export async function GET(request: NextRequest) {
   // URL to redirect to after sign in process completes
   return NextResponse.redirect(
     getStatusRedirect(
-      `${requestUrl.origin}/account`,
+      `${requestUrl.origin}`,
       'Success!',
-      'You are now signed in.'
-    )
+      'You are now signed in.',
+    ),
   );
 }
