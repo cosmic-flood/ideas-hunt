@@ -379,7 +379,7 @@ interface SubredditForScore {
 
 const getSubredditsForScoreScanner = async (
   time: Date,
-  limit: number = 20,
+  limit: number = 10,
 ): Promise<SubredditForScore[]> => {
   const { data, error } = await supabaseAdmin
     .from('projects_subreddits')
