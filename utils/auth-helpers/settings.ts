@@ -1,7 +1,7 @@
 // Boolean toggles to determine which auth types are allowed
-const allowOauth = true;
+const allowOauth = false;
 const allowEmail = true;
-const allowPassword = true;
+const allowPassword = false;
 
 // Boolean toggle to determine whether auth interface should route through server or client
 // (Currently set to false because screen sometimes flickers with server redirects)
@@ -27,7 +27,7 @@ export const getViewTypes = () => {
       'password_signin',
       'forgot_password',
       'update_password',
-      'signup'
+      'signup',
     ];
   }
 
