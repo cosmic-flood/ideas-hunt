@@ -13,7 +13,7 @@ const fontSans = FontSans({
 const meta = {
   title: 'Reddit Leads',
   description:
-    'RedditSale.com leverages AI technology to quickly identify posts most relevant to your business and provides immediate notifications. This prompt alert allows you to post high-quality comments within the first half hour after a post is published, boosting your visibility and ensuring you stay ahead of other responses. This strategy maximizes your exposure to potential customers - Discovering Business Leads and Validating Ideas on Reddit - Leads generation.',
+    'RedditSale.com leverages AI technology to quickly identify posts most relevant to your business and provides immediate notifications. This prompt alert allows you to post high-quality comments within the first half hour after a post is published, boosting your visibility and ensuring you stay ahead of other responses. This strategy maximizes your exposure to potential customers - Discovering Business Leads and Validating Ideas on Reddit - Leads generation - Sell your product on Reddit.',
   cardImage: '/og.png',
   robots: 'follow, index',
   favicon: '/favicon.ico',
