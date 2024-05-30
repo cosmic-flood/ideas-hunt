@@ -11,6 +11,7 @@ import {
 import { Tables } from '@/types_db';
 import { rateSubmissions } from '@/utils/score/openai';
 import { headers } from 'next/headers';
+import { waitFor } from '@/utils/helpers';
 
 export const runtime = 'edge';
 export const maxDuration = 600;
@@ -98,5 +99,7 @@ async function rate() {
     console.log(
       `Inserted ${submissionScores.length} scores for project ${subreddit.projects!.name}(${subreddit.projects!.id}) and subreddit ${subreddit.subreddit_id}(${subreddit.subreddits!.name})`,
     );
+
+    await waitFor(20000);
   }
 }
