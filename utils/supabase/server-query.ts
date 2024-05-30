@@ -3,6 +3,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { Tables } from '@/types_db';
 import { User } from '@supabase/supabase-js';
+import { UserSubmissionScore } from '@/utils/supabase/custom-types';
 
 const supabase = createClient();
 
@@ -40,6 +41,22 @@ export async function fetchProduct(userId: string): Promise<Product> {
   if (error) {
     console.error('Database Error: Failed to fetch products.', error);
     return {} as Product;
+  }
+
+  return data;
+}
+
+export async function fetchUserSubmissionScore(
+  query: string,
+  userId: string,
+): Promise<UserSubmissionScore[]> {
+  const { data, error } = await supabase
+    .rpc('get_user_submission_score', { p_user_id: userId, query: query })
+    .returns<UserSubmissionScore[]>();
+
+  if (error) {
+    console.log('Database Error: Failed to fetch user submissions.', error);
+    return [];
   }
 
   return data;
