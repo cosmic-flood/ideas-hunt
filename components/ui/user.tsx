@@ -15,8 +15,11 @@ import { handleRequest } from '@/utils/auth-helpers/client';
 import { SignOut } from '@/utils/auth-helpers/server';
 import { usePathname, useRouter } from 'next/navigation';
 import { getRedirectMethod } from '@/utils/auth-helpers/settings';
+import { useToast } from '@/components/ui/use-toast';
+import { ComingSoon } from '@/utils/data/toasts';
 
 export default function User({ user }: { user: any }) {
+  const { toast } = useToast();
   const router = getRedirectMethod() === 'client' ? useRouter() : null;
   const { email } = user;
 
@@ -30,10 +33,16 @@ export default function User({ user }: { user: any }) {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuGroup>
-          <DropdownMenuItem className="cursor-pointer">
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => toast(ComingSoon)}
+          >
             Profile
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => toast(ComingSoon)}
+          >
             Billing
           </DropdownMenuItem>
           <DropdownMenuItem asChild className="cursor-pointer">
