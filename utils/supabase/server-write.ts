@@ -3,10 +3,36 @@
 import { revalidatePath } from 'next/cache';
 import type { Tables } from 'types_db';
 import { fetchCurrentUser } from '@/utils/supabase/server-query';
-import { SupabaseClient } from '@supabase/supabase-js';
 import { createAdminClient } from '@/utils/supabase/admin-client';
 
 type Subreddit = Tables<'subreddits'>;
+
+export async function ensureUserProductCreated(userId: string) {
+  const supabaseAdmin = createAdminClient();
+
+  const { data: project, error: getProjectError } = await supabaseAdmin
+    .from('projects')
+    .select('id')
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (getProjectError) {
+    console.error(
+      'Database Error: Failed to fetch project while ensuring account initialized.',
+      getProjectError,
+    );
+    return;
+  }
+
+  if (!project) {
+    await supabaseAdmin.from('projects').insert({
+      name: "Acme's Secret",
+      user_id: userId,
+    });
+
+    console.log('Successfully added new project for user:', userId);
+  }
+}
 
 export async function updateProduct(description: string) {
   const supabaseAdmin = createAdminClient();
@@ -49,24 +75,22 @@ export async function updateUserSubreddits(deletes: string[], adds: string[]) {
   }
 
   if (deletes.length > 0) {
-    await deleteUserSubreddits(supabaseAdmin, project!.id, deletes);
+    await deleteUserSubreddits(project!.id, deletes);
   }
 
   if (adds.length > 0) {
-    await addUserSubreddits(supabaseAdmin, project!.id, adds);
+    await addUserSubreddits(project!.id, adds);
   }
 
   revalidatePath('/settings');
 }
 
-async function addUserSubreddits(
-  supabase: SupabaseClient,
-  projectId: string,
-  adds: string[],
-) {
+async function addUserSubreddits(projectId: string, adds: string[]) {
+  const supabaseAdmin = createAdminClient();
+
   let allSubreddits: Subreddit[] = [];
 
-  const { data: existed, error: getExistedError } = await supabase
+  const { data: existed, error: getExistedError } = await supabaseAdmin
     .from('subreddits')
     .select('*')
     .in('name', adds);
@@ -84,7 +108,7 @@ async function addUserSubreddits(
     (add) => !existed.some((x) => x.name === add),
   );
   if (newSubreddits.length > 0) {
-    const { data: inserted, error: writeError } = await supabase
+    const { data: inserted, error: writeError } = await supabaseAdmin
       .from('subreddits')
       .insert(newSubreddits.map((name) => ({ name })))
       .select();
@@ -109,7 +133,7 @@ async function addUserSubreddits(
     .filter((x) => adds.includes(x.name!))
     .map((x) => x.id);
 
-  await supabase.from('projects_subreddits').insert(
+  await supabaseAdmin.from('projects_subreddits').insert(
     redditIds.map((id) => ({
       project_id: projectId,
       subreddit_id: id,
@@ -119,13 +143,11 @@ async function addUserSubreddits(
   console.log('Successfully added new subreddits for user:', redditIds);
 }
 
-async function deleteUserSubreddits(
-  supabase: SupabaseClient,
-  projectId: string,
-  deletes: string[],
-) {
+async function deleteUserSubreddits(projectId: string, deletes: string[]) {
+  const supabaseAdmin = createAdminClient();
+
   // get subreddit ids to delete from projects_subreddits
-  const { data: subreddits, error: getSubredditError } = await supabase
+  const { data: subreddits, error: getSubredditError } = await supabaseAdmin
     .from('subreddits')
     .select('id')
     .in('name', deletes);
@@ -138,7 +160,7 @@ async function deleteUserSubreddits(
   }
 
   const redditIds = subreddits?.map((x) => x.id);
-  await supabase
+  await supabaseAdmin
     .from('projects_subreddits')
     .delete()
     .eq('project_id', projectId)

@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getErrorRedirect, getStatusRedirect, getURL } from 'utils/helpers';
 import { getAuthTypes } from 'utils/auth-helpers/settings';
+import { ensureUserProductCreated } from '@/utils/supabase/server-write';
 
 function isValidEmail(email: string) {
   var regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -135,7 +136,7 @@ export async function signInWithPassword(formData: FormData) {
   const cookieStore = cookies();
   const email = String(formData.get('email')).trim();
   const password = String(formData.get('password')).trim();
-  let redirectPath: string | null = null;
+  let redirectPath: string;
 
   const supabase = createClient();
   const { error, data } = await supabase.auth.signInWithPassword({
@@ -151,43 +152,8 @@ export async function signInWithPassword(formData: FormData) {
     );
   } else if (data.user) {
     cookieStore.set('preferredSignInView', 'password_signin', { path: '/' });
-
-    // create project if it doesn't exist
-    const { data: projectData, error: projectError } = await supabase
-      .from('projects')
-      .select('id')
-      .eq('user_id', data.user.id)
-      .maybeSingle();
-
-    if (projectError) {
-      console.error(
-        'Error while fetching project when user signed in:',
-        projectError,
-      );
-      redirectPath = getErrorRedirect(
-        '/signin/password_signin',
-        'Hmm... Something went wrong.',
-        'You could not be signed in.',
-      );
-    } else {
-      if (!projectData) {
-        const { data: dd, error } = await supabase
-          .from('projects')
-          .insert([{ user_id: data.user.id, name: 'My Project' }]);
-
-        if (error) {
-          redirectPath = getErrorRedirect(
-            '/signin/password_signin',
-            'Hmm... Something went wrong.',
-            'You could not be signed in.',
-          );
-        }
-      }
-
-      redirectPath =
-        redirectPath ||
-        getStatusRedirect('/', 'Success!', 'You are now signed in.');
-    }
+    await ensureUserProductCreated(data.user.id);
+    redirectPath = getStatusRedirect('/', 'Success!', 'You are now signed in.');
   } else {
     redirectPath = getErrorRedirect(
       '/signin/password_signin',
