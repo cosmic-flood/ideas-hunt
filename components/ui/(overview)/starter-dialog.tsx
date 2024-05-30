@@ -10,16 +10,20 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import Link from 'next/link';
+import { Button } from '@/components/ui/shadcn-button';
 
 export default function StarterDialog() {
   const [isOpen, setIsOpen] = React.useState(false);
 
+  const handleClick = () => {
+    localStorage.setItem('initialized', 'true');
+  };
+
   useEffect(() => {
     const accountInitialized = localStorage.getItem('initialized');
+
     if (!accountInitialized) {
       setIsOpen(true);
-      localStorage.setItem('initialized', 'true');
     }
   }, []);
 
@@ -40,8 +44,8 @@ export default function StarterDialog() {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction asChild>
-            <Link href="/settings">Start Configuration</Link>
+          <AlertDialogAction asChild onClick={handleClick}>
+            <Button variant="ghost">Start Configuration</Button>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
