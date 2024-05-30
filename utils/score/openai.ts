@@ -65,6 +65,7 @@ export async function rateSubmissions(
     });
 
     const messageContent = chatCompletion.choices[0].message.content;
+    console.log('OpenAI usage', JSON.stringify(chatCompletion.usage));
     return messageContent?.split('\n').map((line: string) => {
       const parts = line.split(':');
       return parseInt(parts[parts.length - 1]);

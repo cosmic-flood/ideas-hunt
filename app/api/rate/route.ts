@@ -100,6 +100,6 @@ async function rate() {
       `Inserted ${submissionScores.length} scores for project ${subreddit.projects!.name}(${subreddit.projects!.id}) and subreddit ${subreddit.subreddit_id}(${subreddit.subreddits!.name})`,
     );
 
-    await waitFor(20000);
+    await waitFor(10000);
   }
 }
