@@ -49,6 +49,8 @@ export async function GET(req: Request) {
   }
 
   rateSubreddits(openai, subreddits);
+
+  console.log(`${subreddits.length} subreddits to rate`);
   // for (let subreddit of subreddits) {
   //   const submissions = await fetchNotRatedRedditSubmissions(
   //     subreddit.project_id,
