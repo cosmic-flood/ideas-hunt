@@ -12,9 +12,7 @@ import { Tables } from '@/types_db';
 import { rateSubmissions } from '@/utils/score/openai';
 import { headers } from 'next/headers';
 
-export const config = {
-  maxDuration: 60,
-};
+export const maxDuration = 60;
 
 type SubmissionScore = Tables<'reddit_submissions_scores'>;
 
