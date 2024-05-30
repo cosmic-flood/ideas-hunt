@@ -1,11 +1,12 @@
 'use client';
 
-import Button from 'components/ui/Button';
+import { Button } from 'components/ui/shadcn-button';
 import Link from 'next/link';
 import { signInWithEmail } from '@/utils/auth-helpers/server';
 import { handleRequest } from '@/utils/auth-helpers/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { Input } from '@/components/ui/input';
 
 // Define prop type with allowPassword boolean
 interface EmailSignInProps {
@@ -29,16 +30,14 @@ export default function EmailSignIn({
   };
 
   return (
-    <div className="my-8">
-      <form
-        noValidate={true}
-        className="mb-4"
-        onSubmit={(e) => handleSubmit(e)}
-      >
-        <div className="grid gap-2">
+    <div className="grid gap-6">
+      <form noValidate={true} onSubmit={(e) => handleSubmit(e)}>
+        <div className="grid gap-2 space-y-4">
           <div className="grid gap-1">
-            <label htmlFor="email">Email</label>
-            <input
+            <label className="sr-only" htmlFor="email">
+              Email
+            </label>
+            <Input
               id="email"
               placeholder="name@example.com"
               type="email"
@@ -46,17 +45,11 @@ export default function EmailSignIn({
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              className="w-full rounded-md bg-zinc-800 p-3"
+              disabled={isSubmitting}
             />
           </div>
-          <Button
-            variant="slim"
-            type="submit"
-            className="mt-1"
-            loading={isSubmitting}
-            disabled={disableButton}
-          >
-            Sign in
+          <Button type="submit" disabled={isSubmitting || disableButton}>
+            Send Magic Link
           </Button>
         </div>
       </form>

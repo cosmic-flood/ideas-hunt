@@ -23,7 +23,7 @@ function AuthenticatedUserHeader({ user }: { user: any }) {
         <div className="mr-4 flex">
           <Link href="/" className="mr-6 space-x-0.5" aria-label="Logo">
             <span className="font-extrabold">R</span>eddit
-            <span className="font-extrabold">L</span>eads
+            <span className="font-extrabold">S</span>ale
           </Link>
           <NavLinks></NavLinks>
         </div>
@@ -38,9 +38,9 @@ function GuestUserHeader() {
     <div className="w-full border-b p-4 sm:px-6 sm:py-0 md:gap-8">
       <header className="flex items-center justify-between py-2">
         <div className="mr-4 flex">
-          <Link href="/" className="mr-6" aria-label="Logo">
+          <Link href="/" className="mr-6 space-x-0.5" aria-label="Logo">
             <span className="font-extrabold">R</span>eddit
-            <span className="font-extrabold">L</span>eads
+            <span className="font-extrabold">S</span>ale
           </Link>
         </div>
       </header>
