@@ -20,11 +20,7 @@ export class RedditClient {
     private readonly clientId: string,
     private readonly clientSecret: string,
     private readonly userAgent: string,
-  ) {
-    console.log(`clientId:${clientId}`);
-    console.log(`clientSecret:${clientSecret}`);
-    console.log(`userAgent:${userAgent}`);
-  }
+  ) {}
 
   async init() {
     const authResponse = await fetch(authUrl, {
@@ -56,7 +52,8 @@ export class RedditClient {
     );
 
     if (!response.ok) {
-      throw new Error(`Failed to search subreddit: ${response.statusText}`);
+      console.error(`Failed to search subreddit: ${response.statusText}`);
+      return [];
     }
 
     const data = await response.json();
@@ -90,9 +87,11 @@ export class RedditClient {
     });
 
     if (!response.ok) {
-      throw new Error(
+      console.error(
         `Subreddit: ${subreddit}; SubmissionName: ${submissionName}; Failed to fetch new posts: ${response.statusText}`,
       );
+
+      return [];
     }
 
     const data = await response.json();
