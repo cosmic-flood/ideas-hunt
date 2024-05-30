@@ -19,7 +19,8 @@ export default async function Page() {
       <div className="mb-4">
         <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
         <p className="text-muted-foreground">
-          Here&apos;s a list of your tasks for this month!
+          Here&apos;s a list of relevant Reddit posts that may bring you
+          business leads for your product.
         </p>
       </div>
       <SubmissionTable user={user} />

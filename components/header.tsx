@@ -23,7 +23,7 @@ function AuthenticatedUserHeader({ user }: { user: any }) {
         <div className="mr-4 flex">
           <Link href="/" className="mr-6 space-x-0.5" aria-label="Logo">
             <span className="font-extrabold">R</span>eddit
-            <span className="font-extrabold">L</span>eads
+            <span className="font-extrabold">S</span>ale
           </Link>
           <NavLinks></NavLinks>
         </div>
