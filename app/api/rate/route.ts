@@ -6,7 +6,6 @@ import {
   getSubredditsForScoreScanner,
   insertSubmissionScores,
   saveScheduleJobStartTime,
-  SubredditForScore,
   updateProjectRedditScanAt,
 } from '@/utils/supabase/admin';
 import { Tables } from '@/types_db';
@@ -26,10 +25,15 @@ export async function GET(req: Request) {
     return new Response('OK');
   }
 
+  waitUntil(rate());
+  return new Response('OK');
+}
+
+async function rate() {
   // fetch reddit scan job
   const job = await getScheduleJob(jobName);
   if (job === null) {
-    return new Response('OK');
+    return;
   }
 
   const openai = new OpenAI({
@@ -44,14 +48,9 @@ export async function GET(req: Request) {
 
   if (subreddits.length === 0) {
     await saveScheduleJobStartTime(jobName, new Date());
-    return new Response('OK');
+    return;
   }
 
-  waitUntil(rateSubreddits(openai, subreddits));
-  return new Response('OK');
-}
-
-async function rateSubreddits(openai: OpenAI, subreddits: SubredditForScore[]) {
   for (let subreddit of subreddits) {
     const submissions = await fetchNotRatedRedditSubmissions(
       subreddit.project_id,
