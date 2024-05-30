@@ -13,6 +13,7 @@ import { rateSubmissions } from '@/utils/score/openai';
 import { headers } from 'next/headers';
 
 export const runtime = 'edge';
+export const maxDuration = 600;
 
 type SubmissionScore = Tables<'reddit_submissions_scores'>;
 
