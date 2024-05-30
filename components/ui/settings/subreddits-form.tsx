@@ -13,7 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Cross1Icon, PlusIcon } from '@radix-ui/react-icons';
+import { Cross1Icon, PlusIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { Button } from '@/components/ui/shadcn-button';
 import { Input } from '@/components/ui/input';
 import { updateUserSubreddits } from '@/utils/supabase/server-write';
@@ -47,6 +47,8 @@ export function SubredditForm({ subreddits }: { subreddits: Subreddit[] }) {
     },
     mode: 'onChange',
   });
+
+  const { isSubmitting } = form.formState;
 
   const { fields, append, remove } = useFieldArray({
     name: 'subreddits',
@@ -119,7 +121,14 @@ export function SubredditForm({ subreddits }: { subreddits: Subreddit[] }) {
           </p>
         </div>
         <div className="text-end">
-          <Button type="submit">Save</Button>
+          {isSubmitting ? (
+            <Button disabled>
+              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              Saving...
+            </Button>
+          ) : (
+            <Button type="submit">Save</Button>
+          )}
         </div>
       </form>
     </Form>

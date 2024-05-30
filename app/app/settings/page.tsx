@@ -29,8 +29,12 @@ export default async function Page() {
     <div className="flex w-full flex-col gap-8">
       <Card className="flex-1 shadow-none">
         <CardHeader>
-          <CardTitle>Product</CardTitle>
-          <CardDescription>Describe your product here.</CardDescription>
+          <CardTitle>Your business, product, or idea.</CardTitle>
+          <CardDescription>
+            RedditSale will then compare it with subreddit posts and give you a
+            relevance score, showing how your description might enhance or
+            contribute to the discussions.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <ProductForm product={product} />

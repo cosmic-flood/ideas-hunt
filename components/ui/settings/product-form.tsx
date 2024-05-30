@@ -8,14 +8,13 @@ import { Textarea } from '@/components/ui/textarea';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/shadcn-button';
 import { updateProduct } from '@/utils/supabase/server-write';
+import { ReloadIcon } from '@radix-ui/react-icons';
 
 type Product = Tables<'projects'>;
 
@@ -40,6 +39,8 @@ export function ProductForm({ product }: { product: Product }) {
     mode: 'onChange',
   });
 
+  const { isSubmitting } = form.formState;
+
   async function onSubmit(data: ProductFormValues) {
     await updateProduct(data.description);
   }
@@ -52,26 +53,26 @@ export function ProductForm({ product }: { product: Product }) {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="Tell us about your product..."
-                  className="h-52"
+                  className="h-72"
                   {...field}
                 />
               </FormControl>
-              <FormDescription>
-                Describe your business, product, or idea. RedditSale will then
-                compare it with subreddit posts and give you a relevance score,
-                showing how your description might enhance or contribute to the
-                discussions.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
         <div className="text-end">
-          <Button type="submit">Save</Button>
+          {isSubmitting ? (
+            <Button disabled>
+              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              Saving...
+            </Button>
+          ) : (
+            <Button type="submit">Save</Button>
+          )}
         </div>
       </form>
     </Form>
