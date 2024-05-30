@@ -55,6 +55,8 @@ export async function rateSubmissions(
   Respond with a score from 1 to 10 for each post, separate the index and score with :.
   `;
 
+  console.log('Prompt:', prompt);
+
   try {
     const chatCompletion = await openai.chat.completions.create({
       messages: [...messages, { role: 'user', content: prompt }],
