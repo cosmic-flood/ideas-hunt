@@ -70,6 +70,7 @@ export async function rateSubmissions(
       return parseInt(parts[parts.length - 1]);
     });
   } catch (error) {
+    console.log('Exception:', error);
     console.error('Error evaluating relativity:', error);
     return [];
   }
