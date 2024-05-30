@@ -3,7 +3,7 @@ import Sidebar from '@/components/ui/settings/sidebar';
 
 const sidebarNavItems = [
   {
-    title: 'Application',
+    title: 'Leads Settings',
     href: '/settings',
   },
   {
