@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { ReloadIcon } from '@radix-ui/react-icons';
 
 const emailFormSchema = z.object({
   email: z
@@ -51,9 +52,18 @@ export function EmailForm({ email }: { email: string }) {
     },
     mode: 'onChange',
   });
+  const formState = form.formState;
+
+  const { isSubmitting } = formState;
 
   async function onSubmit(data: EmailFormValues) {
-    console.log(data);
+    const promise = new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, 1000);
+    });
+
+    await promise;
   }
 
   return (
@@ -111,7 +121,14 @@ export function EmailForm({ email }: { email: string }) {
           )}
         />
         <div className="text-end">
-          <Button type="submit">Save</Button>
+          {isSubmitting ? (
+            <Button disabled>
+              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              Saving...
+            </Button>
+          ) : (
+            <Button type="submit">Save</Button>
+          )}
         </div>
       </form>
     </Form>
