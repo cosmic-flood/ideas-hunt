@@ -27,7 +27,15 @@ export async function GET(req: Request) {
     return new Response('OK');
   }
 
-  waitUntil(rate());
+  waitUntil(
+    (async () => {
+      const startTimestamp = new Date().getTime();
+      await rate();
+      console.log(
+        `Rate function took ${new Date().getTime() - startTimestamp}ms`,
+      );
+    })(),
+  );
   return new Response('OK');
 }
 
