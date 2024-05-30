@@ -9,6 +9,10 @@ import {
 import { Tables } from '@/types_db';
 import { getRedditType, RedditClient } from '@/utils/score/reddit';
 
+export const config = {
+  maxDuration: 60,
+};
+
 type RedditSubmission = Tables<'reddit_submissions'>;
 
 const jobName = 'reddit_scanner';
