@@ -20,7 +20,11 @@ export class RedditClient {
     private readonly clientId: string,
     private readonly clientSecret: string,
     private readonly userAgent: string,
-  ) {}
+  ) {
+    console.log(`clientId:${clientId}`);
+    console.log(`clientSecret:${clientSecret}`);
+    console.log(`userAgent:${userAgent}`);
+  }
 
   async init() {
     const authResponse = await fetch(authUrl, {
@@ -86,7 +90,9 @@ export class RedditClient {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch new posts: ${response.statusText}`);
+      throw new Error(
+        `Subreddit: ${subreddit}; SubmissionName: ${submissionName}; Failed to fetch new posts: ${response.statusText}`,
+      );
     }
 
     const data = await response.json();
