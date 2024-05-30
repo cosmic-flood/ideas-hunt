@@ -30,6 +30,7 @@ export async function GET(req: Request) {
 }
 
 async function rate() {
+  console.log('Starting reddit score scanner');
   // fetch reddit scan job
   const job = await getScheduleJob(jobName);
   if (job === null) {
