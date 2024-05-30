@@ -34,6 +34,7 @@ async function rate() {
   // fetch reddit scan job
   const job = await getScheduleJob(jobName);
   if (job === null) {
+    console.log('No job');
     return;
   }
 
@@ -47,6 +48,7 @@ async function rate() {
     job.start_time !== null ? new Date(job.start_time) : new Date();
   const subreddits = await getSubredditsForScoreScanner(jobStartTime);
 
+  console.log(`${subreddits.length} subreddits to scan`);
   if (subreddits.length === 0) {
     await saveScheduleJobStartTime(jobName, new Date());
     return;
@@ -58,6 +60,7 @@ async function rate() {
       subreddit.subreddit_id,
     );
 
+    console.log(`${submissions.length} submissions to rate`);
     if (submissions.length === 0) {
       continue;
     }
@@ -68,6 +71,7 @@ async function rate() {
       submissions.map((s) => `${s.title} ${s.text}`),
     );
 
+    console.log(`${scores?.length} scores to rate`);
     if (!scores || scores.length === 0) {
       continue;
     }
