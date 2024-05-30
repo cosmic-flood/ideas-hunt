@@ -14,7 +14,6 @@ import { headers } from 'next/headers';
 import { waitFor } from '@/utils/helpers';
 
 export const runtime = 'edge';
-export const maxDuration = 600;
 
 type SubmissionScore = Tables<'reddit_submissions_scores'>;
 
@@ -54,7 +53,7 @@ async function rate() {
   // fetch subreddits
   const jobStartTime =
     job.start_time !== null ? new Date(job.start_time) : new Date();
-  const subreddits = await getSubredditsForScoreScanner(jobStartTime);
+  const subreddits = await getSubredditsForScoreScanner(jobStartTime, 1);
 
   if (subreddits.length === 0) {
     await saveScheduleJobStartTime(jobName, new Date());
@@ -70,6 +69,11 @@ async function rate() {
 
     console.log(`${submissions.length} submissions to rate`);
     if (submissions.length === 0) {
+      await updateProjectRedditScanAt(
+        subreddit.projects!.id,
+        subreddit.subreddit_id,
+        new Date(),
+      );
       continue;
     }
 
