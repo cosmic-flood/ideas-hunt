@@ -9,39 +9,9 @@ export async function rateSubmissions(
   projectDescription: string,
   submissions: string[],
 ) {
-  const messages: any[] = [
-    {
-      role: 'system',
-      content:
-        'You are a Reddit expert who understands the various themes, professions, and capabilities of different Reddit communities. You need to help users match their business/product with the appropriate subreddits. ',
-    },
-    {
-      role: 'user',
-      content:
-        "[Reddit Post]: How often do you deploy to prod? What is your team's production deployment strategy? I'm looking to improve my team's prod deploy strategy. Right now, we aim to deploy to prod every two weeks but sometimes we only deploy every month! For our prod deploys, we have to do manual regression testing in QA before proceeding the deployment and it's a slow process. I'm wondering how other teams are dealing with their deploy strategy. How often do you or your team deploys to prod and what is your team's production deployment strategy?",
-    },
-    {
-      role: 'user',
-      content:
-        '[Business/Product Description]: FeatBit, a feature flag management service, built with .NET. Use cases: Testing in Production, Canary Release, AB Testing, and so on. Can enhancing feature delivery effecience and mitigate release risk',
-    },
-    {
-      role: 'user',
-      content:
-        'Is the business/product above can help what the reddit post talking about? From 1-10, give me only a score. 10 is the most relevant and 1 is the least relevant.',
-    },
-    {
-      role: 'assistant',
-      content: '9',
-    },
-  ];
-
   let prompt = `
-  According to the above example, evaluate the relativity between the following Business/Product description and Reddit posts:
+  [Reddit posts]:
 
-  Description: "${projectDescription}"
-  
-  Reddit Posts:
   `;
 
   submissions.forEach((post, index) => {
@@ -50,16 +20,30 @@ export async function rateSubmissions(
     `;
   });
 
-  prompt += `
-  
-  Respond with a score from 1 to 10 for each post, separate the index and score with :.
-  `;
+  const messages: any[] = [
+    {
+      role: 'system',
+      content: 'System is a Reddit Expert and Omniscient Sage.',
+    },
+    {
+      role: 'user',
+      content: prompt,
+    },
+    {
+      role: 'user',
+      content: `[Business/Product]: ${projectDescription}`,
+    },
+    {
+      role: 'user',
+      content: `How much can my business/product help the Reddit post? And how likely is it that the post will generate leads for my business/product? Please give a score from 1-10 with 10 being the highest and 1 the lowest. Rules: 1. Be reasonable not relevance; 2. If business/product can help directly to the post with high utility, score 6 and higher. If not, score lower than 5; 3. For only inspiration but indirect help, downgrade the score; 4. Downgrade the score if it's unlikely that users will buy; 5. If the post doesn't ask a question or provoke a debate but merely states or share a link, downgrade the score.  | [Do not browse links] | Output the score only in the format: x, it must be from 1 to 10. Respond with a score only for each of the post, separate the index and score with ":"`,
+    },
+  ];
 
   try {
     const startTime = new Date().getTime();
     const chatCompletion = await openai.chat.completions.create({
-      messages: [...messages, { role: 'user', content: prompt }],
-      model: 'gpt-4-turbo-preview',
+      messages,
+      model: 'gpt-4o',
       temperature: 0.5,
     });
     const endTime = new Date().getTime();
