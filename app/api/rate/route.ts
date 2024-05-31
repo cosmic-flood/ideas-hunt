@@ -63,6 +63,11 @@ async function rate() {
 
   for (let subreddit of subreddits) {
     console.log(`Scanning subreddit ${subreddit.subreddits?.name}`);
+    await updateProjectRedditScanAt(
+      subreddit.projects!.id,
+      subreddit.subreddit_id,
+      new Date(),
+    );
     const submissions = await fetchNotRatedRedditSubmissions(
       subreddit.project_id,
       subreddit.subreddit_id,
@@ -70,11 +75,6 @@ async function rate() {
 
     console.log(`${submissions.length} submissions to rate`);
     if (submissions.length === 0) {
-      await updateProjectRedditScanAt(
-        subreddit.projects!.id,
-        subreddit.subreddit_id,
-        new Date(),
-      );
       continue;
     }
 
@@ -103,11 +103,6 @@ async function rate() {
     }) as SubmissionScore[];
 
     await insertSubmissionScores(submissionScores);
-    await updateProjectRedditScanAt(
-      subreddit.projects!.id,
-      subreddit.subreddit_id,
-      new Date(),
-    );
 
     console.log(
       `Inserted ${submissionScores.length} scores for project ${subreddit.projects!.name}(${subreddit.projects!.id}) and subreddit ${subreddit.subreddit_id}(${subreddit.subreddits!.name})`,
