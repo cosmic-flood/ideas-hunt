@@ -87,7 +87,6 @@ async function rate() {
       submissions.map((s) => `${s.title} ${s.text}`),
     );
 
-    console.log(`${scores?.length} scores to rate`);
     if (!scores || scores.length === 0) {
       continue;
     }

@@ -55,8 +55,6 @@ export async function rateSubmissions(
   Respond with a score from 1 to 10 for each post, separate the index and score with :.
   `;
 
-  console.log('Evaluating prompt');
-
   try {
     const startTime = new Date().getTime();
     const chatCompletion = await openai.chat.completions.create({
@@ -64,18 +62,21 @@ export async function rateSubmissions(
       model: 'gpt-4-turbo-preview',
       temperature: 0.5,
     });
-
-    console.log('Time taken:', new Date().getTime() - startTime);
+    const endTime = new Date().getTime();
 
     const messageContent = chatCompletion.choices[0].message.content;
-    console.log('OpenAI usage', JSON.stringify(chatCompletion.usage));
+
+    console.log(
+      `Time taken: ${endTime - startTime}ms, OpenAI usage: ${JSON.stringify(chatCompletion.usage)}`,
+    );
+
     return messageContent?.split('\n').map((line: string) => {
       const parts = line.split(':');
       return parseInt(parts[parts.length - 1]);
     });
   } catch (error) {
-    console.log('Exception:', error);
-    console.error('Error evaluating relativity:', error);
-    return [];
+    console.error('OpenAI Error:', error);
   }
+
+  return [];
 }
