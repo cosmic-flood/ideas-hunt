@@ -1,5 +1,4 @@
 import OpenAI from 'openai';
-import { waitUntil } from '@vercel/functions';
 import {
   fetchNotRatedRedditSubmissions,
   getScheduleJob,
@@ -25,15 +24,9 @@ export async function GET(req: Request) {
     return new Response('OK');
   }
 
-  waitUntil(
-    (async () => {
-      const startTimestamp = new Date().getTime();
-      await rate();
-      console.log(
-        `Rate function took ${new Date().getTime() - startTimestamp}ms`,
-      );
-    })(),
-  );
+  const startTimestamp = new Date().getTime();
+  await rate();
+  console.log(`Rate function took ${new Date().getTime() - startTimestamp}ms`);
   return new Response('OK');
 }
 
