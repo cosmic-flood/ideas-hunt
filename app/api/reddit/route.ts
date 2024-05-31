@@ -2,10 +2,10 @@ import { headers } from 'next/headers';
 import { waitUntil } from '@vercel/functions';
 import {
   getScheduleJob,
-  getSubredditsForRedditScanner,
   insertRedditSubmissions,
   saveScheduleJobStartTime,
   saveSubredditLatestScan,
+  scanSubreddits,
 } from '@/utils/supabase/admin';
 import { Tables } from '@/types_db';
 import { getRedditType, RedditClient } from '@/utils/score/reddit';
@@ -61,7 +61,7 @@ async function crawlReddit() {
   // fetch subreddits
   const jobStartTime =
     job.start_time !== null ? new Date(job.start_time) : new Date();
-  const subreddits = await getSubredditsForRedditScanner(jobStartTime);
+  const subreddits = await scanSubreddits(jobStartTime);
 
   if (subreddits.length === 0) {
     await saveScheduleJobStartTime(jobName, new Date());
@@ -74,7 +74,7 @@ async function crawlReddit() {
     let posts: any[] = await redditClient.getNew(
       name!,
       latest_scanned_submission_name,
-      100,
+      50,
     );
 
     console.log(`Fetched ${posts.length} submissions for subreddit ${name}`);
@@ -103,7 +103,6 @@ async function crawlReddit() {
     await insertRedditSubmissions(submissions);
     const latestSubmission = submissions[0];
     subreddit.latest_scanned_submission_name = latestSubmission.name;
-    subreddit.scanned_at = new Date().toISOString();
     await saveSubredditLatestScan(subreddit);
   }
 }

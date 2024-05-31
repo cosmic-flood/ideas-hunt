@@ -319,7 +319,7 @@ const saveScheduleJobStartTime = async (jobName: string, dateTime: Date) => {
   }
 };
 
-const getSubredditsForRedditScanner = async (
+const scanSubreddits = async (
   time: Date,
   limit: number = 20,
 ): Promise<Subreddit[]> => {
@@ -331,6 +331,11 @@ const getSubredditsForRedditScanner = async (
 
   if (error) {
     return [];
+  }
+
+  for (let subreddit of data!) {
+    subreddit.scanned_at = new Date().toISOString();
+    await saveSubredditLatestScan(subreddit);
   }
 
   return data;
@@ -462,7 +467,7 @@ export {
   /******************* reddit start **********************/
   getScheduleJob,
   saveScheduleJobStartTime,
-  getSubredditsForRedditScanner,
+  scanSubreddits,
   saveSubredditLatestScan,
   insertRedditSubmissions,
   /******************* reddit end **********************/
