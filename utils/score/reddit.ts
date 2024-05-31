@@ -10,7 +10,7 @@ export enum RedditType {
 }
 
 export function getRedditType(post: any): RedditType {
-  return post.selftext === '' ? RedditType.Message : RedditType.Link;
+  return post.selftext === '' ? RedditType.Link : RedditType.Message;
 }
 
 export class RedditClient {
