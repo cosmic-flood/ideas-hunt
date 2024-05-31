@@ -10,6 +10,7 @@ import {
 import { Tables } from '@/types_db';
 import { rateSubmissions } from '@/utils/score/openai';
 import { headers } from 'next/headers';
+import { waitUntil } from '@vercel/functions';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -25,9 +26,16 @@ export async function GET(req: Request) {
     return new Response('OK');
   }
 
-  const startTimestamp = new Date().getTime();
-  await rate();
-  console.log(`Rate function took ${new Date().getTime() - startTimestamp}ms`);
+  waitUntil(
+    (async () => {
+      const startTimestamp = new Date().getTime();
+      await rate();
+      console.log(
+        `Rate function took ${new Date().getTime() - startTimestamp}ms`,
+      );
+    })(),
+  );
+
   return new Response('OK');
 }
 
