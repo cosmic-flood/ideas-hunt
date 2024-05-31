@@ -29,7 +29,7 @@ export async function GET(req: Request) {
       const startTimestamp = new Date().getTime();
       await crawlReddit();
       console.log(
-        `Rate function took ${new Date().getTime() - startTimestamp}ms`,
+        `Reddit function took ${new Date().getTime() - startTimestamp}ms`,
       );
     })(),
   );
