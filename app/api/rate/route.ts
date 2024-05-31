@@ -62,12 +62,15 @@ async function rate() {
   }
 
   for (let subreddit of subreddits) {
-    console.log(`Scanning subreddit ${subreddit.subreddits?.name}`);
     await updateProjectRedditScanAt(
       subreddit.projects!.id,
       subreddit.subreddit_id,
       new Date(),
     );
+  }
+
+  for (let subreddit of subreddits) {
+    console.log(`Scanning subreddit ${subreddit.subreddits?.name}`);
     const submissions = await fetchNotRatedRedditSubmissions(
       subreddit.project_id,
       subreddit.subreddit_id,
