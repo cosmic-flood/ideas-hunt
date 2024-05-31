@@ -105,7 +105,13 @@ async function rate() {
       };
     }) as SubmissionScore[];
 
-    await insertSubmissionScores(submissionScores);
+    try {
+      await insertSubmissionScores(submissionScores);
+    } catch (err) {
+      console.error(
+        `Failed to insert ${submissionScores.length} scores for project ${subreddit.projects!.name}(${subreddit.projects!.id}) and subreddit ${subreddit.subreddit_id}(${subreddit.subreddits!.name})`,
+      );
+    }
 
     console.log(
       `Inserted ${submissionScores.length} scores for project ${subreddit.projects!.name}(${subreddit.projects!.id}) and subreddit ${subreddit.subreddit_id}(${subreddit.subreddits!.name})`,
