@@ -77,6 +77,7 @@ async function crawlReddit() {
       100,
     );
 
+    console.log(`Fetched ${posts.length} submissions for subreddit ${name}`);
     if (posts.length === 0) {
       continue;
     }

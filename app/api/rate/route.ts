@@ -92,10 +92,6 @@ async function rate() {
       continue;
     }
 
-    console.log(
-      `Scored ${scores.length} submissions for project ${subreddit.projects!.name}(${subreddit.projects!.id}) and subreddit ${subreddit.subreddit_id}(${subreddit.subreddits!.name})`,
-    );
-
     const submissionScores: SubmissionScore[] = scores.map((score, idx) => {
       return {
         project_id: subreddit.projects!.id,
@@ -107,14 +103,13 @@ async function rate() {
 
     try {
       await insertSubmissionScores(submissionScores);
+      console.log(
+        `Inserted ${submissionScores.length} scores for project ${subreddit.projects!.name}(${subreddit.projects!.id}) and subreddit ${subreddit.subreddit_id}(${subreddit.subreddits!.name})`,
+      );
     } catch (err) {
       console.error(
         `Failed to insert ${submissionScores.length} scores for project ${subreddit.projects!.name}(${subreddit.projects!.id}) and subreddit ${subreddit.subreddit_id}(${subreddit.subreddits!.name})`,
       );
     }
-
-    console.log(
-      `Inserted ${submissionScores.length} scores for project ${subreddit.projects!.name}(${subreddit.projects!.id}) and subreddit ${subreddit.subreddit_id}(${subreddit.subreddits!.name})`,
-    );
   }
 }
