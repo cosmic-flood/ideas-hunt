@@ -10,7 +10,8 @@ import {
 import { Tables } from '@/types_db';
 import { getRedditType, RedditClient } from '@/utils/score/reddit';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
+export const maxDuration = 60;
 
 type RedditSubmission = Tables<'reddit_submissions'>;
 
@@ -23,7 +24,16 @@ export async function GET(req: Request) {
     return new Response('OK');
   }
 
-  waitUntil(crawlReddit());
+  waitUntil(
+    (async () => {
+      const startTimestamp = new Date().getTime();
+      await crawlReddit();
+      console.log(
+        `Rate function took ${new Date().getTime() - startTimestamp}ms`,
+      );
+    })(),
+  );
+
   return new Response('OK');
 }
 
