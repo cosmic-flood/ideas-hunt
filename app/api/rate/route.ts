@@ -11,7 +11,8 @@ import { Tables } from '@/types_db';
 import { rateSubmissions } from '@/utils/score/openai';
 import { headers } from 'next/headers';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
+export const maxDuration = 60000;
 
 type SubmissionScore = Tables<'reddit_submissions_scores'>;
 
