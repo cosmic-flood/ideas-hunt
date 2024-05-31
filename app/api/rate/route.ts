@@ -53,7 +53,7 @@ async function rate() {
   // fetch subreddits
   const jobStartTime =
     job.start_time !== null ? new Date(job.start_time) : new Date();
-  const subreddits = await getSubredditsForScoreScanner(jobStartTime, 1);
+  const subreddits = await getSubredditsForScoreScanner(jobStartTime, 5);
 
   if (subreddits.length === 0) {
     await saveScheduleJobStartTime(jobName, new Date());
@@ -113,6 +113,6 @@ async function rate() {
     );
 
     console.log('Sleeping for 10 seconds');
-    await waitFor(10000);
+    await waitFor(5000);
   }
 }

@@ -429,24 +429,44 @@ export type Database = {
           scanned_at: string | null
         }[]
       }
-      getnotratedsubmissions: {
-        Args: {
-          projectid: string
-          subredditid: string
-        }
-        Returns: {
-          content_type: string | null
-          id: string
-          name: string | null
-          permalink: string | null
-          posted_at: string | null
-          reddit_id: string | null
-          subreddit_id: string | null
-          text: string | null
-          title: string | null
-          url: string | null
-        }[]
-      }
+      getnotratedsubmissions:
+        | {
+            Args: {
+              projectid: string
+              subredditid: string
+            }
+            Returns: {
+              content_type: string | null
+              id: string
+              name: string | null
+              permalink: string | null
+              posted_at: string | null
+              reddit_id: string | null
+              subreddit_id: string | null
+              text: string | null
+              title: string | null
+              url: string | null
+            }[]
+          }
+        | {
+            Args: {
+              projectid: string
+              subredditid: string
+              num: number
+            }
+            Returns: {
+              content_type: string | null
+              id: string
+              name: string | null
+              permalink: string | null
+              posted_at: string | null
+              reddit_id: string | null
+              subreddit_id: string | null
+              text: string | null
+              title: string | null
+              url: string | null
+            }[]
+          }
     }
     Enums: {
       pricing_plan_interval: "day" | "week" | "month" | "year"

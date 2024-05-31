@@ -404,10 +404,12 @@ const getSubredditsForScoreScanner = async (
 const fetchNotRatedRedditSubmissions = async (
   projectId: string,
   subredditId: string,
+  limit: number = 20,
 ): Promise<RedditSubmission[]> => {
   const { data, error } = await supabaseAdmin.rpc('getnotratedsubmissions', {
     projectid: projectId,
     subredditid: subredditId,
+    num: limit,
   });
 
   if (error) {
