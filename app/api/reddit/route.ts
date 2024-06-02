@@ -93,7 +93,7 @@ async function crawlReddit() {
         title: p.title,
         text: p.selftext,
         url: p.url,
-        permalink: p.permalink,
+        permalink: `https://www.reddit.com${p.permalink}`,
         subreddit_id: subreddit.id,
         content_type: getRedditType(p),
         posted_at: new Date(p.created_utc * 1000),
