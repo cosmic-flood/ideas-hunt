@@ -3,7 +3,9 @@ import {
   fetchNotRatedRedditSubmissions,
   getScheduleJob,
   getSubredditsForScoreScanner,
+  insertNotifications,
   insertSubmissionScores,
+  type Notification,
   saveScheduleJobStartTime,
   updateProjectRedditScanAt,
 } from '@/utils/supabase/admin';
@@ -69,6 +71,8 @@ async function rate() {
     );
   }
 
+  let rawNotifications: any[] = [];
+
   for (let subreddit of subreddits) {
     console.log(`Scanning subreddit ${subreddit.subreddits?.name}`);
     const submissions = await fetchNotRatedRedditSubmissions(
@@ -100,6 +104,20 @@ async function rate() {
       };
     }) as SubmissionScore[];
 
+    rawNotifications = [
+      ...rawNotifications,
+      ...submissions
+        .map((submission, idx) => ({
+          projectId: subreddit.project_id,
+          title: submission.title,
+          subreddit: subreddit.subreddits?.name,
+          score: scores[idx],
+          link: submission.permalink,
+          time: new Date(submission.posted_at!).toISOString(),
+        }))
+        .filter((n) => n.score > 5),
+    ];
+
     try {
       await insertSubmissionScores(submissionScores);
       console.log(
@@ -111,4 +129,24 @@ async function rate() {
       );
     }
   }
+
+  if (rawNotifications.length === 0) {
+    return;
+  }
+
+  const notifications = Object.entries(
+    rawNotifications.reduce((acc, cur) => {
+      acc[cur.projectId] = acc[cur.projectId] || [];
+      const { title, subreddit, score, link, time } = cur;
+      acc[cur.projectId].push({ title, subreddit, score, link, time });
+      return acc;
+    }, {}),
+  ).map(([project_id, metadata]) => ({
+    project_id,
+    email_template: '6',
+    metadata,
+  })) as any as Notification[];
+
+  // save notification to db
+  await insertNotifications(notifications);
 }

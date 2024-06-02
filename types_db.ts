@@ -32,6 +32,38 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          email_template: string | null
+          id: string
+          is_email_sent: boolean
+          metadata: Json | null
+          project_id: string | null
+        }
+        Insert: {
+          email_template?: string | null
+          id?: string
+          is_email_sent?: boolean
+          metadata?: Json | null
+          project_id?: string | null
+        }
+        Update: {
+          email_template?: string | null
+          id?: string
+          is_email_sent?: boolean
+          metadata?: Json | null
+          project_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       prices: {
         Row: {
           active: boolean | null

@@ -315,7 +315,7 @@ const saveScheduleJobStartTime = async (jobName: string, dateTime: Date) => {
     .eq('name', jobName);
 
   if (error) {
-    console.log('Error saving ScheduleJob start_time', error);
+    console.error('Error saving ScheduleJob start_time', error);
   }
 };
 
@@ -351,7 +351,7 @@ const saveSubredditLatestScan = async (subreddit: Subreddit) => {
     .eq('id', subreddit.id);
 
   if (error) {
-    console.log('Error saving latest scanned submission', error);
+    console.error('Error saving latest scanned submission', error);
   }
 };
 
@@ -363,7 +363,7 @@ const insertRedditSubmissions = async (
     .insert(redditSubmission);
 
   if (error) {
-    console.log('Error inserting reddit submissions', error);
+    console.error('Error inserting reddit submissions', error);
   }
 };
 
@@ -432,7 +432,7 @@ const insertSubmissionScores = async (submissionScores: SubmissionScore[]) => {
     .insert(submissionScores);
 
   if (error) {
-    console.log('Error inserting reddit submissions', error);
+    console.error('Error inserting reddit submissions', error);
   }
 };
 
@@ -450,11 +450,54 @@ const updateProjectRedditScanAt = async (
     .eq('subreddit_id', subredditId);
 
   if (error) {
-    console.log('Error saving latest scanned submission', error);
+    console.error('Error saving latest scanned submission', error);
   }
 };
 
 /******************* openai end **********************/
+/******************* notifications start **********************/
+type Notification = Tables<'notifications'>;
+
+const insertNotifications = async (notifications: Notification[]) => {
+  const { error } = await supabaseAdmin
+    .from('notifications')
+    .insert(notifications);
+
+  if (error) {
+    console.error('Error inserting notifications', error, notifications);
+  }
+};
+
+const fetchNotSentNotifications = async (
+  limit: number = 20,
+): Promise<Notification[]> => {
+  const { data, error } = await supabaseAdmin
+    .from('notifications')
+    .select('*')
+    .eq('is_email_sent', false)
+    .limit(limit);
+
+  if (error) {
+    return [];
+  }
+
+  return data;
+};
+
+const setNotificationAsSent = async (notificationId: string) => {
+  const { error } = await supabaseAdmin
+    .from('notifications')
+    .update({
+      is_email_sent: true,
+    })
+    .eq('id', notificationId);
+
+  if (error) {
+    console.error('Error setNotificationAsSent', error);
+  }
+};
+
+/******************* notifications end **********************/
 
 export {
   upsertProductRecord,
@@ -477,6 +520,11 @@ export {
   insertSubmissionScores,
   updateProjectRedditScanAt,
   /******************* openai end **********************/
+  /******************* notifications start **********************/
+  insertNotifications,
+  fetchNotSentNotifications,
+  setNotificationAsSent,
+  /******************* notifications end **********************/
 };
 
-export type { SubredditForScore };
+export type { SubredditForScore, Notification };
