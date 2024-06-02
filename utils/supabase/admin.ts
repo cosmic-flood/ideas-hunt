@@ -377,6 +377,7 @@ interface SubredditForScore {
     id: string;
     description: string | null;
     name: string | null;
+    relevance_threshold: number | null;
   } | null;
   subreddit_id: string;
   subreddits: { id: string; name: string | null } | null;
@@ -391,7 +392,7 @@ const getSubredditsForScoreScanner = async (
     .select(
       `
       project_id,
-      projects (id, name, description),
+      projects (id, name, description, relevance_threshold),
       subreddit_id,
       subreddits (id, name)
     `,
@@ -469,7 +470,7 @@ const insertNotifications = async (notifications: Notification[]) => {
 };
 
 const fetchNotSentNotifications = async (
-  limit: number = 20,
+  limit: number = 10,
 ): Promise<Notification[]> => {
   const { data, error } = await supabaseAdmin
     .from('notifications')
@@ -495,6 +496,41 @@ const updateNotificationSentTime = async (notificationId: string) => {
   if (error) {
     console.error('Error setNotificationAsSent', error);
   }
+};
+
+interface EmailRecipient {
+  name: string;
+  email: string;
+}
+
+const fetchNotificationRecipients = async (
+  projectId: string,
+): Promise<EmailRecipient[]> => {
+  const { data: project, error: projectError } = await supabaseAdmin
+    .from('projects')
+    .select('email_recipients, user_id')
+    .eq('id', projectId)
+    .single();
+
+  if (projectError) {
+    return [];
+  }
+
+  if (
+    project.email_recipients !== null &&
+    (project.email_recipients as any[]).length > 0
+  ) {
+    return project.email_recipients as unknown as EmailRecipient[];
+  }
+
+  const { data: userData, error: userError } =
+    await supabaseAdmin.auth.admin.getUserById(project.user_id!);
+
+  if (userError) {
+    return [];
+  }
+
+  return [{ name: '', email: userData.user.email! }];
 };
 
 /******************* notifications end **********************/
@@ -524,6 +560,7 @@ export {
   insertNotifications,
   fetchNotSentNotifications,
   updateNotificationSentTime,
+  fetchNotificationRecipients,
   /******************* notifications end **********************/
 };
 

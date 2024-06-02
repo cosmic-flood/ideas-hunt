@@ -1,6 +1,7 @@
 import { headers } from 'next/headers';
 import { waitUntil } from '@vercel/functions';
 import {
+  fetchNotificationRecipients,
   fetchNotSentNotifications,
   getScheduleJob,
   updateNotificationSentTime,
@@ -43,25 +44,22 @@ async function sendNotifications() {
   const notifications = await fetchNotSentNotifications(1);
 
   for (const notification of notifications) {
-    // TODO
-    // fetch receivers
+    // fetch recipients
+    const recipients = await fetchNotificationRecipients(
+      notification.project_id!,
+    );
+
+    if (recipients.length === 0) {
+      console.log(`No recipients found for notification: ${notification.id}`);
+      continue;
+    }
 
     // send email
     const sent = await sendEmail({
-      to: [
-        {
-          email: 'hu-beau@outlook.com',
-          name: 'Hu-beau',
-        },
-        {
-          email: 'mikcczhang@gmail.com',
-          name: '帅哥',
-        },
-        {
-          email: 'lian.yang.work@gmail.com',
-          name: '靓仔',
-        },
-      ],
+      to: recipients.map(({ name, email }) => ({
+        email,
+        name: name || email,
+      })),
       templateId: parseInt(notification.email_template!),
       params: {
         posts: notification.metadata,
@@ -71,6 +69,7 @@ async function sendNotifications() {
     if (sent) {
       // update notification status
       await updateNotificationSentTime(notification.id);
+      console.log(`Successfully Sent email to ${JSON.stringify(recipients)}`);
     }
   }
 }

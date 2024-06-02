@@ -115,7 +115,9 @@ async function rate() {
           link: submission.permalink,
           time: new Date(submission.posted_at!).toISOString(),
         }))
-        .filter((n) => n.score > 5),
+        .filter(
+          (n) => n.score > (subreddit.projects?.relevance_threshold || 5),
+        ),
     ];
 
     try {
