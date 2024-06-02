@@ -19,7 +19,6 @@ export function ScoreFilter<TData, TValue>({
   }
 
   function setMin(value: string | number) {
-    console.log('setMinScore', value);
     column?.setFilterValue((old: [number, number]) => [
       Number(value),
       old?.[1],
@@ -31,7 +30,6 @@ export function ScoreFilter<TData, TValue>({
   }
 
   function setMax(value: string | number) {
-    console.log('setMaxScore', value);
     column?.setFilterValue((old: [number, number]) => [
       old?.[0],
       Number(value),
@@ -51,7 +49,7 @@ export function ScoreFilter<TData, TValue>({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-3">
-        <div className="mb-3 text-sm">Relevance Score Range</div>
+        <div className="mb-3 text-sm">Relevance Score</div>
         <div className="mb-1.5 flex justify-between gap-7 px-0.5">
           <Label className="flex-1" htmlFor="minScore">
             Min
