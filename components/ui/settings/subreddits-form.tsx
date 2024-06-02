@@ -30,7 +30,18 @@ const subredditFormSchema = z.object({
         name: z.string(),
       }),
     )
-    .nonempty('You must provide at least one subreddit.'),
+    .nonempty('You must provide at least one subreddit.')
+    .superRefine((items, ctx) => {
+      const uniqueNames = new Set(items.map((x) => x.name)).size;
+      const errorPosition = items.length - 1;
+      if (uniqueNames !== items.length) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Duplicate subreddits are not allowed.',
+          path: [errorPosition, 'name'],
+        });
+      }
+    }),
 });
 
 type SubredditFormValues = z.infer<typeof subredditFormSchema>;
