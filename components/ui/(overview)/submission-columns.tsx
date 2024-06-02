@@ -55,6 +55,7 @@ export const columns: ColumnDef<UserSubmissionScore>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Score" />
     ),
+    filterFn: 'inNumberRange',
     enableSorting: true,
     enableHiding: false,
   },
