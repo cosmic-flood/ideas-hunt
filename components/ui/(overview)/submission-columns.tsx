@@ -31,10 +31,7 @@ export const columns: ColumnDef<UserSubmissionScore>[] = [
     header: 'Post',
     cell: ({ row }) => {
       return (
-        <Link
-          href={`https://www.reddit.com${row.original.permalink}`}
-          target="_blank"
-        >
+        <Link href={row.original.permalink!} target="_blank">
           <div title={row.getValue('title')} className="max-w-[500px] truncate">
             <span className="font-medium">{row.getValue('title')}</span>
             <br />
