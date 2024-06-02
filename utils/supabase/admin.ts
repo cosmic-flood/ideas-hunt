@@ -474,7 +474,7 @@ const fetchNotSentNotifications = async (
   const { data, error } = await supabaseAdmin
     .from('notifications')
     .select('*')
-    .eq('is_email_sent', false)
+    .is('email_sent_at', null)
     .limit(limit);
 
   if (error) {
@@ -484,11 +484,11 @@ const fetchNotSentNotifications = async (
   return data;
 };
 
-const setNotificationAsSent = async (notificationId: string) => {
+const updateNotificationSentTime = async (notificationId: string) => {
   const { error } = await supabaseAdmin
     .from('notifications')
     .update({
-      is_email_sent: true,
+      email_sent_at: new Date().toISOString(),
     })
     .eq('id', notificationId);
 
@@ -523,7 +523,7 @@ export {
   /******************* notifications start **********************/
   insertNotifications,
   fetchNotSentNotifications,
-  setNotificationAsSent,
+  updateNotificationSentTime,
   /******************* notifications end **********************/
 };
 

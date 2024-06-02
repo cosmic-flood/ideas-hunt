@@ -34,23 +34,23 @@ export type Database = {
       }
       notifications: {
         Row: {
+          email_sent_at: string | null
           email_template: string | null
           id: string
-          is_email_sent: boolean
           metadata: Json | null
           project_id: string | null
         }
         Insert: {
+          email_sent_at?: string | null
           email_template?: string | null
           id?: string
-          is_email_sent?: boolean
           metadata?: Json | null
           project_id?: string | null
         }
         Update: {
+          email_sent_at?: string | null
           email_template?: string | null
           id?: string
-          is_email_sent?: boolean
           metadata?: Json | null
           project_id?: string | null
         }
@@ -145,22 +145,28 @@ export type Database = {
         Row: {
           created_at: string | null
           description: string | null
+          email_recipients: Json | null
           id: string
           name: string | null
+          relevance_threshold: number | null
           user_id: string | null
         }
         Insert: {
           created_at?: string | null
           description?: string | null
+          email_recipients?: Json | null
           id?: string
           name?: string | null
+          relevance_threshold?: number | null
           user_id?: string | null
         }
         Update: {
           created_at?: string | null
           description?: string | null
+          email_recipients?: Json | null
           id?: string
           name?: string | null
+          relevance_threshold?: number | null
           user_id?: string | null
         }
         Relationships: []

@@ -3,7 +3,7 @@ import { waitUntil } from '@vercel/functions';
 import {
   fetchNotSentNotifications,
   getScheduleJob,
-  setNotificationAsSent,
+  updateNotificationSentTime,
 } from '@/utils/supabase/admin';
 import { sendEmail } from '@/utils/notifications/email-sender';
 
@@ -70,7 +70,7 @@ async function sendNotifications() {
 
     if (sent) {
       // update notification status
-      await setNotificationAsSent(notification.id);
+      await updateNotificationSentTime(notification.id);
     }
   }
 }
