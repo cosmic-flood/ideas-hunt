@@ -2,7 +2,7 @@
 
 import { Tables } from '@/types_db';
 import { z } from 'zod';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, useFormState } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useToast } from '@/components/ui/use-toast';
 import {
@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/shadcn-button';
 import { Input } from '@/components/ui/input';
 import { updateUserSubreddits } from '@/utils/supabase/server-write';
 import { cn } from '@/utils/cn';
+import { useEffect } from 'react';
 
 type Subreddit = Tables<'subreddits'>;
 
@@ -48,7 +49,19 @@ export function SubredditForm({ subreddits }: { subreddits: Subreddit[] }) {
     mode: 'onChange',
   });
 
-  const { isSubmitting } = form.formState;
+  const { isSubmitting, isSubmitSuccessful } = useFormState({
+    control: form.control,
+  });
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      toast({
+        title: 'Success',
+        description: 'Subreddits updated.',
+      });
+    }
+
+    form.reset(undefined, { keepDirtyValues: true });
+  }, [isSubmitSuccessful]);
 
   const { fields, append, remove } = useFieldArray({
     name: 'subreddits',
