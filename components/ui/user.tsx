@@ -9,7 +9,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/shadcn-button';
-import { CaretDownIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { handleRequest } from '@/utils/auth-helpers/client';
 import { SignOut } from '@/utils/auth-helpers/server';
@@ -26,12 +25,11 @@ export default function User({ user }: { user: any }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="relative h-8 rounded-full">
+        <Button variant="ghost" className="relative h-8">
           {email}
-          <CaretDownIcon />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
+      <DropdownMenuContent className="w-48" align="end" forceMount>
         <DropdownMenuGroup>
           <DropdownMenuItem
             className="cursor-pointer"
