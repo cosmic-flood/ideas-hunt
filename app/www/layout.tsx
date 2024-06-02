@@ -1,22 +1,18 @@
 import { PropsWithChildren, Suspense } from "react";
-import Navbar from "@/components/ui/Navbar";
-import Footer from "@/components/ui/Footer";
-import { Toaster } from "@/components/ui/Toasts/toaster";
+import HeaderBar from "./headerbar";
 
 export default async function RootLayout({ children }: PropsWithChildren) {
   return (
     <>
-      <Navbar />
-      <main
-        id="skip"
-        className="min-h-[calc(100dvh-4rem)] md:min-h[calc(100dvh-5rem)]"
-      >
+      <HeaderBar />
+
+      <main className="container my-8">
         {children}
       </main>
-      <Footer />
-      <Suspense>
-        <Toaster />
-      </Suspense>
+
+      <footer className="container py-4 text-center border-t mt-8">
+        © 2024 RedditSale.com All rights reserved.
+      </footer>
     </>
   );
 }

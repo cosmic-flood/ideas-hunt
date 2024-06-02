@@ -20,8 +20,8 @@ const nextConfig = {
             value: '^(?!app\\.).+' // regex to match ideas-hunt.com
           }
         ],
-        // destination: '/www/:path*', // redirect to the www folder
-        destination: '/app/:path*'
+        destination: '/www/:path*', // redirect to the www folder
+        // destination: '/app/:path*'
       }
     ];
   }
