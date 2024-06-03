@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/shadcn-button';
 import { FaDiscord, FaCheckCircle } from 'react-icons/fa';
 import { Label } from '@/components/ui/label';
@@ -46,9 +45,11 @@ export default async function Page() {
           <Button className="p-7 text-xl ">Start 7 Days Free Trial</Button>
         </div>
         <div>
-          <Button className="mt-3 px-7 text-lg">
-            <FaDiscord className="mr-2" /> Join Discord
-          </Button>
+          <a href="https://discord.gg/frDNhcmWr2">
+            <Button className="mt-3 px-7 text-lg">
+              <FaDiscord className="mr-2" /> Join Discord
+            </Button>
+          </a>
         </div>
       </div>
 
@@ -207,108 +208,160 @@ export default async function Page() {
       <div className="container mb-8 mt-8 border-t py-0 text-center" />
 
       <div className="container mb-10 px-0 sm:mt-5 md:mt-20">
-        <div className="sm:grid-cols md:grid-cols mt-8 grid gap-16 lg:grid-cols-7">
-          <Card className="lg:col-span-3">
+        <div className="sm:grid-cols md:grid-cols mt-8 grid gap-16 lg:grid-cols-8">
+          <Card className="lg:col-span-4">
             <CardHeader>
+              <Badge className="my-2 flex animate-bounce flex-row items-center rounded-lg px-3 py-2 text-sm">
+                <span className="">Limited Offer — </span>
+                <span className="ml-2 font-normal line-through">$119</span>
+                <span className="ml-1 font-normal">
+                  $69.9 for the first 3 months.
+                </span>
+              </Badge>
               <CardTitle className="flex items-center">
                 <span className="w-80 flex-auto text-2xl">
-                  Winning 100 Times More Than You Invest
+                Achieving 100 Times More ROI
                 </span>
 
                 <div className="w-20 flex-auto">
-                  <Badge className="self)end rounded-full"> Best ROI </Badge>
+                  <Badge className="self-end rounded-full"> Best ROI </Badge>
                 </div>
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <CardDescription>
-                <div>
-                  <div className="text-black">
-                    Save significant time and ads investment to discover leads
-                    and validating ideas for your job, for fun, or anything
-                    else.
-                  </div>
-                  <div className="mt-8 rounded-md border px-2 py-10">
-                    <div className="mx-auto flex w-72 items-center">
-                      <div className="mx-2 text-5xl font-extrabold text-black">$39.9</div>
-                      <Separator orientation="vertical" />
-                      <div className="mx-2">
-                        <div className="text-gray-900">Per Month</div>
-                        <Separator orientation="horizontal" />
-                        <div className="text-sm">plus local tax</div>
-                      </div>
+              <div>
+                <div className="text-black">
+                  Save significant time and ads investment to discover leads and
+                  validating ideas for your job, for fun, or anything else.
+                </div>
+                <div className="mt-8 rounded-md border px-2 py-10">
+                  <div className="mx-auto flex w-72 items-center">
+                    <div className="mx-2 text-5xl font-extrabold text-black">
+                      $39.9
                     </div>
-                  </div>
-                  <div className="container mx-auto mt-8 text-black">
-                    <div className="mb-2 flex items-center justify-start ">
-                      <FaCheckCircle className="mx-4" />
-                      <span className="">
-                        Subscribe up to 30 subreddits
-                      </span>
-                    </div>
-                    <div className="mb-2 flex items-center justify-start">
-                      <FaCheckCircle className="mx-4" />
-                      <span className="">
-                        Monitor the new posts automatically
-                      </span>
-                    </div>
-                    <div className="mb-2 flex items-center justify-start">
-                      <FaCheckCircle className="mx-4" />
-                      <span className="">
-                        Email notification for high relevant posts
-                      </span>
-                    </div>
-                    <div className="mb-2 flex items-center justify-start">
-                      <FaCheckCircle className="mx-4" />
-                      <span className="">
-                        Discover leads & validate ideas freely
-                      </span>
-                    </div>
-                    <div className="mb-2 flex items-center justify-start">
-                      <FaCheckCircle className="mx-4" />
-                      <span className="">
-                        Win karma for your excellent comment
-                      </span>
-                    </div>
-                    <div className="mb-2 flex items-center justify-start">
-                      <FaCheckCircle className="mx-4" />
-                      <span className="">
-                        Get pay customers in a high ROI way
-                      </span>
+                    <Separator orientation="vertical" />
+                    <div className="mx-2">
+                      <div className="text-gray-900">Per Month</div>
+                      <Separator orientation="horizontal" />
+                      <div className="text-sm">plus local tax</div>
                     </div>
                   </div>
                 </div>
-              </CardDescription>
+                <div className="container mx-auto mt-8 text-black">
+                  <div className="mb-2 flex items-center justify-start ">
+                    <FaCheckCircle className="mx-3" />
+                    <span className="">Subscribe to up to 30 subreddits.</span>
+                  </div>
+                  <div className="mb-2 flex items-center justify-start">
+                    <FaCheckCircle className="mx-3" />
+                    <span className="">Automatically monitor new posts.</span>
+                  </div>
+                  <div className="mb-2 flex items-center justify-start">
+                    <FaCheckCircle className="mx-3" />
+                    <span className="">
+                      Get email alerts for relevant posts.
+                    </span>
+                  </div>
+                  <div className="mb-2 flex items-center justify-start">
+                    <FaCheckCircle className="mx-3" />
+                    <span className="">
+                      Freely discover leads and validate ideas.
+                    </span>
+                  </div>
+                  <div className="mb-2 flex items-center justify-start">
+                    <FaCheckCircle className="mx-3" />
+                    <span className="">
+                      Earn karma for your excellent comments.
+                    </span>
+                  </div>
+                  <div className="mb-2 flex items-center justify-start">
+                    <FaCheckCircle className="mx-3" />
+                    <span className="">
+                      Acquire paying customers cost-effectively.
+                    </span>
+                  </div>
+                </div>
+              </div>
             </CardContent>
             <CardFooter className="flex justify-between">
-              <Button className="w-full py-6 my-5">
+              <Button className="my-5 w-full py-6">
                 <span className="text-xl font-semibold">Get Started</span>
-                {'  '}
-                <span className="text-lg italic mx-2">- 7 Days Free</span>
+                <span className="mx-2 text-lg italic">- 7 Days Free</span>
               </Button>
             </CardFooter>
           </Card>
           <div className="lg:col-span-4">
-            <div className="text-2xl">FAQ</div>
+            <div className="mb-8 text-3xl font-bold mt-5">FAQ</div>
             <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="item-1">
-                <AccordionTrigger>Is it accessible?</AccordionTrigger>
-                <AccordionContent>
-                  Yes. It adheres to the WAI-ARIA design pattern.
+              
+              <AccordionItem value="item-1" >
+                <AccordionTrigger className="text-lg">
+                Why on Reddit?
+                </AccordionTrigger>
+                <AccordionContent className="text-base">
+                Reddit boasts high user activity and subreddits allow for precise targeting. Its highly upvoted posts and comments are easily indexed by Google. Regular activity on Reddit can provide more visibility than ProductHunt's Daily Top 3. Additionally, Reddit's downvote option ensures that high-quality comments stand out.
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="item-2">
-                <AccordionTrigger>Is it styled?</AccordionTrigger>
-                <AccordionContent>
-                  Yes. It comes with default styles that matches the other
-                  components&apos; aesthetic.
+              <AccordionItem value="item-2" >
+                <AccordionTrigger className="text-lg">Can it suggests subreddits for me?</AccordionTrigger>
+                <AccordionContent className="text-base">
+                It's on our roadmap. In the meantime, please join our Discord community or send us an email at contact@redditsale.com. We are happy to help you manually, which also gives us more experience. By the way, you should also try to discover more relevant communities on your own. This can help increase your conversion rate.
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="item-3">
-                <AccordionTrigger>Is it animated?</AccordionTrigger>
-                <AccordionContent>
-                  Yes. It&apos;s animated by default, but you can disable it if
-                  you prefer.
+              <AccordionItem value="item-3" >
+                <AccordionTrigger className="text-lg">
+                Do you have an AI auto-reply feature?
+                </AccordionTrigger>
+                <AccordionContent className="text-base">
+                No, we strongly advise against using an AI auto-reply. It can damage the community and your product brand. The ROI of writing a comment with unique insights and solutions will be 100 times greater than that of an auto-reply in terms of visibility. The members of the subreddit will be happy to mention your insights and product in comments on other posts.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-4" >
+                <AccordionTrigger className="text-lg">
+                Why check only new posts?
+                </AccordionTrigger>
+                <AccordionContent className="text-base">
+                  Because leaving a comment under a historical post won’t
+                  attract many views. The lifecycle of a Reddit post is about 16
+                  hours. It's important to comment as early as possible to share
+                  your unique insights, solutions, and product.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-5">
+                <AccordionTrigger className="text-lg">
+                  How to find leads and validate ideas on Reddit?
+                </AccordionTrigger>
+                <AccordionContent className="text-base">
+                  Use RedditSale.com to find posts relevant to your business (or
+                  ideas) and leave a quality comment under each post as early as
+                  posible. Monitor as many subreddits as possible to increase
+                  your chances of discovering more relevant posts.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-6" >
+                <AccordionTrigger className="text-lg">
+                Can I add more subreddits?
+                </AccordionTrigger>
+                <AccordionContent className="text-base">
+                If this is important to you, feel free to reach out to contact@redditsale.com or join our <a href="https://discord.gg/frDNhcmWr2" className="text-primary">Discord</a>. We will be happy to answer any questions you have.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-7" >
+                <AccordionTrigger className="text-lg">
+                Can I add more solution/products/ideas?
+                </AccordionTrigger>
+                <AccordionContent className="text-base">
+                If this is important to you, feel free to reach out to contact@redditsale.com or join our <a href="https://discord.gg/frDNhcmWr2" className="text-primary">Discord</a>. We will be happy to answer any questions you have.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-8" >
+                <AccordionTrigger className="text-lg">
+                  I still have questions, can I talk to someone?
+                </AccordionTrigger>
+                <AccordionContent className="text-base">
+                  Absolutely! Feel free to reach out to contact@redditsale.com
+                  or Join <a href="https://discord.gg/frDNhcmWr2" className="text-primary">Discord</a>, we will be happy to answer any questions for
+                  you.
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
