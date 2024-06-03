@@ -75,7 +75,7 @@ export function EmailForm({ email }: { email: string }) {
 
       toast({
         title: 'Success',
-        description: 'Subreddits updated.',
+        description: 'Notification settings updated.',
       });
 
       form.reset(undefined, { keepValues: true });
