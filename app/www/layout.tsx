@@ -10,7 +10,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         {children}
       </main>
 
-      <footer className="container py-4 text-center border-t mt-8">
+      <footer className="container py-16 text-center border-t mt-8">
         © 2024 RedditSale.com All rights reserved.
       </footer>
     </>

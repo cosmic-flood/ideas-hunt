@@ -1,5 +1,8 @@
+'use client';
+
 import { Button } from '@/components/ui/shadcn-button';
-import { FaDiscord } from 'react-icons/fa';
+import { FaDiscord, FaCheckCircle } from 'react-icons/fa';
+import { Label } from '@/components/ui/label';
 import {
   Card,
   CardContent,
@@ -8,8 +11,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/shadcn-card';
-import { Label } from '@/components/ui/label';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 
 export default async function Page() {
   return (
@@ -33,22 +42,20 @@ export default async function Page() {
         </div>
       </div>
 
-      <div className="container mb-10 mt-10 gap-x-1.5 px-0">
+      <div className="container mb-16 mt-10 gap-x-1.5 px-0">
         <div>
-          <Button className="p-7 text-2xl ">
-            Start Now (7 days free trial)
-          </Button>
+          <Button className="p-7 text-2xl ">Start 7 Days Free Trial</Button>
         </div>
         <div>
-          <Button className="px-3 text-lg mt-3">
+          <Button className="mt-3 px-3 text-lg">
             <FaDiscord className="mr-2" /> Join Discord
           </Button>
         </div>
       </div>
 
-      <div className="container mb-8 mt-8 border-t py-0 text-center" />
+      <div className="mb-18 container mt-8 border-t py-0 text-center" />
 
-      <div className="container mb-10 px-0 sm:mt-5 md:mt-28">
+      <div className="container mb-16 px-0 sm:mt-5 md:mt-20">
         <div className="container mx-auto max-w-screen-xl px-0">
           <h1 className="text-4xl font-bold">
             Why & How to Discover Leads on Reddit
@@ -73,7 +80,7 @@ export default async function Page() {
 
       <div className="container mb-8 mt-8 border-t py-0 text-center" />
 
-      <div className="container mb-10 gap-6 px-0 sm:mt-5 md:mt-28">
+      <div className="container mb-8 gap-6 px-0 sm:mt-5 md:mt-20">
         <div className="container mx-auto max-w-screen-xl px-0">
           <h1 className="text-4xl font-bold">How does RedditSale work?</h1>
           <h3 className="mt-6 text-xl">
@@ -192,25 +199,103 @@ export default async function Page() {
         </div>
       </div>
 
-      <div className="container mb-10 mt-10 flex items-center justify-start gap-x-1.5 px-0">
+      <div className="container mb-16 mt-10 flex items-center justify-start gap-x-1.5 px-0">
         <div>
-          <Button className="p-7 text-2xl ">
-            Start Now (7 days free trial)
-          </Button>
+          <Button className="p-7 text-2xl ">Start 7 Days Free Trial</Button>
         </div>
       </div>
 
       <div className="container mb-8 mt-8 border-t py-0 text-center" />
 
-      <div className="container mb-10 px-0 sm:mt-5 md:mt-28">
-        <div className="container mx-auto max-w-screen-xl px-0">
-          <h1 className="text-4xl font-bold">Why on Reddit not Others.</h1>
+      <div className="container mb-10 px-0 sm:mt-5 md:mt-20">
+        <div className="sm:grid-cols md:grid-cols mt-8 grid gap-20 lg:grid-cols-2">
+          <Card className="">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <span className="w-80 flex-auto text-lg">
+                  Winning 100 Times More Than You Invest
+                </span>
 
-          <h3 className="mt-6 text-xl">
-            Our AI technology quickly identifies posts that are highly relevant
-            to your business or idea and notifies you instantly. You can then
-            share your high-quality solution in the comment.
-          </h3>
+                <div className="w-20 flex-auto">
+                  <Badge className="self)end rounded-full"> Best ROI </Badge>
+                </div>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                <div>
+                  <div>
+                    Save significant time and ads investment to discover leads
+                    and validating ideas for your job, for fun, or anything
+                    else.
+                  </div>
+                  <div className="mt-8 rounded-md border px-2 py-10">
+                    <div className="mx-auto flex w-72 items-center">
+                      <div className="mx-2 text-5xl font-extrabold">$39.9</div>
+                      <Separator orientation="vertical" />
+                      <div className="mx-2">
+                        <div className="">Per Month</div>
+                        <Separator orientation="horizontal" />
+                        <div className="text-sm">plus local tax</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="container mx-auto mt-8">
+                    <div className="flex items-center justify-start mb-2">
+                      <FaCheckCircle className="mx-4" />
+                      <span className="">Accept terms and conditions</span>
+                    </div>
+                    <div className="flex items-center justify-start mb-2">
+                      <FaCheckCircle className="mx-4" />
+                      <span className="">Accept terms and conditions</span>
+                    </div>
+                    <div className="flex items-center justify-start mb-2">
+                      <FaCheckCircle className="mx-4" />
+                      <span className="">Accept terms and conditions</span>
+                    </div>
+                    <div className="flex items-center justify-start mb-2">
+                      <FaCheckCircle className="mx-4" />
+                      <span className="">Accept terms and conditions</span>
+                    </div>
+                    <div className="flex items-center justify-start mb-2">
+                      <FaCheckCircle className="mx-4" />
+                      <span className="">Accept terms and conditions</span>
+                    </div>
+                    <div className="flex items-center justify-start mb-2">
+                      <FaCheckCircle className="mx-4" />
+                      <span className="">Accept terms and conditions</span>
+                    </div>
+                  </div>
+                </div>
+              </CardDescription>
+            </CardContent>
+            <CardFooter className="flex justify-between"></CardFooter>
+          </Card>
+          <div className="">
+            <div className="text-2xl">FAQ</div>
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="item-1">
+                <AccordionTrigger>Is it accessible?</AccordionTrigger>
+                <AccordionContent>
+                  Yes. It adheres to the WAI-ARIA design pattern.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-2">
+                <AccordionTrigger>Is it styled?</AccordionTrigger>
+                <AccordionContent>
+                  Yes. It comes with default styles that matches the other
+                  components&apos; aesthetic.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-3">
+                <AccordionTrigger>Is it animated?</AccordionTrigger>
+                <AccordionContent>
+                  Yes. It&apos;s animated by default, but you can disable it if
+                  you prefer.
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
         </div>
       </div>
 
