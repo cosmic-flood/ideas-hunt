@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 import { getErrorRedirect, getStatusRedirect } from '@/utils/helpers';
+import { ensureUserProductCreated } from '@/utils/supabase/server-write';
 
 export async function GET(request: NextRequest) {
   // The `/auth/callback` route is required for the server-side auth flow implemented
@@ -26,10 +27,11 @@ export async function GET(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  console.log('user', user);
-
-  // await ensureUserProductCreated(user!.id);
+  if (user) {
+    await ensureUserProductCreated(user.id);
+  } else {
+    console.error('Magic link callback error: User not found.');
+  }
 
   // URL to redirect to after sign in process completes
   return NextResponse.redirect(
