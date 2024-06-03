@@ -58,7 +58,7 @@ async function sendNotifications() {
     const sent = await sendEmail({
       to: recipients.map(({ name, email }) => ({
         email,
-        name: name || email,
+        name: name || email.split('@')[0],
       })),
       templateId: parseInt(notification.email_template!),
       params: {
