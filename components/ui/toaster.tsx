@@ -9,14 +9,12 @@ import {
   ToastViewport,
 } from '@/components/ui/toast';
 import { useToast } from '@/components/ui/use-toast';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 export function Toaster() {
   const { toast, toasts } = useToast();
   const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const router = useRouter();
 
   useEffect(() => {
     const status = searchParams.get('status');
