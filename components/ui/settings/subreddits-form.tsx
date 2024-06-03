@@ -18,7 +18,7 @@ import { Button } from '@/components/ui/shadcn-button';
 import { Input } from '@/components/ui/input';
 import { updateUserSubreddits } from '@/utils/supabase/server-write';
 import { cn } from '@/utils/cn';
-import { useEffect } from 'react';
+import { Error } from '@/utils/data/toasts';
 
 type Subreddit = Tables<'subreddits'>;
 
@@ -60,19 +60,9 @@ export function SubredditForm({ subreddits }: { subreddits: Subreddit[] }) {
     mode: 'onChange',
   });
 
-  const { isSubmitting, isSubmitSuccessful } = useFormState({
+  const { isSubmitting } = useFormState({
     control: form.control,
   });
-  useEffect(() => {
-    if (isSubmitSuccessful) {
-      toast({
-        title: 'Success',
-        description: 'Subreddits updated.',
-      });
-    }
-
-    form.reset(undefined, { keepDirtyValues: true });
-  }, [isSubmitSuccessful]);
 
   const { fields, append, remove } = useFieldArray({
     name: 'subreddits',
@@ -89,7 +79,18 @@ export function SubredditForm({ subreddits }: { subreddits: Subreddit[] }) {
     const deletes = existed.filter((x) => !current.includes(x));
     const adds = current.filter((x) => !existed.includes(x));
 
-    await updateUserSubreddits(deletes, adds);
+    try {
+      await updateUserSubreddits(deletes, adds);
+
+      toast({
+        title: 'Success',
+        description: 'Subreddits updated.',
+      });
+
+      form.reset(undefined, { keepValues: true });
+    } catch (error) {
+      toast(Error);
+    }
   }
 
   return (

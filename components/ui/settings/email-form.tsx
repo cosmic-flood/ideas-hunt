@@ -22,8 +22,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ReloadIcon } from '@radix-ui/react-icons';
-import { useEffect } from 'react';
 import { useToast } from '@/components/ui/use-toast';
+import { Error } from '@/utils/data/toasts';
 
 const emailFormSchema = z.object({
   email: z
@@ -57,19 +57,9 @@ export function EmailForm({ email }: { email: string }) {
     mode: 'onChange',
   });
 
-  const { isSubmitting, isSubmitSuccessful } = useFormState({
+  const { isSubmitting } = useFormState({
     control: form.control,
   });
-  useEffect(() => {
-    if (isSubmitSuccessful) {
-      toast({
-        title: 'Success',
-        description: 'Notification settings updated.',
-      });
-    }
-
-    form.reset(undefined, { keepDirtyValues: true });
-  }, [isSubmitSuccessful]);
 
   async function onSubmit(data: EmailFormValues) {
     const promise = new Promise((resolve) => {
@@ -80,7 +70,18 @@ export function EmailForm({ email }: { email: string }) {
 
     console.log(data);
 
-    await promise;
+    try {
+      await promise;
+
+      toast({
+        title: 'Success',
+        description: 'Subreddits updated.',
+      });
+
+      form.reset(undefined, { keepValues: true });
+    } catch (error) {
+      toast(Error);
+    }
   }
 
   return (
