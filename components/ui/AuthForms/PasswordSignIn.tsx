@@ -1,11 +1,12 @@
 'use client';
 
-import Button from 'components/ui/Button';
+import { Button } from 'components/ui/shadcn-button';
 import Link from 'next/link';
 import { signInWithPassword } from '@/utils/auth-helpers/server';
 import { handleRequest } from '@/utils/auth-helpers/client';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import { Input } from '@/components/ui/input';
 
 // Define prop type with allowEmail boolean
 interface PasswordSignInProps {
@@ -35,8 +36,10 @@ export default function PasswordSignIn({
       >
         <div className="grid gap-2">
           <div className="grid gap-1">
-            <label htmlFor="email">Email</label>
-            <input
+            <label className="sr-only" htmlFor="email">
+              Email
+            </label>
+            <Input
               id="email"
               placeholder="name@example.com"
               type="email"
@@ -44,24 +47,19 @@ export default function PasswordSignIn({
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              className="w-full rounded-md bg-zinc-800 p-3"
             />
-            <label htmlFor="password">Password</label>
-            <input
+            <label className="sr-only" htmlFor="password">
+              Password
+            </label>
+            <Input
               id="password"
               placeholder="Password"
               type="password"
               name="password"
               autoComplete="current-password"
-              className="w-full rounded-md bg-zinc-800 p-3"
             />
           </div>
-          <Button
-            variant="slim"
-            type="submit"
-            className="mt-1"
-            loading={isSubmitting}
-          >
+          <Button type="submit" disabled={isSubmitting}>
             Sign in
           </Button>
         </div>
