@@ -448,6 +448,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_subreddits_for_score_scanner: {
+        Args: {
+          start_time: string
+          size: number
+        }
+        Returns: Database["public"]["CompositeTypes"]["subreddit_for_score_scanner"][]
+      }
       get_user_submission_score: {
         Args: {
           p_user_id: string
@@ -467,44 +474,25 @@ export type Database = {
           scanned_at: string | null
         }[]
       }
-      getnotratedsubmissions:
-        | {
-            Args: {
-              projectid: string
-              subredditid: string
-            }
-            Returns: {
-              content_type: string | null
-              id: string
-              name: string | null
-              permalink: string | null
-              posted_at: string | null
-              reddit_id: string | null
-              subreddit_id: string | null
-              text: string | null
-              title: string | null
-              url: string | null
-            }[]
-          }
-        | {
-            Args: {
-              projectid: string
-              subredditid: string
-              num: number
-            }
-            Returns: {
-              content_type: string | null
-              id: string
-              name: string | null
-              permalink: string | null
-              posted_at: string | null
-              reddit_id: string | null
-              subreddit_id: string | null
-              text: string | null
-              title: string | null
-              url: string | null
-            }[]
-          }
+      getnotratedsubmissions: {
+        Args: {
+          projectid: string
+          subredditid: string
+          num: number
+        }
+        Returns: {
+          content_type: string | null
+          id: string
+          name: string | null
+          permalink: string | null
+          posted_at: string | null
+          reddit_id: string | null
+          subreddit_id: string | null
+          text: string | null
+          title: string | null
+          url: string | null
+        }[]
+      }
     }
     Enums: {
       pricing_plan_interval: "day" | "week" | "month" | "year"
@@ -520,6 +508,14 @@ export type Database = {
         | "paused"
     }
     CompositeTypes: {
+      subreddit_for_score_scanner: {
+        project_id: string | null
+        project_name: string | null
+        project_description: string | null
+        project_relevance_threshold: number | null
+        subreddit_id: string | null
+        subreddit_name: string | null
+      }
       user_submission_score: {
         subreddit: string | null
         title: string | null

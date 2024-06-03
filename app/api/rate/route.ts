@@ -56,8 +56,8 @@ async function rate() {
   // fetch subreddits
   const jobStartTime =
     job.start_time !== null ? new Date(job.start_time) : new Date();
-  const subreddits = await getSubredditsForScoreScanner(jobStartTime, 5);
 
+  const subreddits = await getSubredditsForScoreScanner(jobStartTime, 5);
   if (subreddits.length === 0) {
     await saveScheduleJobStartTime(jobName, new Date());
     return;
@@ -65,7 +65,7 @@ async function rate() {
 
   for (let subreddit of subreddits) {
     await updateProjectRedditScanAt(
-      subreddit.projects!.id,
+      subreddit.project_id,
       subreddit.subreddit_id,
       new Date(),
     );
@@ -74,7 +74,7 @@ async function rate() {
   let rawNotifications: any[] = [];
 
   for (let subreddit of subreddits) {
-    console.log(`Scanning subreddit ${subreddit.subreddits?.name}`);
+    console.log(`Scanning subreddit ${subreddit.subreddit_name}`);
     const submissions = await fetchNotRatedRedditSubmissions(
       subreddit.project_id,
       subreddit.subreddit_id,
@@ -87,7 +87,7 @@ async function rate() {
 
     const scores = await rateSubmissions(
       openai,
-      subreddit.projects?.description!,
+      subreddit.project_description,
       submissions.map((s) => `${s.title} ${s.text}`),
     );
 
@@ -97,7 +97,7 @@ async function rate() {
 
     const submissionScores: SubmissionScore[] = scores.map((score, idx) => {
       return {
-        project_id: subreddit.projects!.id,
+        project_id: subreddit.project_id,
         subreddit_id: subreddit.subreddit_id,
         reddit_submission_id: submissions[idx].id,
         score: score,
@@ -110,24 +110,22 @@ async function rate() {
         .map((submission, idx) => ({
           projectId: subreddit.project_id,
           title: submission.title,
-          subreddit: subreddit.subreddits?.name,
+          subreddit: subreddit.subreddit_name,
           score: scores[idx],
           link: submission.permalink,
           time: new Date(submission.posted_at!).toISOString(),
         }))
-        .filter(
-          (n) => n.score > (subreddit.projects?.relevance_threshold || 5),
-        ),
+        .filter((n) => n.score > (subreddit.project_relevance_threshold || 5)),
     ];
 
     try {
       await insertSubmissionScores(submissionScores);
       console.log(
-        `Inserted ${submissionScores.length} scores for project ${subreddit.projects!.name}(${subreddit.projects!.id}) and subreddit ${subreddit.subreddit_id}(${subreddit.subreddits!.name})`,
+        `Inserted ${submissionScores.length} scores for project ${subreddit.project_name}(${subreddit.project_id}) and subreddit ${subreddit.subreddit_id}(${subreddit.subreddit_name})`,
       );
     } catch (err) {
       console.error(
-        `Failed to insert ${submissionScores.length} scores for project ${subreddit.projects!.name}(${subreddit.projects!.id}) and subreddit ${subreddit.subreddit_id}(${subreddit.subreddits!.name})`,
+        `Failed to insert ${submissionScores.length} scores for project ${subreddit.project_name}(${subreddit.project_id}) and subreddit ${subreddit.subreddit_id}(${subreddit.subreddit_name})`,
       );
     }
   }

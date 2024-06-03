@@ -54,10 +54,25 @@ export async function rateSubmissions(
       `Time taken: ${endTime - startTime}ms, OpenAI usage: ${JSON.stringify(chatCompletion.usage)}`,
     );
 
-    return messageContent?.split('\n').map((line: string) => {
+    if (!messageContent) {
+      console.error(
+        `OpenAI Error: No message content, returning empty scores. Prompt: ${prompt}. Response: ${JSON.stringify(chatCompletion)}`,
+      );
+      return [];
+    }
+
+    const scores = messageContent.split('\n').map((line: string) => {
       const parts = line.split(':');
       return parseInt(parts[parts.length - 1]);
     });
+
+    if (scores.length != submissions.length) {
+      console.error(
+        `Mismatched scores and submissions. Scores: ${scores.length}, Submissions: ${submissions.length}. Prompt: ${prompt}. Response: ${JSON.stringify(chatCompletion)}`,
+      );
+    }
+
+    return scores;
   } catch (error) {
     console.error('OpenAI Error:', error);
   }

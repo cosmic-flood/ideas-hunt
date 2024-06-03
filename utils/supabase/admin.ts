@@ -373,14 +373,11 @@ const insertRedditSubmissions = async (
 
 interface SubredditForScore {
   project_id: string;
-  projects: {
-    id: string;
-    description: string | null;
-    name: string | null;
-    relevance_threshold: number | null;
-  } | null;
+  project_name: string;
+  project_description: string;
+  project_relevance_threshold: number;
   subreddit_id: string;
-  subreddits: { id: string; name: string | null } | null;
+  subreddit_name: string;
 }
 
 const getSubredditsForScoreScanner = async (
@@ -388,17 +385,11 @@ const getSubredditsForScoreScanner = async (
   limit: number = 10,
 ): Promise<SubredditForScore[]> => {
   const { data, error } = await supabaseAdmin
-    .from('projects_subreddits')
-    .select(
-      `
-      project_id,
-      projects (id, name, description, relevance_threshold),
-      subreddit_id,
-      subreddits (id, name)
-    `,
-    )
-    .or(`scanned_at.lt.${time.toISOString()},scanned_at.is.null`)
-    .limit(limit);
+    .rpc('get_subreddits_for_score_scanner', {
+      start_time: time.toISOString(),
+      size: limit,
+    })
+    .returns<SubredditForScore[]>();
 
   if (error) {
     return [];
