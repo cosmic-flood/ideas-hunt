@@ -16,6 +16,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { getRedirectMethod } from '@/utils/auth-helpers/settings';
 import { useToast } from '@/components/ui/use-toast';
 import { ComingSoon } from '@/utils/data/toasts';
+import { ChevronDown } from 'lucide-react';
 
 export default function User({ user }: { user: any }) {
   const { toast } = useToast();
@@ -25,8 +26,9 @@ export default function User({ user }: { user: any }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8">
+        <Button variant="outline" className="flex h-8 items-center">
           {email}
+          <ChevronDown className="ml-1 h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-48" align="end" forceMount>
