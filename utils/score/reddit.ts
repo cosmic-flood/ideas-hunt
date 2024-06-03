@@ -88,14 +88,17 @@ export class RedditClient {
 
     if (!response.ok) {
       console.error(
-        `Subreddit: ${subreddit}; SubmissionName: ${submissionName}; Failed to fetch new posts: ${response.statusText}`,
+        `Failed to fetch new submissions for subreddit ${subreddit}. URL: ${url}`,
       );
 
       return [];
     }
 
     const data = await response.json();
-    const posts = data.data.children.map((post: any) => post.data);
-    return posts;
+
+    const submissions = data.data.children.map((post: any) => post.data);
+    console.log(`Fetched ${submissions.length} posts from ${url}.`);
+
+    return submissions;
   }
 }
