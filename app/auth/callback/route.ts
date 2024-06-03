@@ -8,11 +8,10 @@ export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
 
+  const supabase = createClient();
+
   if (code) {
-    const supabase = createClient();
-
     const { error } = await supabase.auth.exchangeCodeForSession(code);
-
     if (error) {
       return NextResponse.redirect(
         getErrorRedirect(
@@ -23,6 +22,14 @@ export async function GET(request: NextRequest) {
       );
     }
   }
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  console.log('user', user);
+
+  // await ensureUserProductCreated(user!.id);
 
   // URL to redirect to after sign in process completes
   return NextResponse.redirect(
