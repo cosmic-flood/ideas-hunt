@@ -53,7 +53,7 @@ export function ProductForm({ product }: { product: Product }) {
 
       toast({
         title: 'Success',
-        description: 'Subreddits updated.',
+        description: 'Product description updated.',
       });
 
       form.reset(undefined, { keepValues: true });
