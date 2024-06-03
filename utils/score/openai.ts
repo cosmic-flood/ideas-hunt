@@ -59,20 +59,19 @@ export async function rateSubmission(
       `Time taken: ${endTime - startTime}ms, OpenAI usage: ${JSON.stringify(chatCompletion.usage)}`,
     );
 
-    const prompt = `Submission: ${submission}, Description: ${projectDescription}. Response: ${JSON.stringify(chatCompletion)}`;
+    const prompt = `Submission: ${submission}, Description: ${projectDescription}, Response: ${JSON.stringify(chatCompletion)}`;
 
     if (!messageContent) {
       console.error(
-        `OpenAI Error: No message content, returning empty scores. Prompt: ${prompt}`,
+        `OpenAI Error: No message content, returning invalid score. Prompt: ${prompt}`,
       );
       return invalidScore;
     }
 
     const score = parseInt(messageContent.trim());
-
     if (Number.isNaN(score)) {
       console.error(
-        `OpenAI Error: Invalid score. Prompt: ${prompt}, MessageContent: ${messageContent}`,
+        `OpenAI Error: Invalid score. Prompt: ${prompt}. MessageContent: ${messageContent}`,
       );
       return invalidScore;
     }
