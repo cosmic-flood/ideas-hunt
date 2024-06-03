@@ -9,9 +9,30 @@ import {
   ToastViewport,
 } from '@/components/ui/toast';
 import { useToast } from '@/components/ui/use-toast';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 export function Toaster() {
-  const { toasts } = useToast();
+  const { toast, toasts } = useToast();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    const status = searchParams.get('status');
+    const status_description = searchParams.get('status_description');
+    const error = searchParams.get('error');
+    const error_description = searchParams.get('error_description');
+    if (error || status) {
+      toast({
+        title: error
+          ? error ?? 'Hmm... Something went wrong.'
+          : status ?? 'Alright!',
+        description: error ? error_description : status_description,
+        variant: error ? 'destructive' : undefined,
+      });
+    }
+  }, [searchParams]);
 
   return (
     <ToastProvider>
