@@ -1,4 +1,4 @@
-import { PropsWithChildren, Suspense } from "react";
+import { PropsWithChildren } from "react";
 import HeaderBar from "./headerbar";
 
 export default async function RootLayout({ children }: PropsWithChildren) {

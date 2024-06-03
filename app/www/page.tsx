@@ -1,4 +1,3 @@
-'use client';
 
 import { Button } from '@/components/ui/shadcn-button';
 import { FaDiscord, FaCheckCircle } from 'react-icons/fa';
@@ -44,10 +43,10 @@ export default async function Page() {
 
       <div className="container mb-16 mt-10 gap-x-1.5 px-0">
         <div>
-          <Button className="p-7 text-2xl ">Start 7 Days Free Trial</Button>
+          <Button className="p-7 text-xl ">Start 7 Days Free Trial</Button>
         </div>
         <div>
-          <Button className="mt-3 px-3 text-lg">
+          <Button className="mt-3 px-7 text-lg">
             <FaDiscord className="mr-2" /> Join Discord
           </Button>
         </div>
@@ -201,18 +200,18 @@ export default async function Page() {
 
       <div className="container mb-16 mt-10 flex items-center justify-start gap-x-1.5 px-0">
         <div>
-          <Button className="p-7 text-2xl ">Start 7 Days Free Trial</Button>
+          <Button className="p-7 text-xl ">Start 7 Days Free Trial</Button>
         </div>
       </div>
 
       <div className="container mb-8 mt-8 border-t py-0 text-center" />
 
       <div className="container mb-10 px-0 sm:mt-5 md:mt-20">
-        <div className="sm:grid-cols md:grid-cols mt-8 grid gap-20 lg:grid-cols-2">
-          <Card className="">
+        <div className="sm:grid-cols md:grid-cols mt-8 grid gap-16 lg:grid-cols-7">
+          <Card className="lg:col-span-3">
             <CardHeader>
               <CardTitle className="flex items-center">
-                <span className="w-80 flex-auto text-lg">
+                <span className="w-80 flex-auto text-2xl">
                   Winning 100 Times More Than You Invest
                 </span>
 
@@ -224,54 +223,72 @@ export default async function Page() {
             <CardContent>
               <CardDescription>
                 <div>
-                  <div>
+                  <div className="text-black">
                     Save significant time and ads investment to discover leads
                     and validating ideas for your job, for fun, or anything
                     else.
                   </div>
                   <div className="mt-8 rounded-md border px-2 py-10">
                     <div className="mx-auto flex w-72 items-center">
-                      <div className="mx-2 text-5xl font-extrabold">$39.9</div>
+                      <div className="mx-2 text-5xl font-extrabold text-black">$39.9</div>
                       <Separator orientation="vertical" />
                       <div className="mx-2">
-                        <div className="">Per Month</div>
+                        <div className="text-gray-900">Per Month</div>
                         <Separator orientation="horizontal" />
                         <div className="text-sm">plus local tax</div>
                       </div>
                     </div>
                   </div>
-                  <div className="container mx-auto mt-8">
-                    <div className="flex items-center justify-start mb-2">
+                  <div className="container mx-auto mt-8 text-black">
+                    <div className="mb-2 flex items-center justify-start ">
                       <FaCheckCircle className="mx-4" />
-                      <span className="">Accept terms and conditions</span>
+                      <span className="">
+                        Subscribe up to 30 subreddits
+                      </span>
                     </div>
-                    <div className="flex items-center justify-start mb-2">
+                    <div className="mb-2 flex items-center justify-start">
                       <FaCheckCircle className="mx-4" />
-                      <span className="">Accept terms and conditions</span>
+                      <span className="">
+                        Monitor the new posts automatically
+                      </span>
                     </div>
-                    <div className="flex items-center justify-start mb-2">
+                    <div className="mb-2 flex items-center justify-start">
                       <FaCheckCircle className="mx-4" />
-                      <span className="">Accept terms and conditions</span>
+                      <span className="">
+                        Email notification for high relevant posts
+                      </span>
                     </div>
-                    <div className="flex items-center justify-start mb-2">
+                    <div className="mb-2 flex items-center justify-start">
                       <FaCheckCircle className="mx-4" />
-                      <span className="">Accept terms and conditions</span>
+                      <span className="">
+                        Discover leads & validate ideas freely
+                      </span>
                     </div>
-                    <div className="flex items-center justify-start mb-2">
+                    <div className="mb-2 flex items-center justify-start">
                       <FaCheckCircle className="mx-4" />
-                      <span className="">Accept terms and conditions</span>
+                      <span className="">
+                        Win karma for your excellent comment
+                      </span>
                     </div>
-                    <div className="flex items-center justify-start mb-2">
+                    <div className="mb-2 flex items-center justify-start">
                       <FaCheckCircle className="mx-4" />
-                      <span className="">Accept terms and conditions</span>
+                      <span className="">
+                        Get pay customers in a high ROI way
+                      </span>
                     </div>
                   </div>
                 </div>
               </CardDescription>
             </CardContent>
-            <CardFooter className="flex justify-between"></CardFooter>
+            <CardFooter className="flex justify-between">
+              <Button className="w-full py-6 my-5">
+                <span className="text-xl font-semibold">Get Started</span>
+                {'  '}
+                <span className="text-lg italic mx-2">- 7 Days Free</span>
+              </Button>
+            </CardFooter>
           </Card>
-          <div className="">
+          <div className="lg:col-span-4">
             <div className="text-2xl">FAQ</div>
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="item-1">
