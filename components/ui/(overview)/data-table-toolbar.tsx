@@ -24,12 +24,12 @@ export function DataTableToolbar<TData>({
   const subreddit = table.getColumn('subreddit');
 
   return (
-    <div className="flex flex-1 items-center space-x-2">
+    <div className="flex flex-1 flex-col gap-2 sm:flex-row sm:items-center">
       <DebouncedInput
         placeholder="Filter posts..."
         value={(title?.getFilterValue() as string) ?? ''}
         onChange={(value) => title?.setFilterValue(value)}
-        className="h-8 w-[150px] lg:w-[250px]"
+        className="h-8 sm:w-[250px]"
       />
       <ScoreFilter column={score} />
       <DataTableFacetedFilter
