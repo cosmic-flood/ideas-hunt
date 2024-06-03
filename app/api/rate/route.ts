@@ -10,7 +10,7 @@ import {
   updateProjectRedditScanAt,
 } from '@/utils/supabase/admin';
 import { Tables } from '@/types_db';
-import { rateSubmissions } from '@/utils/score/openai';
+import { rateSubmissionsV2 } from '@/utils/score/openai';
 import { headers } from 'next/headers';
 import { waitUntil } from '@vercel/functions';
 
@@ -85,7 +85,7 @@ async function rate() {
       continue;
     }
 
-    const scores = await rateSubmissions(
+    const scores = await rateSubmissionsV2(
       openai,
       subreddit.project_description,
       submissions.map((s) => `${s.title} ${s.text}`),
