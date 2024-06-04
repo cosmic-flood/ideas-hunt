@@ -28,6 +28,7 @@ export async function ensureUserProductCreated(userId: string) {
     await supabaseAdmin.from('projects').insert({
       name: "Acme's Secret",
       user_id: userId,
+      relevance_threshold: 5,
     });
 
     console.log('Successfully added new project for user:', userId);

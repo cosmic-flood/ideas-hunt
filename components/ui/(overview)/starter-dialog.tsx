@@ -3,15 +3,14 @@
 import React, { useEffect } from 'react';
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/shadcn-button';
 import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/shadcn-button';
 
 export default function StarterDialog() {
   const router = useRouter();
@@ -47,9 +46,9 @@ export default function StarterDialog() {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction asChild onClick={handleClick}>
-            <Button variant="ghost">Start Configuration</Button>
-          </AlertDialogAction>
+          <Button variant="outline" onClick={handleClick}>
+            Start Configuration
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

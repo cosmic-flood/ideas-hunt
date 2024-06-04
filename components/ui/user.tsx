@@ -9,7 +9,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/shadcn-button';
-import { CaretDownIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { handleRequest } from '@/utils/auth-helpers/client';
 import { SignOut } from '@/utils/auth-helpers/server';
@@ -17,6 +16,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { getRedirectMethod } from '@/utils/auth-helpers/settings';
 import { useToast } from '@/components/ui/use-toast';
 import { ComingSoon } from '@/utils/data/toasts';
+import { ChevronDown } from 'lucide-react';
 
 export default function User({ user }: { user: any }) {
   const { toast } = useToast();
@@ -26,12 +26,12 @@ export default function User({ user }: { user: any }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="relative h-8 rounded-full">
+        <Button variant="outline" className="flex h-8 items-center">
           {email}
-          <CaretDownIcon />
+          <ChevronDown className="ml-1 h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
+      <DropdownMenuContent className="w-48" align="end" forceMount>
         <DropdownMenuGroup>
           <DropdownMenuItem
             className="cursor-pointer"

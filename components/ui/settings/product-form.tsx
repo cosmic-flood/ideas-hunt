@@ -2,7 +2,7 @@
 
 import { Tables } from '@/types_db';
 import { z } from 'zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useFormState } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -15,6 +15,8 @@ import {
 import { Button } from '@/components/ui/shadcn-button';
 import { updateProduct } from '@/utils/supabase/server-write';
 import { ReloadIcon } from '@radix-ui/react-icons';
+import { useToast } from '@/components/ui/use-toast';
+import { Error } from '@/utils/data/toasts';
 
 type Product = Tables<'projects'>;
 
@@ -31,6 +33,8 @@ const productFormSchema = z.object({
 type ProductFormValues = z.infer<typeof productFormSchema>;
 
 export function ProductForm({ product }: { product: Product }) {
+  const { toast } = useToast();
+
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productFormSchema),
     defaultValues: {
@@ -39,10 +43,23 @@ export function ProductForm({ product }: { product: Product }) {
     mode: 'onChange',
   });
 
-  const { isSubmitting } = form.formState;
+  const { isSubmitting } = useFormState({
+    control: form.control,
+  });
 
   async function onSubmit(data: ProductFormValues) {
-    await updateProduct(data.description);
+    try {
+      await updateProduct(data.description);
+
+      toast({
+        title: 'Success',
+        description: 'Product description updated.',
+      });
+
+      form.reset(undefined, { keepValues: true });
+    } catch (error) {
+      toast(Error);
+    }
   }
 
   return (

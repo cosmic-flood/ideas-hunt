@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useForm, useFormState } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import {
@@ -22,6 +22,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ReloadIcon } from '@radix-ui/react-icons';
+import { useToast } from '@/components/ui/use-toast';
+import { Error } from '@/utils/data/toasts';
 
 const emailFormSchema = z.object({
   email: z
@@ -44,6 +46,8 @@ const emailFormSchema = z.object({
 type EmailFormValues = z.infer<typeof emailFormSchema>;
 
 export function EmailForm({ email }: { email: string }) {
+  const { toast } = useToast();
+
   const form = useForm<EmailFormValues>({
     resolver: zodResolver(emailFormSchema),
     defaultValues: {
@@ -52,9 +56,10 @@ export function EmailForm({ email }: { email: string }) {
     },
     mode: 'onChange',
   });
-  const formState = form.formState;
 
-  const { isSubmitting } = formState;
+  const { isSubmitting } = useFormState({
+    control: form.control,
+  });
 
   async function onSubmit(data: EmailFormValues) {
     const promise = new Promise((resolve) => {
@@ -65,7 +70,18 @@ export function EmailForm({ email }: { email: string }) {
 
     console.log(data);
 
-    await promise;
+    try {
+      await promise;
+
+      toast({
+        title: 'Success',
+        description: 'Notification settings updated.',
+      });
+
+      form.reset(undefined, { keepValues: true });
+    } catch (error) {
+      toast(Error);
+    }
   }
 
   return (

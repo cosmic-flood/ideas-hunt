@@ -32,6 +32,41 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          created_at: string | null
+          email_sent_at: string | null
+          email_template: string | null
+          id: string
+          metadata: Json | null
+          project_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email_sent_at?: string | null
+          email_template?: string | null
+          id?: string
+          metadata?: Json | null
+          project_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email_sent_at?: string | null
+          email_template?: string | null
+          id?: string
+          metadata?: Json | null
+          project_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       prices: {
         Row: {
           active: boolean | null
@@ -113,38 +148,47 @@ export type Database = {
         Row: {
           created_at: string | null
           description: string | null
+          email_recipients: Json | null
           id: string
           name: string | null
+          relevance_threshold: number | null
           user_id: string | null
         }
         Insert: {
           created_at?: string | null
           description?: string | null
+          email_recipients?: Json | null
           id?: string
           name?: string | null
+          relevance_threshold?: number | null
           user_id?: string | null
         }
         Update: {
           created_at?: string | null
           description?: string | null
+          email_recipients?: Json | null
           id?: string
           name?: string | null
+          relevance_threshold?: number | null
           user_id?: string | null
         }
         Relationships: []
       }
       projects_subreddits: {
         Row: {
+          created_at: string | null
           project_id: string
           scanned_at: string | null
           subreddit_id: string
         }
         Insert: {
+          created_at?: string | null
           project_id: string
           scanned_at?: string | null
           subreddit_id: string
         }
         Update: {
+          created_at?: string | null
           project_id?: string
           scanned_at?: string | null
           subreddit_id?: string
@@ -169,6 +213,7 @@ export type Database = {
       reddit_submissions: {
         Row: {
           content_type: string | null
+          created_at: string | null
           id: string
           name: string | null
           permalink: string | null
@@ -181,6 +226,7 @@ export type Database = {
         }
         Insert: {
           content_type?: string | null
+          created_at?: string | null
           id?: string
           name?: string | null
           permalink?: string | null
@@ -193,6 +239,7 @@ export type Database = {
         }
         Update: {
           content_type?: string | null
+          created_at?: string | null
           id?: string
           name?: string | null
           permalink?: string | null
@@ -410,6 +457,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_latest_submission_before: {
+        Args: {
+          submission_name: string
+        }
+        Returns: string
+      }
+      get_subreddits_for_score_scanner: {
+        Args: {
+          start_time: string
+          size: number
+        }
+        Returns: Database["public"]["CompositeTypes"]["subreddit_for_score_scanner"][]
+      }
       get_user_submission_score: {
         Args: {
           p_user_id: string
@@ -429,44 +489,26 @@ export type Database = {
           scanned_at: string | null
         }[]
       }
-      getnotratedsubmissions:
-        | {
-            Args: {
-              projectid: string
-              subredditid: string
-            }
-            Returns: {
-              content_type: string | null
-              id: string
-              name: string | null
-              permalink: string | null
-              posted_at: string | null
-              reddit_id: string | null
-              subreddit_id: string | null
-              text: string | null
-              title: string | null
-              url: string | null
-            }[]
-          }
-        | {
-            Args: {
-              projectid: string
-              subredditid: string
-              num: number
-            }
-            Returns: {
-              content_type: string | null
-              id: string
-              name: string | null
-              permalink: string | null
-              posted_at: string | null
-              reddit_id: string | null
-              subreddit_id: string | null
-              text: string | null
-              title: string | null
-              url: string | null
-            }[]
-          }
+      getnotratedsubmissions: {
+        Args: {
+          projectid: string
+          subredditid: string
+          num: number
+        }
+        Returns: {
+          content_type: string | null
+          created_at: string | null
+          id: string
+          name: string | null
+          permalink: string | null
+          posted_at: string | null
+          reddit_id: string | null
+          subreddit_id: string | null
+          text: string | null
+          title: string | null
+          url: string | null
+        }[]
+      }
     }
     Enums: {
       pricing_plan_interval: "day" | "week" | "month" | "year"
@@ -482,6 +524,14 @@ export type Database = {
         | "paused"
     }
     CompositeTypes: {
+      subreddit_for_score_scanner: {
+        project_id: string | null
+        project_name: string | null
+        project_description: string | null
+        project_relevance_threshold: number | null
+        subreddit_id: string | null
+        subreddit_name: string | null
+      }
       user_submission_score: {
         subreddit: string | null
         title: string | null

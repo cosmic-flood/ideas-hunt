@@ -315,7 +315,7 @@ const saveScheduleJobStartTime = async (jobName: string, dateTime: Date) => {
     .eq('name', jobName);
 
   if (error) {
-    console.log('Error saving ScheduleJob start_time', error);
+    console.error('Error saving ScheduleJob start_time', error);
   }
 };
 
@@ -341,6 +341,23 @@ const scanSubreddits = async (
   return data;
 };
 
+const getLatestSubmissionBefore = async (
+  submissionName: string,
+): Promise<string | null> => {
+  const { data, error } = await supabaseAdmin
+    .rpc('get_latest_submission_before', {
+      submission_name: submissionName,
+    })
+    .returns<string>();
+
+  if (error) {
+    console.log(`No submission found before ${submissionName}`);
+    return null;
+  }
+
+  return data;
+};
+
 const saveSubredditLatestScan = async (subreddit: Subreddit) => {
   const { error } = await supabaseAdmin
     .from('subreddits')
@@ -351,7 +368,7 @@ const saveSubredditLatestScan = async (subreddit: Subreddit) => {
     .eq('id', subreddit.id);
 
   if (error) {
-    console.log('Error saving latest scanned submission', error);
+    console.error('Error saving latest scanned submission', error);
   }
 };
 
@@ -363,7 +380,7 @@ const insertRedditSubmissions = async (
     .insert(redditSubmission);
 
   if (error) {
-    console.log('Error inserting reddit submissions', error);
+    console.error('Error inserting reddit submissions', error);
   }
 };
 
@@ -373,13 +390,11 @@ const insertRedditSubmissions = async (
 
 interface SubredditForScore {
   project_id: string;
-  projects: {
-    id: string;
-    description: string | null;
-    name: string | null;
-  } | null;
+  project_name: string;
+  project_description: string;
+  project_relevance_threshold: number;
   subreddit_id: string;
-  subreddits: { id: string; name: string | null } | null;
+  subreddit_name: string;
 }
 
 const getSubredditsForScoreScanner = async (
@@ -387,17 +402,11 @@ const getSubredditsForScoreScanner = async (
   limit: number = 10,
 ): Promise<SubredditForScore[]> => {
   const { data, error } = await supabaseAdmin
-    .from('projects_subreddits')
-    .select(
-      `
-      project_id,
-      projects (id, name, description),
-      subreddit_id,
-      subreddits (id, name)
-    `,
-    )
-    .or(`scanned_at.lt.${time.toISOString()},scanned_at.is.null`)
-    .limit(limit);
+    .rpc('get_subreddits_for_score_scanner', {
+      start_time: time.toISOString(),
+      size: limit,
+    })
+    .returns<SubredditForScore[]>();
 
   if (error) {
     return [];
@@ -432,7 +441,7 @@ const insertSubmissionScores = async (submissionScores: SubmissionScore[]) => {
     .insert(submissionScores);
 
   if (error) {
-    console.log('Error inserting reddit submissions', error);
+    console.error('Error inserting reddit submissions', error);
   }
 };
 
@@ -450,11 +459,89 @@ const updateProjectRedditScanAt = async (
     .eq('subreddit_id', subredditId);
 
   if (error) {
-    console.log('Error saving latest scanned submission', error);
+    console.error('Error saving latest scanned submission', error);
   }
 };
 
 /******************* openai end **********************/
+/******************* notifications start **********************/
+type Notification = Tables<'notifications'>;
+
+const insertNotifications = async (notifications: Notification[]) => {
+  const { error } = await supabaseAdmin
+    .from('notifications')
+    .insert(notifications);
+
+  if (error) {
+    console.error('Error inserting notifications', error, notifications);
+  }
+};
+
+const fetchNotSentNotifications = async (
+  limit: number = 10,
+): Promise<Notification[]> => {
+  const { data, error } = await supabaseAdmin
+    .from('notifications')
+    .select('*')
+    .is('email_sent_at', null)
+    .limit(limit);
+
+  if (error) {
+    return [];
+  }
+
+  return data;
+};
+
+const updateNotificationSentTime = async (notificationId: string) => {
+  const { error } = await supabaseAdmin
+    .from('notifications')
+    .update({
+      email_sent_at: new Date().toISOString(),
+    })
+    .eq('id', notificationId);
+
+  if (error) {
+    console.error('Error setNotificationAsSent', error);
+  }
+};
+
+interface EmailRecipient {
+  name: string;
+  email: string;
+}
+
+const fetchNotificationRecipients = async (
+  projectId: string,
+): Promise<EmailRecipient[]> => {
+  const { data: project, error: projectError } = await supabaseAdmin
+    .from('projects')
+    .select('email_recipients, user_id')
+    .eq('id', projectId)
+    .single();
+
+  if (projectError) {
+    return [];
+  }
+
+  if (
+    project.email_recipients !== null &&
+    (project.email_recipients as any[]).length > 0
+  ) {
+    return project.email_recipients as unknown as EmailRecipient[];
+  }
+
+  const { data: userData, error: userError } =
+    await supabaseAdmin.auth.admin.getUserById(project.user_id!);
+
+  if (userError) {
+    return [];
+  }
+
+  return [{ name: '', email: userData.user.email! }];
+};
+
+/******************* notifications end **********************/
 
 export {
   upsertProductRecord,
@@ -470,6 +557,7 @@ export {
   scanSubreddits,
   saveSubredditLatestScan,
   insertRedditSubmissions,
+  getLatestSubmissionBefore,
   /******************* reddit end **********************/
   /******************* openai start **********************/
   getSubredditsForScoreScanner,
@@ -477,6 +565,12 @@ export {
   insertSubmissionScores,
   updateProjectRedditScanAt,
   /******************* openai end **********************/
+  /******************* notifications start **********************/
+  insertNotifications,
+  fetchNotSentNotifications,
+  updateNotificationSentTime,
+  fetchNotificationRecipients,
+  /******************* notifications end **********************/
 };
 
-export type { SubredditForScore };
+export type { SubredditForScore, Notification };

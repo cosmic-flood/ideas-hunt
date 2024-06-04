@@ -21,20 +21,22 @@ const types = [
 export const columns: ColumnDef<UserSubmissionScore>[] = [
   {
     accessorKey: 'subreddit',
-    header: 'Subreddit',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Subreddit" />
+    ),
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
+    enableSorting: false,
   },
   {
     accessorKey: 'title',
-    header: 'Post',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Title" />
+    ),
     cell: ({ row }) => {
       return (
-        <Link
-          href={`https://www.reddit.com${row.original.permalink}`}
-          target="_blank"
-        >
+        <Link href={row.original.permalink!} target="_blank">
           <div title={row.getValue('title')} className="max-w-[500px] truncate">
             <span className="font-medium">{row.getValue('title')}</span>
             <br />
@@ -43,29 +45,37 @@ export const columns: ColumnDef<UserSubmissionScore>[] = [
         </Link>
       );
     },
+    enableSorting: false,
   },
   {
     accessorKey: 'content_type',
-    header: 'Content Type',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Content Type" />
+    ),
     cell: ({ row }) => {
       const type = types.find((t) => t.value === row.original.content_type);
 
       return <Badge variant="outline">{type?.label ?? 'Unknown'}</Badge>;
     },
+    enableSorting: false,
   },
   {
     accessorKey: 'score',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Score" />
     ),
+    filterFn: 'inNumberRange',
     enableSorting: true,
     enableHiding: false,
   },
   {
     accessorKey: 'posted_at',
-    header: 'Posted At',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Posted At" />
+    ),
     cell: ({ row }) => {
       return <span>{format(row.original.posted_at!, 'yyyy-MM-dd HH:mm')}</span>;
     },
+    enableSorting: false,
   },
 ];

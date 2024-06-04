@@ -2,7 +2,7 @@
 
 import { Tables } from '@/types_db';
 import { z } from 'zod';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, useFormState } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useToast } from '@/components/ui/use-toast';
 import {
@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/shadcn-button';
 import { Input } from '@/components/ui/input';
 import { updateUserSubreddits } from '@/utils/supabase/server-write';
 import { cn } from '@/utils/cn';
+import { Error } from '@/utils/data/toasts';
 
 type Subreddit = Tables<'subreddits'>;
 
@@ -29,7 +30,18 @@ const subredditFormSchema = z.object({
         name: z.string(),
       }),
     )
-    .nonempty('You must provide at least one subreddit.'),
+    .nonempty('You must provide at least one subreddit.')
+    .superRefine((items, ctx) => {
+      const uniqueNames = new Set(items.map((x) => x.name)).size;
+      const errorPosition = items.length - 1;
+      if (uniqueNames !== items.length) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Duplicate subreddits are not allowed.',
+          path: [errorPosition, 'name'],
+        });
+      }
+    }),
 });
 
 type SubredditFormValues = z.infer<typeof subredditFormSchema>;
@@ -48,7 +60,9 @@ export function SubredditForm({ subreddits }: { subreddits: Subreddit[] }) {
     mode: 'onChange',
   });
 
-  const { isSubmitting } = form.formState;
+  const { isSubmitting } = useFormState({
+    control: form.control,
+  });
 
   const { fields, append, remove } = useFieldArray({
     name: 'subreddits',
@@ -65,7 +79,18 @@ export function SubredditForm({ subreddits }: { subreddits: Subreddit[] }) {
     const deletes = existed.filter((x) => !current.includes(x));
     const adds = current.filter((x) => !existed.includes(x));
 
-    await updateUserSubreddits(deletes, adds);
+    try {
+      await updateUserSubreddits(deletes, adds);
+
+      toast({
+        title: 'Success',
+        description: 'Subreddits updated.',
+      });
+
+      form.reset(undefined, { keepValues: true });
+    } catch (error) {
+      toast(Error);
+    }
   }
 
   return (
