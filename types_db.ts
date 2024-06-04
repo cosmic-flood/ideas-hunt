@@ -448,6 +448,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_latest_submission_before: {
+        Args: {
+          submission_name: string
+        }
+        Returns: string
+      }
       get_subreddits_for_score_scanner: {
         Args: {
           start_time: string

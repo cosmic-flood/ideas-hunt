@@ -341,6 +341,23 @@ const scanSubreddits = async (
   return data;
 };
 
+const getLatestSubmissionBefore = async (
+  submissionName: string,
+): Promise<string | null> => {
+  const { data, error } = await supabaseAdmin
+    .rpc('get_latest_submission_before', {
+      submission_name: submissionName,
+    })
+    .returns<string>();
+
+  if (error) {
+    console.log(`No submission found before ${submissionName}`);
+    return null;
+  }
+
+  return data;
+};
+
 const saveSubredditLatestScan = async (subreddit: Subreddit) => {
   const { error } = await supabaseAdmin
     .from('subreddits')
@@ -540,6 +557,7 @@ export {
   scanSubreddits,
   saveSubredditLatestScan,
   insertRedditSubmissions,
+  getLatestSubmissionBefore,
   /******************* reddit end **********************/
   /******************* openai start **********************/
   getSubredditsForScoreScanner,

@@ -134,3 +134,7 @@ export const getErrorRedirect = (
 
 export const waitFor = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
+
+export const isNullOrUndefinedOrWhitespace = (
+  input: string | null | undefined,
+) => !input || !input.trim();
