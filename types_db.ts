@@ -266,21 +266,18 @@ export type Database = {
           project_id: string
           reddit_submission_id: string
           score: number | null
-          subreddit_id: string
         }
         Insert: {
           created_at?: string
           project_id: string
           reddit_submission_id: string
           score?: number | null
-          subreddit_id: string
         }
         Update: {
           created_at?: string
           project_id?: string
           reddit_submission_id?: string
           score?: number | null
-          subreddit_id?: string
         }
         Relationships: [
           {
@@ -295,13 +292,6 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "projects_subreddits_reddit_submissions_subreddit_id_fkey"
-            columns: ["subreddit_id"]
-            isOneToOne: false
-            referencedRelation: "subreddits"
             referencedColumns: ["id"]
           },
         ]

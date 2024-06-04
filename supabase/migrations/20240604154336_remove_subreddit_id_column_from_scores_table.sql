@@ -1,0 +1,2 @@
+ALTER TABLE reddit_submissions_scores
+DROP COLUMN subreddit_id;
