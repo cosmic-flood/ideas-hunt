@@ -72,7 +72,6 @@ async function rate() {
   }
 
   let rawNotifications: any[] = [];
-
   for (let subreddit of subreddits) {
     console.log(`Scanning subreddit ${subreddit.subreddit_name}`);
     const submissions = await fetchNotRatedRedditSubmissions(
@@ -115,7 +114,7 @@ async function rate() {
           link: submission.permalink,
           time: new Date(submission.posted_at!).toISOString(),
         }))
-        .filter((n) => n.score > (subreddit.project_relevance_threshold || 10)),
+        .filter((n) => n.score > (subreddit.project_relevance_threshold || 5)),
     ];
 
     try {
