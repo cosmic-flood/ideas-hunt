@@ -76,7 +76,7 @@ async function crawlReddit() {
     let posts: any[] = await redditClient.getNew(
       name!,
       latest_scanned_submission_name,
-      50,
+      5,
     );
 
     if (
