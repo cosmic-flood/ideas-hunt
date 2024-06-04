@@ -99,7 +99,6 @@ async function rate() {
     const submissionScores: SubmissionScore[] = scores.map((score, idx) => {
       return {
         project_id: subreddit.project_id,
-        subreddit_id: subreddit.subreddit_id,
         reddit_submission_id: submissions[idx].id,
         score: score,
       };
