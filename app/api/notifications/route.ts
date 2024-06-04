@@ -4,6 +4,7 @@ import {
   fetchNotificationRecipients,
   fetchNotSentNotifications,
   getScheduleJob,
+  Notification,
   updateNotificationSentTime,
 } from '@/utils/supabase/admin';
 import { sendEmail } from '@/utils/notifications/email-sender';
@@ -41,7 +42,31 @@ async function sendNotifications() {
   }
 
   // fetch notifications
-  const notifications = await fetchNotSentNotifications(1);
+  let notifications = await fetchNotSentNotifications(20);
+
+  // group notifications by project_id
+  notifications = Object.values(
+    notifications.reduce(
+      (acc, currentValue) => {
+        acc[currentValue.project_id!] = acc[currentValue.project_id!] || [];
+        acc[currentValue.project_id!].push(currentValue);
+        return acc;
+      },
+      {} as Record<string, Notification[]>,
+    ),
+  ).map((items: Notification[]) => {
+    return items.reduce(
+      (acc, currentValue) => {
+        acc = acc || { ...currentValue, metadata: [] };
+        acc.metadata = [
+          ...(acc.metadata as any[]),
+          ...(currentValue.metadata as any[]),
+        ];
+        return acc;
+      },
+      null as any as Notification,
+    );
+  });
 
   for (const notification of notifications) {
     // fetch recipients
