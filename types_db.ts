@@ -34,6 +34,7 @@ export type Database = {
       }
       notifications: {
         Row: {
+          created_at: string | null
           email_sent_at: string | null
           email_template: string | null
           id: string
@@ -41,6 +42,7 @@ export type Database = {
           project_id: string | null
         }
         Insert: {
+          created_at?: string | null
           email_sent_at?: string | null
           email_template?: string | null
           id?: string
@@ -48,6 +50,7 @@ export type Database = {
           project_id?: string | null
         }
         Update: {
+          created_at?: string | null
           email_sent_at?: string | null
           email_template?: string | null
           id?: string
@@ -173,16 +176,19 @@ export type Database = {
       }
       projects_subreddits: {
         Row: {
+          created_at: string | null
           project_id: string
           scanned_at: string | null
           subreddit_id: string
         }
         Insert: {
+          created_at?: string | null
           project_id: string
           scanned_at?: string | null
           subreddit_id: string
         }
         Update: {
+          created_at?: string | null
           project_id?: string
           scanned_at?: string | null
           subreddit_id?: string
@@ -207,6 +213,7 @@ export type Database = {
       reddit_submissions: {
         Row: {
           content_type: string | null
+          created_at: string | null
           id: string
           name: string | null
           permalink: string | null
@@ -219,6 +226,7 @@ export type Database = {
         }
         Insert: {
           content_type?: string | null
+          created_at?: string | null
           id?: string
           name?: string | null
           permalink?: string | null
@@ -231,6 +239,7 @@ export type Database = {
         }
         Update: {
           content_type?: string | null
+          created_at?: string | null
           id?: string
           name?: string | null
           permalink?: string | null
@@ -488,6 +497,7 @@ export type Database = {
         }
         Returns: {
           content_type: string | null
+          created_at: string | null
           id: string
           name: string | null
           permalink: string | null
