@@ -22,8 +22,8 @@ export async function sendEmail(payload: EmailPayload): Promise<boolean> {
     body: JSON.stringify({
       ...payload,
       sender: {
-        name: 'BO HU',
-        email: 'beau.hu@featbit.co',
+        name: 'Reddit Sale',
+        email: 'contact@redditsale.com',
       },
     }),
   });
