@@ -1,6 +1,8 @@
+'use client'
+
 import { Button } from '@/components/ui/shadcn-button';
 
-export default async function HeaderBar() {
+export default function HeaderBar() {
   return (
     <header className="container flex items-center justify-between py-4">
       <div className="text-4xl">
@@ -10,9 +12,9 @@ export default async function HeaderBar() {
       <nav>
         <ul className="flex space-x-4">
           <li>
-            <a href="/signin">
-              <Button>Sign In / Up</Button>
-            </a>
+              <Button onClick={()=>{
+                window.location.href = `${window.location.protocol}//app.${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+              }}>Sign In / Up</Button>
           </li>
         </ul>
       </nav>

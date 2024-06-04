@@ -1,6 +1,9 @@
+'use client';
+
 import { Button } from '@/components/ui/shadcn-button';
 import { FaDiscord, FaCheckCircle } from 'react-icons/fa';
-import { Label } from '@/components/ui/label';
+import { FaRedditAlien } from "react-icons/fa";
+import { FaReddit } from "react-icons/fa";
 import {
   Card,
   CardContent,
@@ -18,38 +21,89 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 
-export default async function Page() {
+export default function Page() {
   return (
-    <div className="container px-0 xl:px-24">
-      <div className="container mb-10 px-0 sm:mt-5 md:mt-28">
+    <div className="container px-0 xl:px-10">
+      <div className="container mb-10 px-0 sm:mt-5 md:mt-12">
         <div className="container mx-auto max-w-screen-xl px-0">
           <h1 className="text-5xl font-bold">
-            Discovering Leads & Validating Ideas on{' '}
-            <span className="text-primary"> Reddit</span>
+            Grow ten times faster with
+            <span className="text-primary"> R</span>eddit
+            <span className="text-primary">S</span>ale.
           </h1>
-
-          <h3 className="mt-6 text-xl">
-            Our AI technology quickly identifies posts that are highly relevant
-            to your business or idea and notifies you instantly. You can then
-            share your high-quality solution in the comments, seamlessly
-            engaging with millions of potential customers accurately —{' '}
-            <span className="text-primary">
-              while fully respecting Reddit's culture.
-            </span>
-          </h3>
         </div>
       </div>
 
-      <div className="container mb-16 mt-10 gap-x-1.5 px-0">
-        <div>
-          <Button className="p-7 text-xl ">Start 7 Days Free Trial</Button>
-        </div>
-        <div>
-          <a href="https://discord.gg/frDNhcmWr2">
-            <Button className="mt-3 px-7 text-lg">
+      <div className="sm:grid-cols md:grid-cols container mb-16 mt-10 grid gap-8 px-0 lg:grid-cols-8">
+        <div className="lg:col-span-4">
+          <h3 className="mt-6 text-xl">
+            Discover leads by using AI to identify new & highly relevant <strong className="text-primary">Reddit</strong> posts
+            and instantly notify you. Share your professional{' '}
+            <strong className="text-primary">comment</strong> to{' '}
+            <strong className="text-primary">
+              reach millions of potential customers
+            </strong>
+            .
+          </h3>
+          <div className="mt-10">
+            <Button
+              className="mb-3 mr-3 p-7 text-xl"
+              onClick={() => {
+                window.location.href = `${window.location.protocol}//app.${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+              }}
+            >
+              <FaRedditAlien className="mx-2" />
+              Start 3 Days Free Trial
+            </Button>
+            <Button className="p-7 text-xl">
               <FaDiscord className="mr-2" /> Join Discord
             </Button>
-          </a>
+            <a href="https://discord.gg/frDNhcmWr2"></a>
+          </div>
+        </div>
+        <div className="lg:col-span-4">
+          <div className="mb-3 mt-6 flex items-center justify-start ">
+            <FaReddit className="mx-3 text-xl" />
+            <span className="text-lg">A professional comment can easily get paying users</span>
+          </div>
+          <div className="mb-3 flex items-center justify-start ">
+            <FaReddit className="mx-3 text-xl" />
+            <span className="text-lg">One highly upvoted comment equals the top 3 SEO for a keyword</span>
+          </div>
+          <div className="mb-3 flex items-center justify-start">
+            <FaReddit className="mx-3 text-xl" />
+            <span className="text-lg">3 highly upvoted comments >= ProductHunt's daily top 3</span>
+          </div>
+          <div className="mb-3 flex items-center justify-start">
+            <FaReddit className="mx-3 text-xl" />
+            <span className="text-lg">Replicate Zapier's path to sucess</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="container relative mb-16 mt-10 px-0">
+        <video
+          id="video-intro"
+          className="w-full rounded-lg border-2 border-primary shadow-md shadow-primary"
+          poster="dashboard.png"
+        >
+          <source src="intro.mp4" type="video/mp4" />
+        </video>
+        <div id="video-button" className="absolute inset-0 h-full w-full">
+          <div className="flex h-full items-center justify-center">
+            <Button
+              className="p-12 text-5xl"
+              onClick={() => {
+                const introVideo = document.getElementById('video-intro');
+                const introButton = document.getElementById('video-button');
+                introVideo.setAttribute('controls', 'controls');
+                introButton.style.display = 'none';
+                introVideo.play();
+              }}
+            >
+              PLAY
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -201,7 +255,14 @@ export default async function Page() {
 
       <div className="container mb-16 mt-10 flex items-center justify-start gap-x-1.5 px-0">
         <div>
-          <Button className="p-7 text-xl ">Start 7 Days Free Trial</Button>
+          <Button
+            className="p-7 text-xl"
+            onClick={() => {
+              window.location.href = `${window.location.protocol}//app.${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+            }}
+          >
+            Start 3 Days Free Trial
+          </Button>
         </div>
       </div>
 
@@ -219,13 +280,9 @@ export default async function Page() {
                 </span>
               </Badge>
               <CardTitle className="flex items-center">
-                <span className="w-80 flex-auto text-2xl">
-                Achieving 100 Times More ROI
+                <span className="w-full flex-auto text-2xl">
+                  Achieving 100 Times More ROI
                 </span>
-
-                <div className="w-20 flex-auto">
-                  <Badge className="self-end rounded-full"> Best ROI </Badge>
-                </div>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -234,13 +291,13 @@ export default async function Page() {
                   Save significant time and ads investment to discover leads and
                   validating ideas for your job, for fun, or anything else.
                 </div>
-                <div className="mt-8 rounded-md border px-2 py-10">
-                  <div className="mx-auto flex w-72 items-center">
+                <div className="grid-cols mt-8 grid place-items-center rounded-md border px-2 py-10">
+                  <div className="mx-auto flex w-64 items-center ">
                     <div className="mx-2 text-5xl font-extrabold text-black">
                       $39.9
                     </div>
                     <Separator orientation="vertical" />
-                    <div className="mx-2">
+                    <div className="mx-1">
                       <div className="text-gray-900">Per Month</div>
                       <Separator orientation="horizontal" />
                       <div className="text-sm">plus local tax</div>
@@ -284,41 +341,60 @@ export default async function Page() {
               </div>
             </CardContent>
             <CardFooter className="flex justify-between">
-              <Button className="my-5 w-full py-6">
+              <Button className="my-5 w-full py-6"
+              onClick={()=>{
+                window.location.href = `${window.location.protocol}//app.${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+              }}>
                 <span className="text-xl font-semibold">Get Started</span>
-                <span className="mx-2 text-lg italic">- 7 Days Free</span>
+                <span className="mx-2 text-lg italic">- 3 Days Free</span>
               </Button>
             </CardFooter>
           </Card>
           <div className="lg:col-span-4">
-            <div className="mb-8 text-3xl font-bold mt-5">FAQ</div>
+            <div className="mb-8 mt-5 text-3xl font-bold">FAQ</div>
             <Accordion type="single" collapsible className="w-full">
-              
-              <AccordionItem value="item-1" >
+              <AccordionItem value="item-1">
                 <AccordionTrigger className="text-lg">
-                Why on Reddit?
+                  Why on Reddit?
                 </AccordionTrigger>
                 <AccordionContent className="text-base">
-                Reddit boasts high user activity and subreddits allow for precise targeting. Its highly upvoted posts and comments are easily indexed by Google. Regular activity on Reddit can provide more visibility than ProductHunt's Daily Top 3. Additionally, Reddit's downvote option ensures that high-quality comments stand out.
+                  Reddit boasts high user activity and subreddits allow for
+                  precise targeting. Its highly upvoted posts and comments are
+                  easily indexed by Google. Regular activity on Reddit can
+                  provide more visibility than ProductHunt's Daily Top 3.
+                  Additionally, Reddit's downvote option ensures that
+                  high-quality comments stand out.
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="item-2" >
-                <AccordionTrigger className="text-lg">Can it suggests subreddits for me?</AccordionTrigger>
-                <AccordionContent className="text-base">
-                It's on our roadmap. In the meantime, please join our Discord community or send us an email at contact@redditsale.com. We are happy to help you manually, which also gives us more experience. By the way, you should also try to discover more relevant communities on your own. This can help increase your conversion rate.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-3" >
+              <AccordionItem value="item-2">
                 <AccordionTrigger className="text-lg">
-                Do you have an AI auto-reply feature?
+                  Can it suggests subreddits for me?
                 </AccordionTrigger>
                 <AccordionContent className="text-base">
-                No, we strongly advise against using an AI auto-reply. It can damage the community and your product brand. The ROI of writing a comment with unique insights and solutions will be 100 times greater than that of an auto-reply in terms of visibility. The members of the subreddit will be happy to mention your insights and product in comments on other posts.
+                  It's on our roadmap. In the meantime, please join our Discord
+                  community or send us an email at contact@redditsale.com. We
+                  are happy to help you manually, which also gives us more
+                  experience. By the way, you should also try to discover more
+                  relevant communities on your own. This can help increase your
+                  conversion rate.
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="item-4" >
+              <AccordionItem value="item-3">
                 <AccordionTrigger className="text-lg">
-                Why check only new posts?
+                  Do you have an AI auto-reply feature?
+                </AccordionTrigger>
+                <AccordionContent className="text-base">
+                  No, we strongly advise against using an AI auto-reply. It can
+                  damage the community and your product brand. The ROI of
+                  writing a comment with unique insights and solutions will be
+                  100 times greater than that of an auto-reply in terms of
+                  visibility. The members of the subreddit will be happy to
+                  mention your insights and product in comments on other posts.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-4">
+                <AccordionTrigger className="text-lg">
+                  Why check only new posts?
                 </AccordionTrigger>
                 <AccordionContent className="text-base">
                   Because leaving a comment under a historical post won’t
@@ -338,30 +414,52 @@ export default async function Page() {
                   your chances of discovering more relevant posts.
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="item-6" >
+              <AccordionItem value="item-6">
                 <AccordionTrigger className="text-lg">
-                Can I add more subreddits?
+                  Can I add more subreddits?
                 </AccordionTrigger>
                 <AccordionContent className="text-base">
-                If this is important to you, feel free to reach out to contact@redditsale.com or join our <a href="https://discord.gg/frDNhcmWr2" className="text-primary">Discord</a>. We will be happy to answer any questions you have.
+                  If this is important to you, feel free to reach out to
+                  contact@redditsale.com or join our{' '}
+                  <a
+                    href="https://discord.gg/frDNhcmWr2"
+                    className="text-primary"
+                  >
+                    Discord
+                  </a>
+                  . We will be happy to answer any questions you have.
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="item-7" >
+              <AccordionItem value="item-7">
                 <AccordionTrigger className="text-lg">
-                Can I add more solution/products/ideas?
+                  Can I add more solution/products/ideas?
                 </AccordionTrigger>
                 <AccordionContent className="text-base">
-                If this is important to you, feel free to reach out to contact@redditsale.com or join our <a href="https://discord.gg/frDNhcmWr2" className="text-primary">Discord</a>. We will be happy to answer any questions you have.
+                  If this is important to you, feel free to reach out to
+                  contact@redditsale.com or join our{' '}
+                  <a
+                    href="https://discord.gg/frDNhcmWr2"
+                    className="text-primary"
+                  >
+                    Discord
+                  </a>
+                  . We will be happy to answer any questions you have.
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="item-8" >
+              <AccordionItem value="item-8">
                 <AccordionTrigger className="text-lg">
                   I still have questions, can I talk to someone?
                 </AccordionTrigger>
                 <AccordionContent className="text-base">
                   Absolutely! Feel free to reach out to contact@redditsale.com
-                  or Join <a href="https://discord.gg/frDNhcmWr2" className="text-primary">Discord</a>, we will be happy to answer any questions for
-                  you.
+                  or Join{' '}
+                  <a
+                    href="https://discord.gg/frDNhcmWr2"
+                    className="text-primary"
+                  >
+                    Discord
+                  </a>
+                  , we will be happy to answer any questions for you.
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
