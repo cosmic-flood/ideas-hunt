@@ -72,7 +72,7 @@ export default function Page() {
           </div>
           <div className="mb-3 flex items-center justify-start">
             <FaReddit className="mx-3 text-xl" />
-            <span className="text-lg">3 highly upvoted comments >= ProductHunt's daily top 3</span>
+            <span className="text-lg">3 highly upvoted comments <strong>&gt;</strong> ProductHunt's daily top 3</span>
           </div>
           <div className="mb-3 flex items-center justify-start">
             <FaReddit className="mx-3 text-xl" />
@@ -94,8 +94,8 @@ export default function Page() {
             <Button
               className="p-12 text-5xl"
               onClick={() => {
-                const introVideo = document.getElementById('video-intro');
-                const introButton = document.getElementById('video-button');
+                const introVideo = document.getElementById('video-intro')! as HTMLVideoElement;
+                const introButton = document.getElementById('video-button')!;
                 introVideo.setAttribute('controls', 'controls');
                 introButton.style.display = 'none';
                 introVideo.play();
