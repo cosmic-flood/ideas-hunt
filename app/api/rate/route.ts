@@ -57,7 +57,7 @@ async function rate() {
   const jobStartTime =
     job.start_time !== null ? new Date(job.start_time) : new Date();
 
-  const subreddits = await getSubredditsForScoreScanner(jobStartTime, 20);
+  const subreddits = await getSubredditsForScoreScanner(jobStartTime, 30);
   if (subreddits.length === 0) {
     await saveScheduleJobStartTime(jobName, new Date());
     return;
@@ -78,7 +78,7 @@ async function rate() {
     const submissions = await fetchNotRatedRedditSubmissions(
       subreddit.project_id,
       subreddit.subreddit_id,
-      3,
+      2,
     );
 
     console.log(`${submissions.length} submissions to rate`);
