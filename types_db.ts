@@ -213,6 +213,7 @@ export type Database = {
       reddit_submissions: {
         Row: {
           content_type: string | null
+          crawl_url: string | null
           created_at: string | null
           id: string
           name: string | null
@@ -226,6 +227,7 @@ export type Database = {
         }
         Insert: {
           content_type?: string | null
+          crawl_url?: string | null
           created_at?: string | null
           id?: string
           name?: string | null
@@ -239,6 +241,7 @@ export type Database = {
         }
         Update: {
           content_type?: string | null
+          crawl_url?: string | null
           created_at?: string | null
           id?: string
           name?: string | null
@@ -487,6 +490,7 @@ export type Database = {
         }
         Returns: {
           content_type: string | null
+          crawl_url: string | null
           created_at: string | null
           id: string
           name: string | null

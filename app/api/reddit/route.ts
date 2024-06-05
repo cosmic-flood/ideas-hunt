@@ -128,6 +128,7 @@ async function crawlReddit() {
         subreddit_id: subreddit.id,
         content_type: getRedditType(p),
         posted_at: new Date(p.created_utc * 1000),
+        crawl_url: p.crawl_url,
       };
     }) as unknown as RedditSubmission[];
 

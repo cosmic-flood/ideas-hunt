@@ -99,7 +99,7 @@ export class RedditClient {
     const data = await response.json();
 
     const submissions = data.data.children
-      .map((post: any) => post.data)
+      .map((post: any) => ({ ...post.data, crawl_url: `${url}` }))
       .filter((x: any) => x.name.startsWith('t3_'));
 
     if (data.data.children.length() !== submissions.length) {

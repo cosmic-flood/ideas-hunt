@@ -1,0 +1,1 @@
+alter table reddit_submissions add column crawl_url text;
