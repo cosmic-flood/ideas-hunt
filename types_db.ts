@@ -324,6 +324,7 @@ export type Database = {
         Row: {
           created_at: string | null
           id: string
+          latest_posted_at: string | null
           latest_scanned_submission_name: string | null
           name: string | null
           scanned_at: string | null
@@ -331,6 +332,7 @@ export type Database = {
         Insert: {
           created_at?: string | null
           id?: string
+          latest_posted_at?: string | null
           latest_scanned_submission_name?: string | null
           name?: string | null
           scanned_at?: string | null
@@ -338,6 +340,7 @@ export type Database = {
         Update: {
           created_at?: string | null
           id?: string
+          latest_posted_at?: string | null
           latest_scanned_submission_name?: string | null
           name?: string | null
           scanned_at?: string | null
@@ -477,6 +480,7 @@ export type Database = {
         Returns: {
           created_at: string | null
           id: string
+          latest_posted_at: string | null
           latest_scanned_submission_name: string | null
           name: string | null
           scanned_at: string | null
