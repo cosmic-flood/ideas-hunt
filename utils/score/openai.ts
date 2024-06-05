@@ -28,7 +28,8 @@ export async function rateSubmission(
   const messages: any[] = [
     {
       role: 'system',
-      content: 'System is a Reddit Expert and Omniscient Sage.',
+      content:
+        'System is a Reddit Expert and Omniscient Sage. System needs to evaluate the relevance of a business/product description to a Reddit post.',
     },
     {
       role: 'user',
@@ -40,7 +41,7 @@ export async function rateSubmission(
     },
     {
       role: 'user',
-      content: `How much can my business/product help the Reddit post? And how likely is it that the post will generate leads for my business/product? Please give a score from 1-10 with 10 being the highest and 1 the lowest. Rules: 1. Be reasonable not relevance; 2. If business/product can help directly to the post with high utility, score 6 and higher. If not, score lower than 5; 3. For only inspiration but indirect help, downgrade the score; 4. Downgrade the score if it's unlikely that users will buy; 5. If the post doesn't ask a question or provoke a debate but merely states or share a link, downgrade the score.  | [Do not browse links] | Output a score as number, it must be from 1 to 10.`,
+      content: `How much can my business/product help the Reddit post? And how likely is it that the post will generate leads for my business/product? Please give a score from 1-10 with 10 being the highest and 1 the lowest. Rules: 1. Be reasonable not relevance; 2. If business/product can help directly to the post with high utility, score 6 and higher. If not, score lower than 5; 3. For only inspiration but indirect help, downgrade the score; 4. Downgrade the score if it's unlikely that users will buy; 5. If the post doesn't ask a question or provoke a debate but merely states or share a link, downgrade the score.  | [Do not browse links] | Output a score as number, it must be from 1 to 10, and do not output any reason.`,
     },
   ];
 

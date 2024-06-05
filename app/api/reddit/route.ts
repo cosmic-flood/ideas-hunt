@@ -76,7 +76,7 @@ async function crawlReddit() {
     let posts: any[] = await redditClient.getNew(
       name!,
       latest_scanned_submission_name,
-      5,
+      2,
     );
 
     if (
@@ -87,7 +87,7 @@ async function crawlReddit() {
         latest_scanned_submission_name!,
       );
 
-      posts = await redditClient.getNew(name!, previousSubmissionName, 50);
+      posts = await redditClient.getNew(name!, previousSubmissionName, 2);
 
       // Possible cases:
       // 1. posts.length === 0: latest_scanned_submission_name is removed, we should save the previous

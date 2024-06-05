@@ -98,7 +98,17 @@ export class RedditClient {
 
     const data = await response.json();
 
-    const submissions = data.data.children.map((post: any) => post.data);
+    const submissions = data.data.children
+      .map((post: any) => post.data)
+      .filter((x: any) => x.name.startsWith('t3_'));
+
+    if (data.data.children.length() !== submissions.length) {
+      console.error(
+        `Some submissions are not of type 'link' in subreddit ${subreddit}.`,
+        JSON.stringify(data.data.children),
+      );
+    }
+
     console.log(`Fetched ${submissions.length} posts from ${url}.`);
 
     return submissions;
