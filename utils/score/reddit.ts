@@ -102,7 +102,7 @@ export class RedditClient {
       .map((post: any) => ({ ...post.data, crawl_url: `${url}` }))
       .filter((x: any) => x.name.startsWith('t3_'));
 
-    if (data.data.children.length() !== submissions.length) {
+    if (data.data.children.length !== submissions.length) {
       console.error(
         `Some submissions are not of type 'link' in subreddit ${subreddit}.`,
         JSON.stringify(data.data.children),
