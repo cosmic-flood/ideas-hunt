@@ -70,11 +70,11 @@ export function SubredditForm({ subreddits }: { subreddits: Subreddit[] }) {
     <>
       <div className="mb-4 flex flex-row flex-wrap">
         {localSubreddits.map((field, index) => (
-          <div className="mb-1 mr-1" key={field}>
-            <Badge className="px-5 py-2 rounded-full" variant="secondary">
+          <div className="mb-2 mr-2" key={field}>
+            <Badge className="px-6 py-2 rounded-full" variant="secondary">
               <span className="mr-2"> {field} </span>
               <FaRegTimesCircle
-                className="mr-1 h-4 w-4 cursor-pointer"
+                className="mr ml-1 h-4 w-4 cursor-pointer"
                 onClick={() => {
                   removeLocalSubreddit(index);
                 }}
