@@ -45,25 +45,21 @@ export class RedditClient {
     this.accessToken = authData.access_token;
   }
 
-  static async searchSubreddits(
-    query: string,
-    limit: number = 10,
-  ): Promise<string[]> {
-    const response = await fetch(
-      `https://www.reddit.com/api/subreddit_autocomplete_v2.json?query=${query}&include_over_18=0&include_profiles=0&limit=${limit}`,
-    );
-
-    if (!response.ok) {
-      console.error(`Failed to search subreddit: ${response.statusText}`);
-      return [];
+  async searchSubreddits(query: string, limit: number = 10): Promise<string[]> {
+    if (this.accessToken === '') {
+      await this.init();
     }
 
+    const url = `https://oauth.reddit.com/api/subreddit_autocomplete_v2.json?query=${query}&include_over_18=0&include_profiles=0&limit=${limit}`;
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${this.accessToken}`,
+      },
+    });
     const data = await response.json();
-    const subreddits = data.data.children.map(
+    return data.data.children.map(
       (subreddit: any) => subreddit.data.display_name_prefixed,
     );
-
-    return subreddits;
   }
 
   async getNew(
