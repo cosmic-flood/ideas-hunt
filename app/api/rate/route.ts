@@ -25,7 +25,7 @@ export async function GET(req: Request) {
   const headersList = headers();
   const apiKey = headersList.get('api-key');
   if (apiKey !== process.env.API_KEY) {
-    return new Response('OK');
+    return new Response(null, { status: 400 });
   }
 
   waitUntil(
