@@ -455,9 +455,22 @@ export type Database = {
     Functions: {
       get_latest_submission_before: {
         Args: {
-          submission_name: string
+          submission: string
         }
-        Returns: string
+        Returns: {
+          content_type: string | null
+          crawl_url: string | null
+          created_at: string | null
+          id: string
+          name: string | null
+          permalink: string | null
+          posted_at: string | null
+          reddit_id: string | null
+          subreddit_id: string | null
+          text: string | null
+          title: string | null
+          url: string | null
+        }
       }
       get_subreddits_for_score_scanner: {
         Args: {

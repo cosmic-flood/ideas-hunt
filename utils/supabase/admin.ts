@@ -319,71 +319,6 @@ const saveScheduleJobStartTime = async (jobName: string, dateTime: Date) => {
   }
 };
 
-const scanSubreddits = async (
-  time: Date,
-  limit: number = 20,
-): Promise<Subreddit[]> => {
-  const { data, error } = await supabaseAdmin
-    .from('subreddits')
-    .select('*')
-    .or(`scanned_at.lt.${time.toISOString()},scanned_at.is.null`)
-    .limit(limit);
-
-  if (error) {
-    return [];
-  }
-
-  for (let subreddit of data!) {
-    subreddit.scanned_at = new Date().toISOString();
-    await saveSubredditLatestScan(subreddit);
-  }
-
-  return data;
-};
-
-const getLatestSubmissionBefore = async (
-  submissionName: string,
-): Promise<string | null> => {
-  const { data, error } = await supabaseAdmin
-    .rpc('get_latest_submission_before', {
-      submission_name: submissionName,
-    })
-    .returns<string>();
-
-  if (error) {
-    console.log(`No submission found before ${submissionName}`);
-    return null;
-  }
-
-  return data;
-};
-
-const saveSubredditLatestScan = async (subreddit: Subreddit) => {
-  const { error } = await supabaseAdmin
-    .from('subreddits')
-    .update({
-      latest_scanned_submission_name: subreddit.latest_scanned_submission_name,
-      scanned_at: subreddit.scanned_at,
-    })
-    .eq('id', subreddit.id);
-
-  if (error) {
-    console.error('Error saving latest scanned submission', error);
-  }
-};
-
-const insertRedditSubmissions = async (
-  redditSubmission: RedditSubmission[],
-) => {
-  const { error } = await supabaseAdmin
-    .from('reddit_submissions')
-    .insert(redditSubmission);
-
-  if (error) {
-    console.error('Error inserting reddit submissions', error);
-  }
-};
-
 /******************* reddit end **********************/
 
 /******************* openai start **********************/
@@ -554,10 +489,6 @@ export {
   /******************* reddit start **********************/
   getScheduleJob,
   saveScheduleJobStartTime,
-  scanSubreddits,
-  saveSubredditLatestScan,
-  insertRedditSubmissions,
-  getLatestSubmissionBefore,
   /******************* reddit end **********************/
   /******************* openai start **********************/
   getSubredditsForScoreScanner,

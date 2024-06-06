@@ -1,23 +1,15 @@
 import { headers } from 'next/headers';
 import { waitUntil } from '@vercel/functions';
-import {
-  getLatestSubmissionBefore,
-  getScheduleJob,
-  insertRedditSubmissions,
-  saveScheduleJobStartTime,
-  saveSubredditLatestScan,
-  scanSubreddits,
-} from '@/utils/supabase/admin';
 import { Tables } from '@/types_db';
-import { getRedditType, RedditClient } from '@/utils/score/reddit';
-import { isNullOrUndefinedOrWhitespace } from '@/utils/helpers';
+import { RedditClient } from '@/utils/reddit/client';
+import { Scheduler } from '@/utils/reddit/scheduler';
+import { createAdminClient } from '@/utils/supabase/admin-client';
+import { Crawler } from '@/utils/reddit/crawler';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 
 type RedditSubmission = Tables<'reddit_submissions'>;
-
-const jobName = 'reddit_scanner';
 
 export async function GET(req: Request) {
   const headersList = headers();
@@ -28,11 +20,9 @@ export async function GET(req: Request) {
 
   waitUntil(
     (async () => {
-      const startTimestamp = new Date().getTime();
+      const startAt = new Date().getTime();
       await crawlReddit();
-      console.log(
-        `Reddit function took ${new Date().getTime() - startTimestamp}ms`,
-      );
+      console.log(`Crawl reddit took ${new Date().getTime() - startAt}ms`);
     })(),
   );
 
@@ -40,6 +30,43 @@ export async function GET(req: Request) {
 }
 
 async function crawlReddit() {
+  const redditClient = await getRedditClient();
+  if (!redditClient) {
+    console.error('Failed to get Reddit client.');
+    return;
+  }
+
+  const supabase = createAdminClient();
+  const scheduler = new Scheduler(supabase);
+  console.log('Scheduler start scan subreddits.');
+  const subreddits = await scheduler.scan(30);
+  if (subreddits === undefined) {
+    console.error('Scheduler error.');
+    return;
+  }
+
+  if (subreddits.length === 0) {
+    console.log('Scheduler cannot found any new subreddits for scan, restart.');
+    await scheduler.restart();
+    return;
+  }
+
+  const crawler = new Crawler(redditClient, supabase);
+  for (let subreddit of subreddits) {
+    const startAt = new Date().getTime();
+    const taskId = `${subreddit.name}:${subreddit.latest_scanned_submission_name ?? 'null'}:${subreddit.latest_posted_at ?? 'null'}`;
+    console.log(`Start crawling subreddit: ${taskId}`);
+
+    const rawSubmissions = await crawler.crawl(subreddit, 2);
+    await crawler.save(subreddit.id, rawSubmissions);
+
+    console.log(
+      `Crawled ${rawSubmissions.length} submissions for subreddit: ${taskId}. Took ${new Date().getTime() - startAt}ms.`,
+    );
+  }
+}
+
+async function getRedditClient(): Promise<RedditClient | undefined> {
   const clientId = process.env.REDDIT_CLIENT_ID;
   const clientSecret = process.env.REDDIT_CLIENT_SECRET;
   const userAgent = process.env.REDDIT_USER_AGENT;
@@ -49,92 +76,16 @@ async function crawlReddit() {
     clientSecret === undefined ||
     userAgent === undefined
   ) {
-    return new Response('Missing params', { status: 500 });
+    console.error('Missing environment variables.');
+    return undefined;
   }
 
-  const redditClient = new RedditClient(clientId, clientSecret, userAgent);
-
-  // fetch reddit scan job
-  const job = await getScheduleJob(jobName);
-  if (job === null) {
-    return new Response('OK');
-  }
-
-  // fetch subreddits
-  const jobStartTime =
-    job.start_time !== null ? new Date(job.start_time) : new Date();
-  const subreddits = await scanSubreddits(jobStartTime);
-
-  if (subreddits.length === 0) {
-    await saveScheduleJobStartTime(jobName, new Date());
-    return new Response('OK');
-  }
-
-  for (let subreddit of subreddits) {
-    const { name, latest_scanned_submission_name } = subreddit;
-
-    let posts: any[] = await redditClient.getNew(
-      name!,
-      latest_scanned_submission_name,
-      2,
-    );
-
-    if (
-      posts.length === 0 &&
-      !isNullOrUndefinedOrWhitespace(latest_scanned_submission_name)
-    ) {
-      const previousSubmissionName = await getLatestSubmissionBefore(
-        latest_scanned_submission_name!,
-      );
-
-      posts = await redditClient.getNew(name!, previousSubmissionName, 2);
-
-      // Possible cases:
-      // 1. posts.length === 0: latest_scanned_submission_name is removed, we should save the previous
-      //    submission[latestSubmissionName] as latest_scanned_submission_name in DB
-      // 2. posts.length > 0:
-      //    2.1 posts contains only the latest_scanned_submission_name: latest_scanned_submission_name is not removed,
-      //        and we should do nothing in DB
-      //    2.2 posts contains more than 1 submission:
-      //        2.2.1 posts contains latest_scanned_submission_name: do nothing in DB
-      //        2.2.2 posts does not contain latest_scanned_submission_name: theoretically we should save
-      //              latestSubmissionName in DB, but we can ignore it since we will save latestSubmissionName
-      //              at the last step of the loop
-      if (posts.length === 0) {
-        subreddit.latest_scanned_submission_name = previousSubmissionName;
-        await saveSubredditLatestScan(subreddit);
-      }
-
-      posts = posts.filter((p) => p.name !== latest_scanned_submission_name);
-    }
-
-    console.log(`Fetched ${posts.length} submissions for subreddit ${name}`);
-    if (posts.length === 0) {
-      continue;
-    }
-
-    console.log(
-      `Crawled ${posts.length} submissions for subreddit ${subreddit.name}(${subreddit.id})`,
-    );
-
-    const submissions = posts.map((p) => {
-      return {
-        reddit_id: p.id,
-        name: p.name,
-        title: p.title,
-        text: p.selftext,
-        url: p.url,
-        permalink: `https://www.reddit.com${p.permalink}`,
-        subreddit_id: subreddit.id,
-        content_type: getRedditType(p),
-        posted_at: new Date(p.created_utc * 1000),
-        crawl_url: p.crawl_url,
-      };
-    }) as unknown as RedditSubmission[];
-
-    await insertRedditSubmissions(submissions);
-    const latestSubmission = submissions[0];
-    subreddit.latest_scanned_submission_name = latestSubmission.name;
-    await saveSubredditLatestScan(subreddit);
+  const client = new RedditClient(clientId, clientSecret, userAgent);
+  try {
+    await client.init();
+    return client;
+  } catch (error) {
+    console.error('Failed to init Reddit client:', error);
+    return undefined;
   }
 }

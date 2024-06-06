@@ -10,7 +10,7 @@ import {
   updateProjectRedditScanAt,
 } from '@/utils/supabase/admin';
 import { Tables } from '@/types_db';
-import { rateSubmissionsV2 } from '@/utils/score/openai';
+import { rateSubmissionsV2 } from '@/utils/reddit/openai';
 import { headers } from 'next/headers';
 import { waitUntil } from '@vercel/functions';
 
