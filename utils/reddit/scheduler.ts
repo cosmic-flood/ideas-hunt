@@ -21,6 +21,11 @@ export class Scheduler {
       return undefined;
     }
 
+    if (!scheduler.enabled) {
+      console.warn(`${this._name} scheduler is disabled.`);
+      return undefined;
+    }
+
     const startAt = new Date(scheduler.start_time);
 
     const { data, error } = await this.supabase

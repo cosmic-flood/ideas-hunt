@@ -302,18 +302,21 @@ export type Database = {
       schedule_jobs: {
         Row: {
           created_at: string | null
+          enabled: boolean
           id: string
           name: string | null
           start_time: string | null
         }
         Insert: {
           created_at?: string | null
+          enabled?: boolean
           id?: string
           name?: string | null
           start_time?: string | null
         }
         Update: {
           created_at?: string | null
+          enabled?: boolean
           id?: string
           name?: string | null
           start_time?: string | null

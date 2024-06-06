@@ -41,7 +41,6 @@ async function crawlReddit() {
   console.log('Scheduler start scan subreddits.');
   const subreddits = await scheduler.scan(30);
   if (subreddits === undefined) {
-    console.error('Scheduler error.');
     return;
   }
 

@@ -36,9 +36,21 @@ export async function GET(req: Request) {
 
 async function sendNotifications() {
   // fetch reddit scan job
-  const job = await getScheduleJob(jobName);
-  if (job === null) {
-    return new Response('OK');
+  const scheduler = await getScheduleJob(jobName);
+
+  if (!scheduler) {
+    console.error(`${jobName} scheduler not found.`);
+    return;
+  }
+
+  if (!scheduler.start_time) {
+    console.error(`${jobName} scheduler start time is null.`);
+    return;
+  }
+
+  if (!scheduler.enabled) {
+    console.warn(`${jobName} scheduler is disabled.`);
+    return;
   }
 
   // fetch notifications
