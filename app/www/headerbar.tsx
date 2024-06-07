@@ -6,9 +6,13 @@ import { getAppUrl } from '@/utils/helpers';
 export default function HeaderBar() {
   return (
     <header className="container flex items-center justify-between py-4">
-      <div className="text-4xl">
-        <strong className="text-primary">R</strong>eddit
-        <strong className="text-primary">S</strong>ale
+      <div className="space-x-0.5 text-4xl">
+        <strong className="font-extrabold">
+          <span className="text-primary">R</span>eddit
+        </strong>
+        <strong className="font-extrabold">
+          <span className="text-primary">S</span>ale
+        </strong>
       </div>
       <nav>
         <ul className="flex space-x-4">
