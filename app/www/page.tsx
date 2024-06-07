@@ -31,7 +31,7 @@ export default function Page() {
       <div className="container mb-10 px-0 sm:mt-5 md:mt-12">
         <div className="container mx-auto max-w-screen-xl px-0">
           <h1 className="text-5xl font-bold">
-            Grow ten times faster with
+            Grow ten times faster with&nbsp;
             <span className="text-primary">R</span>eddit
             <span className="text-primary">S</span>ale.
           </h1>
