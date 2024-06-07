@@ -10,7 +10,7 @@ import {
   updateProjectRedditScanAt,
 } from '@/utils/supabase/admin';
 import { Tables } from '@/types_db';
-import { rateSubmissionsV2 } from '@/utils/score/openai';
+import { rateSubmissionsV2 } from '@/utils/reddit/openai';
 import { headers } from 'next/headers';
 import { waitUntil } from '@vercel/functions';
 
@@ -25,7 +25,7 @@ export async function GET(req: Request) {
   const headersList = headers();
   const apiKey = headersList.get('api-key');
   if (apiKey !== process.env.API_KEY) {
-    return new Response('OK');
+    return new Response(null, { status: 400 });
   }
 
   waitUntil(
@@ -43,8 +43,20 @@ export async function GET(req: Request) {
 
 async function rate() {
   // fetch reddit scan job
-  const job = await getScheduleJob(jobName);
-  if (job === null) {
+  const scheduler = await getScheduleJob(jobName);
+
+  if (!scheduler) {
+    console.error(`${jobName} scheduler not found.`);
+    return;
+  }
+
+  if (!scheduler.start_time) {
+    console.error(`${jobName} scheduler start time is null.`);
+    return;
+  }
+
+  if (!scheduler.enabled) {
+    console.warn(`${jobName} scheduler is disabled.`);
     return;
   }
 
@@ -55,7 +67,7 @@ async function rate() {
 
   // fetch subreddits
   const jobStartTime =
-    job.start_time !== null ? new Date(job.start_time) : new Date();
+    scheduler.start_time !== null ? new Date(scheduler.start_time) : new Date();
 
   const subreddits = await getSubredditsForScoreScanner(jobStartTime, 30);
   if (subreddits.length === 0) {
