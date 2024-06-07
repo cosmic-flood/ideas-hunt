@@ -1,5 +1,7 @@
 'use client';
 
+import React, { useEffect } from 'react';
+
 import { ColumnDef } from '@tanstack/react-table';
 import { UserSubmissionScore } from '@/utils/supabase/custom-types';
 import { Badge } from '@/components/ui/badge';
@@ -13,9 +15,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
-import { Button } from "@/components/ui/shadcn-button";
+} from '@/components/ui/dropdown-menu';
+import { MoreHorizontal } from 'lucide-react';
+import { Button } from '@/components/ui/shadcn-button';
+import ScoreReasonDialog from '@/components/ui/(overview)/score-reason-dialog';
 
 const types = [
   {
@@ -89,33 +92,23 @@ export const columns: ColumnDef<UserSubmissionScore>[] = [
     enableSorting: false,
   },
   {
-    id: "actions",
+    id: 'actions',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Assistance" />
     ),
     cell: ({ row }) => {
-      const payment = row.original
- 
+      const [isDialogOpen, setIsDialogOpen] = React.useState(false);
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Score Details
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Comment Assistance</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
+        <div>
+          <ScoreReasonDialog
+            isOpen={isDialogOpen}
+            postText={row.original.text}
+            postTitle={row.original.title}
+            onClose={() => setIsDialogOpen(false)}
+          />
+          <Button onClick={() => setIsDialogOpen(true)}>Assistance</Button>
+        </div>
+      );
     },
   },
 ];
