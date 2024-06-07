@@ -15,7 +15,7 @@
     "supabase:stop": "npx supabase stop",
     "supabase:status": "npx supabase status",
     "supabase:restart": "npm run supabase:stop && npm run supabase:start",
-    "supabase:reset": "npx supabase reset",
+    "supabase:reset": "npx supabase db reset",
     "supabase:link": "npx supabase link",
     "supabase:generate-types": "npx supabase gen types typescript --linked --schema public > types_db.ts",
     "supabase:generate-migration": "npx supabase db diff | npx supabase migration new",
