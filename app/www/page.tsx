@@ -1,9 +1,12 @@
 'use client';
 
 import { Button } from '@/components/ui/shadcn-button';
-import { FaDiscord, FaCheckCircle } from 'react-icons/fa';
-import { FaRedditAlien } from "react-icons/fa";
-import { FaReddit } from "react-icons/fa";
+import {
+  FaCheckCircle,
+  FaDiscord,
+  FaReddit,
+  FaRedditAlien,
+} from 'react-icons/fa';
 import {
   Card,
   CardContent,
@@ -20,6 +23,7 @@ import {
 } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { getAppUrl } from '@/utils/helpers';
 
 export default function Page() {
   return (
@@ -37,8 +41,9 @@ export default function Page() {
       <div className="sm:grid-cols md:grid-cols container mb-16 mt-10 grid gap-8 px-0 lg:grid-cols-8">
         <div className="lg:col-span-4">
           <h3 className="mt-6 text-xl">
-            Discover leads by using AI to identify new & highly relevant <strong className="text-primary">Reddit</strong> posts
-            and instantly notify you. Share your professional{' '}
+            Discover leads by using AI to identify new & highly relevant{' '}
+            <strong className="text-primary">Reddit</strong> posts and instantly
+            notify you. Share your professional{' '}
             <strong className="text-primary">comment</strong> to{' '}
             <strong className="text-primary">
               reach millions of potential customers
@@ -49,7 +54,7 @@ export default function Page() {
             <Button
               className="mb-3 mr-3 p-7 text-xl"
               onClick={() => {
-                window.location.href = `${window.location.protocol}//app.${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+                window.location.href = getAppUrl(window.location);
               }}
             >
               <FaRedditAlien className="mx-2" />
@@ -64,15 +69,22 @@ export default function Page() {
         <div className="lg:col-span-4">
           <div className="mb-3 mt-6 flex items-center justify-start ">
             <FaReddit className="mx-3 text-xl" />
-            <span className="text-lg">A professional comment can easily get paying users</span>
+            <span className="text-lg">
+              A professional comment can easily get paying users
+            </span>
           </div>
           <div className="mb-3 flex items-center justify-start ">
             <FaReddit className="mx-3 text-xl" />
-            <span className="text-lg">One highly upvoted comment equals the top 3 SEO for a keyword</span>
+            <span className="text-lg">
+              One highly upvoted comment equals the top 3 SEO for a keyword
+            </span>
           </div>
           <div className="mb-3 flex items-center justify-start">
             <FaReddit className="mx-3 text-xl" />
-            <span className="text-lg">3 highly upvoted comments <strong>&gt;</strong> ProductHunt's daily top 3</span>
+            <span className="text-lg">
+              3 highly upvoted comments <strong>&gt;</strong> ProductHunt's
+              daily top 3
+            </span>
           </div>
           <div className="mb-3 flex items-center justify-start">
             <FaReddit className="mx-3 text-xl" />
@@ -94,7 +106,9 @@ export default function Page() {
             <Button
               className="p-12 text-5xl"
               onClick={() => {
-                const introVideo = document.getElementById('video-intro')! as HTMLVideoElement;
+                const introVideo = document.getElementById(
+                  'video-intro',
+                )! as HTMLVideoElement;
                 const introButton = document.getElementById('video-button')!;
                 introVideo.setAttribute('controls', 'controls');
                 introButton.style.display = 'none';
@@ -258,7 +272,7 @@ export default function Page() {
           <Button
             className="p-7 text-xl"
             onClick={() => {
-              window.location.href = `${window.location.protocol}//app.${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+              window.location.href = getAppUrl(window.location);
             }}
           >
             Start 3 Days Free Trial
@@ -341,10 +355,12 @@ export default function Page() {
               </div>
             </CardContent>
             <CardFooter className="flex justify-between">
-              <Button className="my-5 w-full py-6"
-              onClick={()=>{
-                window.location.href = `${window.location.protocol}//app.${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
-              }}>
+              <Button
+                className="my-5 w-full py-6"
+                onClick={() => {
+                  window.location.href = getAppUrl(window.location);
+                }}
+              >
                 <span className="text-xl font-semibold">Get Started</span>
                 <span className="mx-2 text-lg italic">- 3 Days Free</span>
               </Button>

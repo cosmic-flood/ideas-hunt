@@ -1,6 +1,7 @@
-'use client'
+'use client';
 
 import { Button } from '@/components/ui/shadcn-button';
+import { getAppUrl } from '@/utils/helpers';
 
 export default function HeaderBar() {
   return (
@@ -12,9 +13,13 @@ export default function HeaderBar() {
       <nav>
         <ul className="flex space-x-4">
           <li>
-              <Button onClick={()=>{
-                window.location.href = `${window.location.protocol}//app.${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
-              }}>Sign In / Up</Button>
+            <Button
+              onClick={() =>
+                (window.location.href = getAppUrl(window.location))
+              }
+            >
+              Sign In / Up
+            </Button>
           </li>
         </ul>
       </nav>

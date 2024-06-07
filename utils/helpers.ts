@@ -138,3 +138,12 @@ export const waitFor = (ms: number) =>
 export const isNullOrUndefinedOrWhitespace = (
   input: string | null | undefined,
 ) => !input || !input.trim();
+
+export const getAppUrl = (location: Location) => {
+  const { protocol, host } = location;
+  const appHost = host.startsWith('app.')
+    ? host
+    : `app.${host.replace('www.', '')}`;
+
+  return `${protocol}//${appHost}`;
+};
