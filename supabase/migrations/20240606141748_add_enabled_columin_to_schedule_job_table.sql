@@ -1,0 +1,1 @@
+alter table schedule_jobs add column enabled boolean not null default false;
