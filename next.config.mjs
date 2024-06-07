@@ -7,7 +7,7 @@ const nextConfig = {
         has: [
           {
             type: 'host',
-            value: '^app\\.(.*)$' // regex to match app.ideas-hunt.com exactly
+            value: '^app\\.(.*)$' // regex to match app.redditsale.com exactly
           }
         ],
         destination: '/app/:path*'
@@ -17,11 +17,10 @@ const nextConfig = {
         has: [
           {
             type: 'host',
-            value: '^(?!app\\.).+' // regex to match ideas-hunt.com
+            value: '^(?!app\\.).+' // regex to match redditsale.com
           }
         ],
         destination: '/www/:path*', // redirect to the www folder
-        // destination: '/app/:path*'
       }
     ];
   }
