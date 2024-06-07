@@ -43,8 +43,12 @@ function GuestUserHeader() {
       <header className="flex items-center justify-between py-2">
         <div className="mr-4 flex">
           <Link href="/" className="mr-6 space-x-0.5" aria-label="Logo">
-            <span className="font-extrabold">R</span>eddit
-            <span className="font-extrabold">S</span>ale
+            <strong className="font-extrabold">
+              <span className="text-primary">R</span>eddit
+            </strong>
+            <strong className="font-extrabold">
+              <span className="text-primary">S</span>ale
+            </strong>
           </Link>
         </div>
       </header>

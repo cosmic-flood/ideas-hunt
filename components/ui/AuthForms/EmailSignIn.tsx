@@ -30,7 +30,7 @@ export default function EmailSignIn({
   };
 
   return (
-    <div className="grid gap-6">
+    <div className="grid gap-4">
       <form noValidate={true} onSubmit={(e) => handleSubmit(e)}>
         <div className="grid gap-2 space-y-4">
           <div className="grid gap-1">
@@ -54,7 +54,7 @@ export default function EmailSignIn({
         </div>
       </form>
       {allowPassword && (
-        <>
+        <div>
           <p>
             <Link href="/signin/password_signin" className="text-sm font-light">
               Sign in with email and password
@@ -65,7 +65,7 @@ export default function EmailSignIn({
               Don't have an account? Sign up
             </Link>
           </p>
-        </>
+        </div>
       )}
     </div>
   );
