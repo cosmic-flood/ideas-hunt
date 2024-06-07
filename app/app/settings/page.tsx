@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from '@/components/ui/shadcn-card';
 import { ProductForm } from '@/components/ui/settings/product-form';
-import { SubredditForm } from '@/components/ui/settings/subreddits-form';
+import { Subreddits } from '@/components/ui/settings/subreddits';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import { EmailForm } from '@/components/ui/settings/email-form';
@@ -49,7 +49,7 @@ export default async function Page() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <SubredditForm subreddits={subreddits} />
+          <Subreddits subreddits={subreddits.map((x) => x.name!)} />
         </CardContent>
       </Card>
       <Card className="flex-1 shadow-none">

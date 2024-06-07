@@ -1,6 +1,5 @@
 import { headers } from 'next/headers';
 import { waitUntil } from '@vercel/functions';
-import { Tables } from '@/types_db';
 import { RedditClient } from '@/utils/reddit/client';
 import { Scheduler } from '@/utils/reddit/scheduler';
 import { createAdminClient } from '@/utils/supabase/admin-client';
@@ -8,8 +7,6 @@ import { Crawler } from '@/utils/reddit/crawler';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
-
-type RedditSubmission = Tables<'reddit_submissions'>;
 
 export async function GET(req: Request) {
   const headersList = headers();
@@ -30,7 +27,7 @@ export async function GET(req: Request) {
 }
 
 async function crawlReddit() {
-  const redditClient = await getRedditClient();
+  const redditClient = await RedditClient.getNew();
   if (!redditClient) {
     console.error('Failed to get Reddit client.');
     return;
@@ -62,29 +59,5 @@ async function crawlReddit() {
     console.log(
       `Crawled ${rawSubmissions.length} submissions for subreddit: ${taskId}. Took ${new Date().getTime() - startAt}ms.`,
     );
-  }
-}
-
-async function getRedditClient(): Promise<RedditClient | undefined> {
-  const clientId = process.env.REDDIT_CLIENT_ID;
-  const clientSecret = process.env.REDDIT_CLIENT_SECRET;
-  const userAgent = process.env.REDDIT_USER_AGENT;
-
-  if (
-    clientId === undefined ||
-    clientSecret === undefined ||
-    userAgent === undefined
-  ) {
-    console.error('Missing environment variables.');
-    return undefined;
-  }
-
-  const client = new RedditClient(clientId, clientSecret, userAgent);
-  try {
-    await client.init();
-    return client;
-  } catch (error) {
-    console.error('Failed to init Reddit client:', error);
-    return undefined;
   }
 }
