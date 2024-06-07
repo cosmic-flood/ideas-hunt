@@ -16,13 +16,37 @@ export function getRedditType(post: any): RedditType {
 export class RedditClient {
   private accessToken: string = '';
 
-  constructor(
+  private constructor(
     private readonly clientId: string,
     private readonly clientSecret: string,
     private readonly userAgent: string,
   ) {}
 
-  async init() {
+  static async getNew(): Promise<RedditClient | undefined> {
+    const clientId = process.env.REDDIT_CLIENT_ID;
+    const clientSecret = process.env.REDDIT_CLIENT_SECRET;
+    const userAgent = process.env.REDDIT_USER_AGENT;
+
+    if (
+      clientId === undefined ||
+      clientSecret === undefined ||
+      userAgent === undefined
+    ) {
+      console.error('Missing environment variables.');
+      return undefined;
+    }
+
+    const client = new RedditClient(clientId, clientSecret, userAgent);
+    try {
+      await client.init();
+      return client;
+    } catch (error) {
+      console.error('Failed to init Reddit client:', error);
+      return undefined;
+    }
+  }
+
+  private async init() {
     const authResponse = await fetch(
       'https://www.reddit.com/api/v1/access_token',
       {
@@ -45,27 +69,6 @@ export class RedditClient {
 
     const authData = await authResponse.json();
     this.accessToken = authData.access_token;
-  }
-
-  static async searchSubreddits(
-    query: string,
-    limit: number = 10,
-  ): Promise<string[]> {
-    const response = await fetch(
-      `https://www.reddit.com/api/subreddit_autocomplete_v2.json?query=${query}&include_over_18=true&include_profiles=0&limit=${limit}`,
-    );
-
-    if (!response.ok) {
-      console.error(`Failed to search subreddit: ${response.statusText}`);
-      return [];
-    }
-
-    const data = await response.json();
-    const subreddits = data.data.children.map(
-      (subreddit: any) => subreddit.data.display_name_prefixed,
-    );
-
-    return subreddits;
   }
 
   async getNewSubmissions(
@@ -120,5 +123,33 @@ export class RedditClient {
 
     console.log(`Got ${submissions.length} submissions from ${url}.`);
     return submissions;
+  }
+
+  async searchSubreddits(query: string, limit: number = 10): Promise<string[]> {
+    const url = new URL(
+      'https://oauth.reddit.com/api/subreddit_autocomplete_v2.json',
+    );
+    url.searchParams.append('query', query);
+    url.searchParams.append('include_over_18', 'true');
+    url.searchParams.append('include_profiles', '0');
+    url.searchParams.append('limit', `${limit}`);
+
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${this.accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      console.error(
+        `Failed to search subreddit: ${response.status}:${response.statusText}`,
+      );
+      return [];
+    }
+
+    const data = await response.json();
+    return data.data.children.map(
+      (subreddit: any) => subreddit.data.display_name_prefixed,
+    );
   }
 }
