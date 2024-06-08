@@ -3,6 +3,7 @@
 import OpenAI from 'openai';
 import { createClient } from '@/utils/supabase/server';
 import { fetchProduct } from '@/utils/supabase/server-query';
+import * as https from 'https';
 
 const invalidReason = 'Process Invalid';
 
@@ -19,12 +20,17 @@ export async function getScoreReason(
   }
 
   const product = await fetchProduct(user.id);
-  console.log(product);
   const projectDescription = product.description;
+  console.log(projectDescription);
+  console.log(submission);
 
+  const agent = new https.Agent({
+    rejectUnauthorized: false,
+  });
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
     baseURL: 'https://api.opendevelop.tech/v1',
+    httpAgent: agent,
   });
   
   const messages: any[] = [
@@ -53,6 +59,10 @@ export async function getScoreReason(
       role: 'user',
       content: `From the score from 1-10 with 10 being the highest and 1 the lowest. You scored ${currentScore}. Please provide a reason for the score by following the rules above. If you are unable to provide a reason, please type "I am unable to provide a reason."`,
     },
+    {
+      role: 'user',
+      content: `Please also give some suggestions of how to make a high quality comment under the post.`,
+    },
   ];
 
   try {
@@ -79,15 +89,7 @@ export async function getScoreReason(
       return invalidReason;
     }
 
-    const score = parseInt(messageContent.trim());
-    if (Number.isNaN(score)) {
-      console.error(
-        `OpenAI Error: Invalid score. Prompt: ${prompt}. MessageContent: ${messageContent}`,
-      );
-      return invalidReason;
-    }
-
-    return '';
+    return messageContent;
   } catch (error) {
     console.error('OpenAI Error:', error);
     return invalidReason;
