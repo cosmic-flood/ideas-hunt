@@ -9,6 +9,8 @@ import {
   AlertDialogCancel,
 } from '@/components/ui/alert-dialog';
 import { Skeleton } from '@/components/ui/skeleton';
+import OpenAI from 'openai';
+import { getScoreReason } from '@/utils/reddit/openai';
 
 interface ScoreReasonDialogProps {
   isOpen: boolean;
@@ -21,6 +23,11 @@ const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
+const openai = new OpenAI({
+  apiKey: process.env['OPENAI_API_KEY'],
+  baseURL: 'https://api.opendevelop.tech/v1',
+});
+
 export default function ScoreReasonDialog({
   isOpen,
   postText,
@@ -29,12 +36,24 @@ export default function ScoreReasonDialog({
 }: ScoreReasonDialogProps) {
   const [isLoading, setIsLoading] = React.useState(false);
   useEffect(() => {
+    const getScoreReasonAsync = async () => {
+      const scores = await getScoreReason(
+        openai,
+        `${postTitle} ${postText}`,
+        `${postTitle} ${postText}`,
+      );
+      setIsLoading(false);
+    }
+
     if (isOpen == true) {
       setIsLoading(true);
       const delay = 3000;
+      getScoreReasonAsync();
       sleep(delay).then(() => {
         setIsLoading(false);
       });
+
+      
     }
   }, [isOpen]);
   return (
