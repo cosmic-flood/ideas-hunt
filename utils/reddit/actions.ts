@@ -7,5 +7,5 @@ export const searchSubreddits = async (query: string) => {
     return [];
   }
 
-  return await client.searchSubreddits(query, 6);
+  return await client.searchSubreddits(query, 8);
 };

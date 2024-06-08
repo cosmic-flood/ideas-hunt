@@ -13,6 +13,7 @@ import { Tables } from '@/types_db';
 import { rateSubmissionsV2 } from '@/utils/reddit/openai';
 import { headers } from 'next/headers';
 import { waitUntil } from '@vercel/functions';
+import * as https from 'https';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -55,14 +56,14 @@ async function rate() {
     return;
   }
 
-  if (!scheduler.enabled) {
-    console.warn(`${jobName} scheduler is disabled.`);
-    return;
-  }
+  const agent = new https.Agent({
+    rejectUnauthorized: false,
+  });
 
   const openai = new OpenAI({
     apiKey: process.env['OPENAI_API_KEY'],
     baseURL: 'https://api.opendevelop.tech/v1',
+    httpAgent: agent,
   });
 
   // fetch subreddits

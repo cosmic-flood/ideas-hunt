@@ -31,8 +31,8 @@ export default function Page() {
       <div className="container mb-10 px-0 sm:mt-5 md:mt-12">
         <div className="container mx-auto max-w-screen-xl px-0">
           <h1 className="text-5xl font-bold">
-            Grow ten times faster with
-            <span className="text-primary"> R</span>eddit
+            Grow ten times faster with&nbsp;
+            <span className="text-primary">R</span>eddit
             <span className="text-primary">S</span>ale.
           </h1>
         </div>
@@ -42,9 +42,9 @@ export default function Page() {
         <div className="lg:col-span-4">
           <h3 className="mt-6 text-xl">
             Discover leads by using AI to identify new & highly relevant{' '}
-            <strong className="text-primary">Reddit</strong> posts and instantly
-            notify you. Share your professional{' '}
-            <strong className="text-primary">comment</strong> to{' '}
+            <strong className="text-primary">Reddit</strong> posts and get
+            instant notifications. Share your professional{' '}
+            <strong className="text-primary">comments</strong> to{' '}
             <strong className="text-primary">
               reach millions of potential customers
             </strong>

@@ -28,14 +28,10 @@ export default function PasswordSignIn({
   };
 
   return (
-    <div className="my-8">
-      <form
-        noValidate={true}
-        className="mb-4"
-        onSubmit={(e) => handleSubmit(e)}
-      >
-        <div className="grid gap-2">
-          <div className="grid gap-1">
+    <div className="grid gap-4">
+      <form noValidate={true} onSubmit={(e) => handleSubmit(e)}>
+        <div className="grid gap-2 space-y-4">
+          <div className="grid gap-1 space-y-2">
             <label className="sr-only" htmlFor="email">
               Email
             </label>
@@ -64,23 +60,25 @@ export default function PasswordSignIn({
           </Button>
         </div>
       </form>
-      <p>
-        <Link href="/signin/forgot_password" className="text-sm font-light">
-          Forgot your password?
-        </Link>
-      </p>
-      {allowEmail && (
+      <div>
         <p>
-          <Link href="/signin/email_signin" className="text-sm font-light">
-            Sign in via magic link
+          <Link href="/signin/forgot_password" className="text-sm font-light">
+            Forgot your password?
           </Link>
         </p>
-      )}
-      <p>
-        <Link href="/signin/signup" className="text-sm font-light">
-          Don't have an account? Sign up
-        </Link>
-      </p>
+        {allowEmail && (
+          <p>
+            <Link href="/signin/email_signin" className="text-sm font-light">
+              Sign in via magic link
+            </Link>
+          </p>
+        )}
+        <p>
+          <Link href="/signin/signup" className="text-sm font-light">
+            Don't have an account? Sign up
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

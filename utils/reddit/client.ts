@@ -57,6 +57,7 @@ export class RedditClient {
           'User-Agent': this.userAgent,
         },
         body: 'grant_type=client_credentials',
+        next: { revalidate: 3600 * 23 },
       },
     );
 
