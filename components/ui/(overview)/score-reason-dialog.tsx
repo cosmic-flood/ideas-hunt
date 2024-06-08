@@ -9,8 +9,7 @@ import {
   AlertDialogCancel,
 } from '@/components/ui/alert-dialog';
 import { Skeleton } from '@/components/ui/skeleton';
-import OpenAI from 'openai';
-import { getScoreReason } from '@/utils/reddit/openai';
+import { getScoreReason } from '@/utils/openai/server-actions';
 
 interface ScoreReasonDialogProps {
   isOpen: boolean;
@@ -24,11 +23,6 @@ const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-const openai = new OpenAI({
-  apiKey: process.env['OPENAI_API_KEY'],
-  baseURL: 'https://api.opendevelop.tech/v1',
-});
-
 export default function ScoreReasonDialog({
   isOpen,
   postText,
@@ -40,25 +34,23 @@ export default function ScoreReasonDialog({
   const [isLoading, setIsLoading] = React.useState(false);
   useEffect(() => {
     const getScoreReasonAsync = async () => {
-      if(!score)
-        setText("No Score for this post");
+      if (!score) {
+        setText('No Score for this post');
+        return;
+      }
+
       const reason = await getScoreReason(
-        openai,
         `${postTitle} ${postText}`,
-        `${postTitle} ${postText}`,
-        score ?? 0
+        score,
       );
       setText(reason);
+      
       setIsLoading(false);
-    }
+    };
 
     if (isOpen == true) {
       setIsLoading(true);
-      // const delay = 3000;
       getScoreReasonAsync();
-      // sleep(delay).then(() => {
-      //   setIsLoading(false);
-      // });
     }
   }, [isOpen]);
   return (
@@ -84,8 +76,10 @@ export default function ScoreReasonDialog({
             </div>
           ) : (
             <div className="my-6 py-6">
-              <strong>{postTitle}</strong>
-              {postText}
+              <div>
+                <strong>Post: {postTitle}</strong>
+              </div>
+              <div className="my-10 py-6">{text}</div>
             </div>
           )}
         </AlertDialogHeader>
