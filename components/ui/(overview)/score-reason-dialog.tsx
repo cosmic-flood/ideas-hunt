@@ -16,6 +16,7 @@ interface ScoreReasonDialogProps {
   isOpen: boolean;
   postText: string | null;
   postTitle: string | null;
+  score: number | null;
   onClose: () => void;
 }
 
@@ -32,28 +33,32 @@ export default function ScoreReasonDialog({
   isOpen,
   postText,
   postTitle,
+  score,
   onClose,
 }: ScoreReasonDialogProps) {
+  const [text, setText] = React.useState<string>('');
   const [isLoading, setIsLoading] = React.useState(false);
   useEffect(() => {
     const getScoreReasonAsync = async () => {
-      const scores = await getScoreReason(
+      if(!score)
+        setText("No Score for this post");
+      const reason = await getScoreReason(
         openai,
         `${postTitle} ${postText}`,
         `${postTitle} ${postText}`,
+        score ?? 0
       );
+      setText(reason);
       setIsLoading(false);
     }
 
     if (isOpen == true) {
       setIsLoading(true);
-      const delay = 3000;
+      // const delay = 3000;
       getScoreReasonAsync();
-      sleep(delay).then(() => {
-        setIsLoading(false);
-      });
-
-      
+      // sleep(delay).then(() => {
+      //   setIsLoading(false);
+      // });
     }
   }, [isOpen]);
   return (

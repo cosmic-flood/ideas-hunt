@@ -104,6 +104,7 @@ export const columns: ColumnDef<UserSubmissionScore>[] = [
             isOpen={isDialogOpen}
             postText={row.original.text}
             postTitle={row.original.title}
+            score={row.original.score}
             onClose={() => setIsDialogOpen(false)}
           />
           <Button onClick={() => setIsDialogOpen(true)}>Assistance</Button>
