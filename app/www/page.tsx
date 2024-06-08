@@ -88,7 +88,7 @@ export default function Page() {
           </div>
           <div className="mb-3 flex items-center justify-start">
             <FaReddit className="mx-3 text-xl" />
-            <span className="text-lg">Replicate Zapier's path to sucess</span>
+            <span className="text-lg">Replicate Zapier's path to success</span>
           </div>
         </div>
       </div>
