@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import {
   AlertDialog,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -10,6 +9,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getScoreReason } from '@/utils/openai/server-actions';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface ScoreReasonDialogProps {
   isOpen: boolean;
@@ -39,12 +39,9 @@ export default function ScoreReasonDialog({
         return;
       }
 
-      const reason = await getScoreReason(
-        `${postTitle} ${postText}`,
-        score,
-      );
+      const reason = await getScoreReason(`${postTitle} ${postText}`, score);
       setText(reason);
-      
+
       setIsLoading(false);
     };
 
@@ -60,7 +57,7 @@ export default function ScoreReasonDialog({
     >
       <AlertDialogContent className="w-full max-w-[800px]">
         <AlertDialogHeader>
-          <AlertDialogTitle>Reason of the score</AlertDialogTitle>
+          <AlertDialogTitle>Reason of the score & Comment Suggestion</AlertDialogTitle>
           {isLoading == true ? (
             <div className="flex items-center space-x-4 py-6">
               <div className="space-y-2">
@@ -76,10 +73,24 @@ export default function ScoreReasonDialog({
             </div>
           ) : (
             <div className="my-6 py-6">
-              <div>
+              <div className="mb-2">
                 <strong>Post: {postTitle}</strong>
               </div>
-              <div className="my-10 py-6">{text}</div>
+              <ScrollArea className="my=10 h-full max-h-96 w-full rounded-md pr-5">
+                <div className="my-1 py-6">
+                  {text.split(/\r?\n/).map((paragraph, index) => (
+                    <div key={index} className="my-3">
+                      {paragraph.split('**').map((part, index) => {
+                        if (index % 2 === 1) {
+                          return <strong key={index}>{part}</strong>;
+                        } else {
+                          return part;
+                        }
+                      })}
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
             </div>
           )}
         </AlertDialogHeader>

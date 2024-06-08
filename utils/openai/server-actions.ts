@@ -57,11 +57,11 @@ export async function getScoreReason(
     },
     {
       role: 'user',
-      content: `From the score from 1-10 with 10 being the highest and 1 the lowest. You scored ${currentScore}. Please provide a reason for the score by following the rules above. If you are unable to provide a reason, please type "I am unable to provide a reason."`,
+      content: `From the score from 1-10 with 10 being the highest and 1 the lowest. You scored ${currentScore}. Please provide a reason for the score you gave and some suggestions of how to make a high quality comment under the post."`,
     },
     {
       role: 'user',
-      content: `Please also give some suggestions of how to make a high quality comment under the post.`,
+      content: ``,
     },
   ];
 
