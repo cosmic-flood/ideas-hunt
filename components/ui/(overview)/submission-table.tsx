@@ -9,7 +9,7 @@ import { User } from '@supabase/supabase-js';
 export default async function SubmissionTable({ user }: { user: User }) {
   const submissions = await fetchUserSubmissionScore('', user.id);
   const subreddits = await fetchSubreddits(user.id);
-  
+
   return (
     <DataTable
       columns={columns}
