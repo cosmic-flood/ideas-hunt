@@ -21,8 +21,6 @@ export async function getScoreReason(
 
   const product = await fetchProduct(user.id);
   const projectDescription = product.description;
-  console.log(projectDescription);
-  console.log(submission);
 
   const agent = new https.Agent({
     rejectUnauthorized: false,
@@ -41,10 +39,6 @@ export async function getScoreReason(
     },
     {
       role: 'user',
-      content: `, of how much it can help the Reddit post and how likely it is that the post will generate leads for the business/product. From the score from 1-10 with 10 being the highest and 1 the lowest.`,
-    },
-    {
-      role: 'user',
       content: `[Reddit post]: ${submission}`,
     },
     {
@@ -53,15 +47,7 @@ export async function getScoreReason(
     },
     {
       role: 'user',
-      content: `You evaluateed the relevance of a business/product description to a Reddit by following the rules: 1. Be reasonable not relevance; 2. If business/product can help directly to the post with high utility, score 6 and higher. If not, score lower than 5; 3. For only inspiration but indirect help, downgrade the score; 4. Downgrade the score if it's unlikely that users will buy; 5. If the post doesn't ask a question or provoke a debate but merely states or share a link, downgrade the score.  Output a score as number, it must be from 1 to 10, and do not output any reason.`,
-    },
-    {
-      role: 'user',
-      content: `From the score from 1-10 with 10 being the highest and 1 the lowest. You scored ${currentScore}. Please provide a reason for the score you gave and some suggestions of how to make a high quality comment under the post."`,
-    },
-    {
-      role: 'user',
-      content: ``,
+      content: `You evaluateed the relevance of a business/product description to a Reddit by following the rules: 1. Be reasonable not relevance; 2. If business/product can help directly to the post with high utility, score 6 and higher. If not, score lower than 5; 3. For only inspiration but indirect help, downgrade the score; 4. Downgrade the score if it's unlikely that users will buy; 5. If the post doesn't ask a question or provoke a debate but merely states or share a link, downgrade the score.  \n\r From the score from 1-10 with 10 being the highest and 1 the lowest, you scored ${currentScore}.  \n\r Please explain the relevance between the post and the product description, and how the product can help with the Reddit post. Also, please provide some suggestions for comments that could help us sell the product under the post, but be mindful of avoiding spammy sentences.  \n\r [Do not browse links]`,
     },
   ];
 
